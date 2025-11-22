@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Rowdies } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const rowdies = Rowdies({
+  variable: "--font-rowdies",
+  weight: ["300"],
 });
 
 export const metadata: Metadata = {
@@ -25,8 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${rowdies.className} antialiased  bg-linear-to-r from-[#020309] to-[#0b181c]`}
       >
+        <Navbar />
         {children}
       </body>
     </html>

@@ -1,0 +1,63 @@
+framer motion lets you animate html elements easily.
+instead of writing @keyframes in css, you can tell a component:
+"Here's how i want you to look in different states, and when the user interacts ,switch between these states"
+
+variants: named animation states
+A variant is like a "label" for a set of styles that you want to animate to.
+
+Example:
+
+const boxVariants = {
+  initial: { x: 0, opacity: 0.5 },  // starting state
+  hover: { x: 100, opacity: 1 }     // when hovered
+};
+
+initial - what it looks like before anything happens
+hover - what it should become on hover
+
+using the variants
+<motion.div
+  variants={boxVariants}  // attach our variant object
+  initial="initial"       // start in the 'initial' state
+  whileHover="hover"      // when hovered, switch to the 'hover' state
+  style={{
+    width: 100,
+    height: 100,
+    backgroundColor: 'red'
+  }}
+/>
+
+Think of a variant as a named "pose" for an object.
+intial - how i look when i first appear
+hover - how i look when the mouse is over me 
+tap - how i look like when the user clicks me
+animate - the default animation i play automatically
+
+So instead of manually writing:
+div:hover { transform: rotate(0deg); }
+you just define 
+hover: { rotate: 0 }
+
+
+a variant is a dictionary of named animation states for the element 
+each key is a state label, like initial, hover, tap, or any name i choose
+each value is an object of styles or transform properties you want to animate
+ex 
+variants = {
+  initial: { rotate: 5, opacity: 0.5 },
+  hover: { rotate: 0, opacity: 1 },
+  tap: { scale: 0.9 }
+}
+
+
+special state names
+initial - starting pose before any animation
+hover - when the mouse is on the element
+tap - when tapped or clicked
+you can also define custom names if you want, like open, closed, active
+
+how to apply them
+
+initial = "initial" -> tells framer motion ot start the element in the pose named initial 
+whileHover = "hover" -> tells framer motion to switch to the pose named hover when hovered 
+whileTap = "tap" -> tells framer motion to switch to the tap pose when clicked or tapped 
