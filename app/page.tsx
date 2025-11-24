@@ -5,12 +5,31 @@ import SpendingChart from "./components/SpendingChart";
 import IncomeCard from "./components/IncomeCard";
 import SpendingsCard from "./components/SpendingsCard";
 import MonthlySpendingChart from "./components/MonthlySpendingChart";
-import MonthlyBalanceDifference from "./components/MonthlyBalanceDifference";
 import UpcomingCharges from "./components/UpcomingCharges";
 import Debts from "./components/Debts";
 import Savings from "./components/Savings";
+import { useDashboard } from "./hooks/useDashboard";
+import LoadingSpinner from "./components/LoadingSpinner";
+import { MdError } from "react-icons/md";
 
 export default function Home() {
+  const { data, isLoading, isError, error } = useDashboard();
+
+  // if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="flex h-screen items-center p-5 text-(--text-light) justify-center relative">
+        <LoadingSpinner /> Loading...
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="flex h-screen items-center p-5 text-red-500 justify-center gap-2">
+        <MdError />
+        An error as occured.
+      </div>
+    );
+
   return (
     <div className="flex justify-center lg:py-10">
       {/* 
@@ -30,7 +49,6 @@ export default function Home() {
          */}
         <div className="border border-(--border-blue) bg-(--border-blue) p-3 rounded-xl w-full md:row-start-1 md:col-start-1 md:row-span-1 md:col-span-1 flex flex-col lg:col-span-1">
           <Overview />
-          <MonthlyBalanceDifference />
         </div>
         {/* 
         TRANSACTIONS

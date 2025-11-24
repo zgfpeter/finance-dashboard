@@ -8,7 +8,7 @@
       "id": "tx1",
       "date": "2025-11-20",
       "company": "Spotify",
-      "amount": -9.99,
+      "amount": 9.99,
       "type": "expense"
     },
     {
@@ -22,7 +22,7 @@
       "id": "tx3",
       "date": "2025-11-18",
       "company": "Starbucks",
-      "amount": -4.5,
+      "amount": 4.5,
       "type": "expense"
     },
     {
@@ -38,19 +38,19 @@
       "id": "uc1",
       "date": "2025-12-01",
       "company": "Rent",
-      "amount": -620
+      "amount": 620
     },
     {
       "id": "uc2",
       "date": "2025-12-03",
       "company": "Netflix",
-      "amount": -10.99
+      "amount": 10.99
     },
     {
       "id": "uc3",
       "date": "2025-12-05",
       "company": "Internet Provider",
-      "amount": -27
+      "amount": 27
     }
   ],
   "debts": [
@@ -64,7 +64,7 @@
     {
       "id": "db2",
       "company": "Credit Card",
-      "currentPaid": 400,
+      "currentPaid": 2000,
       "totalAmount": 2400,
       "dueDate": "2025-12-15"
     }
@@ -74,7 +74,7 @@
       "id": "gl1",
       "title": "Summer Vacation",
       "targetDate": "2026-07-01",
-      "currentAmount": 850,
+      "currentAmount": 1200,
       "targetAmount": 1500
     },
     {
@@ -84,5 +84,17 @@
       "currentAmount": 600,
       "targetAmount": 1200
     }
-  ]
+  ],
+  "income":[
+  {
+    "id":"i1",
+    "company":"Freelance",
+    "amount":460
+  },
+  {
+    "id":"i2",
+    "company":"Acme Corp",
+    "amount":3200
+  }
+]
 }

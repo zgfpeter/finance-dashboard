@@ -123,7 +123,7 @@ export default function Navbar() {
       {/* Toggle Button */}
       <motion.button
         onClick={toggleMenu}
-        className="fixed top-4.5 left-0 md:left-0 lg:top-1/2 lg:-translate-y-1/2 rounded-full bg-(--primary-orange) text-white flex items-center justify-center text-4xl z-30 w-16 h-16"
+        className="fixed top-4.5 left-0 md:left-0 lg:top-1/2 lg:-translate-y-1/2 rounded-full bg-(--primary-orange) text-white flex items-center justify-center text-4xl z-30 w-16 h-16 hover:cursor-pointer "
         animate={{
           x: menuOpen ? sidebarWidth : 20,
         }}

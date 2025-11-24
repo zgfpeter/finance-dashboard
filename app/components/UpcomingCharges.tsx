@@ -2,11 +2,13 @@
 import { LuBellRing } from "react-icons/lu";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
-
+import { useDashboard } from "../hooks/useDashboard";
 export default function UpcomingCharges() {
   const [notificationsModalOpen, setNotificationsModalOpen] = useState(false);
   const [notify, setNotify] = useState(false);
   const [tempNotify, setTempNotify] = useState(notify); /// for inside the modal
+
+  const UCData = useDashboard().data?.upcomingCharges;
 
   function handleNotifications() {
     setNotificationsModalOpen(!notificationsModalOpen);
@@ -74,48 +76,24 @@ export default function UpcomingCharges() {
       </h2>
       {/* total balance-current net worth across accounts */}
       <ul className="flex flex-col gap-2 ">
-        <li className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl">
-          <div className="flex items-center gap-2">
-            {/* <FaPlus color="green" /> */}
+        {UCData?.map((charge) => {
+          return (
+            <li
+              key={charge.id}
+              className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl"
+            >
+              <div className="flex items-center gap-2">
+                {/* <FaPlus color="green" /> */}
 
-            <div className="flex flex-col">
-              <span>Rent</span>
-              <span>02/12</span>
-            </div>
-          </div>
-          <div className="text-yellow-500">- €50.00</div>
-        </li>
-
-        <li className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl">
-          <div className="flex items-center gap-2">
-            {/* <FaMinus color="red" /> */}
-            <div className="flex flex-col">
-              <span>Netflix</span>
-              <span>19/12</span>
-            </div>
-          </div>
-          <div className="text-yellow-500">- €15.99</div>
-        </li>
-        <li className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl">
-          <div className="flex items-center gap-2">
-            {/* <FaMinus color="red" /> */}
-            <div className="flex flex-col">
-              <span>EYDAP</span>
-              <span>22/12</span>
-            </div>
-          </div>
-          <div className="text-yellow-500">- €13.49</div>
-        </li>
-        <li className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl">
-          <div className="flex items-center gap-2">
-            {/* <FaMinus color="red" /> */}
-            <div className="flex flex-col">
-              <span>Youtube Premium</span>
-              <span>29/12</span>
-            </div>
-          </div>
-          <div className="text-yellow-500">- €6.99</div>
-        </li>
+                <div className="flex flex-col">
+                  <span>{charge.company}</span>
+                  <span>{charge.date}</span>
+                </div>
+              </div>
+              <div className="text-yellow-500">- € {charge.amount}</div>
+            </li>
+          );
+        })}
       </ul>
       <button className="underline p-2 w-fit self-center rounded-xl">
         See All

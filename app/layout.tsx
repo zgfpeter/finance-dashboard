@@ -5,7 +5,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import QueryProvider from "./providers/QueryProvider";
 import { Provider } from "react-redux";
-import { store } from "./store/store";
+// import { store } from "./store/store";
 const rowdies = Rowdies({
   variable: "--font-rowdies",
   weight: ["300"],
@@ -26,12 +26,14 @@ export default function RootLayout({
       <body
         className={`${rowdies.className} antialiased  bg-linear-to-r from-[#020309] to-[#0b181c]`}
       >
-        <Provider store={store}>
-          <QueryProvider>
-            <Navbar />
-            {children}
-          </QueryProvider>
-        </Provider>
+        {/* wrap my app in the QueryProvider (for tanstack query) */}
+        {/* a Provider is a react pattern based on React Context. It makes a value available to all descendant components without passing it as props. QueryClientProvider places teh queryClient into context ( here i have a separate QueryProvider in my providers/QueryProvider.tsx ). The provider connects hooks and components to the central cache and behaviors*/}
+        {/* <Provider store={store}> */}
+        <QueryProvider>
+          <Navbar />
+          {children}
+        </QueryProvider>
+        {/* </Provider> */}
       </body>
     </html>
   );

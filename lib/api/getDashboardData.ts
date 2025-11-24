@@ -5,10 +5,10 @@ import { DashboardData } from "../types/dashboard";
 import axios from "axios";
 export async function getDashboardData(): Promise<DashboardData> {
   try {
+    console.log("fetching dashboard data");
     const res = await axios.get<DashboardData>("./data/dashboardData.json");
     return res.data;
     // this works because axios automatically parses JSON
-    console.log("fetching dashboard data");
   } catch (error) {
     console.log("Error while fetching data ", error);
     if (axios.isAxiosError(error)) {
