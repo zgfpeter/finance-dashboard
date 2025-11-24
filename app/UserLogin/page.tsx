@@ -78,7 +78,7 @@ export default function UserLogin() {
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
-    // if there are no errors in the for, this will return true
+    // if there are no errors in the form, this will return true
     // if there's at least one error, then it will return false
   }
   return (

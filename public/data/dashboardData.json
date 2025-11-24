@@ -31,7 +31,22 @@
       "company": "Freelance Project",
       "amount": 460,
       "type": "income"
+    },
+    {
+      "id": "tx5",
+      "date": "2025-11-19",
+      "company": "Paolo's",
+      "amount": 40,
+      "type": "expense"
+    },
+    {
+      "id": "tx6",
+      "date": "2025-11-21",
+      "company": "AB Shop & Go",
+      "amount": 25,
+      "type": "expense"
     }
+    
   ],
   "upcomingCharges": [
     {
@@ -51,6 +66,30 @@
       "date": "2025-12-05",
       "company": "Internet Provider",
       "amount": 27
+    },
+    {
+      "id": "uc4",
+      "date": "2025-12-07",
+      "company": "Cosmote",
+      "amount": 23
+    },
+    {
+      "id": "uc5",
+      "date": "2025-12-11",
+      "company": "EYDAP",
+      "amount": 18
+    },
+    {
+      "id": "uc6",
+      "date": "2025-12-14",
+      "company": "HBO+",
+      "amount": 16
+    },
+    {
+      "id": "uc7",
+      "date": "2025-12-17",
+      "company": "Google One",
+      "amount": 5.59
     }
   ],
   "debts": [

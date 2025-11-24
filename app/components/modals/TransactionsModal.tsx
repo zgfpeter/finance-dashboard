@@ -1,15 +1,21 @@
-import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { useDashboard } from "../hooks/useDashboard";
-import { useModal } from "../context/ModalContext";
-export default function Transactions() {
+"use client";
+
+interface Props {
+  onClose: () => void;
+}
+import { useDashboard } from "@/app/hooks/useDashboard";
+export default function TransactionsModal({ onClose }: Props) {
   const TransactionsData = useDashboard().data?.transactions;
-  const { openModal } = useModal();
   return (
-    <section className="bg-(--hover-blue) flex flex-col text-(--text-light) rounded-xl gap-3 w-full h-full">
-      <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl mb-2">
-        <FaMoneyBillTransfer /> Transactions
-      </h2>
-      {/* total balance-current net worth across accounts */}
+    <div className=" text-(--text-light) rounded">
+      <button
+        onClick={onClose}
+        className="absolute right-10 top-4 text-red-500 text-xl"
+      >
+        ✕
+      </button>
+      <h2 className="text-xl font-semibold mb-4">Transactions</h2>
+
       <ul className="flex flex-col gap-2 h-70 overflow-y-auto ">
         {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
         {TransactionsData?.map((transaction) => {
@@ -34,12 +40,6 @@ export default function Transactions() {
           );
         })}
       </ul>
-      <button
-        className="underline p-2 w-fit self-center rounded-xl hover:cursor-pointer mt-auto"
-        onClick={() => openModal("transactions")}
-      >
-        See All
-      </button>
-    </section>
+    </div>
   );
 }

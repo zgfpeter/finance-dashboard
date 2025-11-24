@@ -5,19 +5,30 @@ export default function Overview() {
   const dashboardData = useDashboard().data?.overview;
   //console.log(dashboardData);
   return (
-    <section className="flex flex-col p-3 text-(--text-light) rounded-xl h-full w-full justify-evenly ">
+    <section className="flex flex-col justify-center gap-2 h-full overflow-y-auto  text-(--text-light) ">
       <h1 className="text-4xl">Overview</h1>
       {/* total balance-current net worth across accounts */}
-      <p className="text-2xl">{`Total balance: $ ${dashboardData?.totalBalance}`}</p>
-      <div className="text-md">
-        <p>Savings Account: $ 3712</p>
-        <p>Checkings Account: $ 3920 </p>
+      <p className="text-2xl text-(--limegreen) bg-(--primary-blue) rounded-xl p-2 flex justify-between ">
+        <span>Total balance: </span>{" "}
+        {`$ ${Number(dashboardData?.totalBalance).toFixed(2)}`}
+      </p>
+      {/* toFixed(2) keep only 2 decimals  */}
+      <div className="text-md bg-(--border-blue) rounded-xl p-2 ">
+        <p className="flex justify-between">
+          Savings Account: <span>$ 3712</span>
+        </p>
+        <p className="flex justify-between">
+          Checkings Account: <span> $ 3920</span>{" "}
+        </p>
       </div>
-      <p className="text-emerald-600 flex items-center">
+      <p className="text-emerald-600 flex items-center bg-(--border-blue) rounded-xl p-2">
         <IoMdArrowDropup />
         {`$ ${dashboardData?.monthlyChange} more compared to last month.`}
       </p>
-      <p>Total transactions this month: 32</p>
+      <p className="bg-(--border-blue) rounded-xl p-2">
+        Total transactions this month:{" "}
+        <span className="text-emerald-600">32</span>
+      </p>
     </section>
   );
 }

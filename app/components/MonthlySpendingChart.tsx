@@ -14,7 +14,7 @@ const data = [
   { name: "Sept", Spending: 400 },
   { name: "Oct", Spending: 900 },
   { name: "Nov", Spending: 100 },
-  { name: "Dec", Spending: 500 },
+  { name: "Dec", Spending: 0 },
 ];
 
 // #endregion
@@ -42,6 +42,7 @@ const MonthlySpendingChart = () => {
         <XAxis dataKey="name" />
         <YAxis />
       </BarChart>
+      <p className="text-(--text-light) text-center">Spendings by month</p>
     </section>
   );
 };

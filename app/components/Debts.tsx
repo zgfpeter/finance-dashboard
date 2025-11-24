@@ -8,7 +8,7 @@ export default function Debts() {
 
   return (
     <section className="bg-(--border-blue) flex flex-col justify-evenly text-(--text-light) gap-3 h-1/2 w-full rounded-xl">
-      <div className="flex justify-between px-2">
+      <div className="flex justify-between p-2">
         <h2 className="flex items-center rounded-xl text-xl">Debts</h2>
         <p className="text-sm text-orange-400">Due Date</p>
       </div>

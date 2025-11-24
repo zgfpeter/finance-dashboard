@@ -1,14 +1,20 @@
 "use client";
 import { LuBellRing } from "react-icons/lu";
 import { useState } from "react";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdEdit, MdDelete } from "react-icons/md";
 import { useDashboard } from "../hooks/useDashboard";
+import { useModal } from "../context/ModalContext";
 export default function UpcomingCharges() {
-  const [notificationsModalOpen, setNotificationsModalOpen] = useState(false);
-  const [notify, setNotify] = useState(false);
-  const [tempNotify, setTempNotify] = useState(notify); /// for inside the modal
+  const [notificationsModalOpen, setNotificationsModalOpen] =
+    useState<boolean>(false);
+  // track which item is to be deleted and show the delete confirmation modal
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  const [notify, setNotify] = useState<boolean>(false);
+  const [tempNotify, setTempNotify] = useState<boolean>(notify); /// for inside the modal
 
   const UCData = useDashboard().data?.upcomingCharges;
+  const { openModal } = useModal();
 
   function handleNotifications() {
     setNotificationsModalOpen(!notificationsModalOpen);
@@ -27,7 +33,7 @@ export default function UpcomingCharges() {
   return (
     <section className="bg-(--hover-blue) row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col text-(--text-light) rounded-xl gap-3 h-full w-full relative">
       {notificationsModalOpen && (
-        <section className="absolute bg-(--primary-blue) h-full w-full inset-0 flex flex-col items-center justify-evenly gap-3">
+        <section className="absolute bg-(--primary-blue) h-full w-full inset-0 flex flex-col items-center justify-evenly gap-3 z-10">
           <button
             className="absolute top-3 right-3 p-1 text-2xl"
             onClick={() => setNotificationsModalOpen(false)}
@@ -75,27 +81,66 @@ export default function UpcomingCharges() {
         </button>
       </h2>
       {/* total balance-current net worth across accounts */}
-      <ul className="flex flex-col gap-2 ">
+      <ul className="flex flex-col gap-2 h-70 overflow-y-auto ">
         {UCData?.map((charge) => {
           return (
             <li
               key={charge.id}
-              className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl"
+              className="grid grid-cols-2 justify-items-stretch items-center bg-(--border-blue) p-2 rounded-xl relative"
             >
               <div className="flex items-center gap-2">
                 {/* <FaPlus color="green" /> */}
 
-                <div className="flex flex-col">
+                <div className="flex flex-col ">
                   <span>{charge.company}</span>
                   <span>{charge.date}</span>
                 </div>
               </div>
-              <div className="text-yellow-500">- € {charge.amount}</div>
+              <div className="flex justify-between">
+                <div className="text-yellow-500 ">- € {charge.amount}</div>
+                <div className="flex items-center gap-1 ">
+                  <button className="p-1 hover:cursor-pointer">
+                    <MdEdit color="orange" />
+                  </button>
+                  <button
+                    className="p-1 hover:cursor-pointer"
+                    onClick={() => setDeleteId(charge.id)}
+                  >
+                    <MdDelete color="red" />
+                  </button>
+                </div>
+              </div>
+              {deleteId === charge.id && (
+                <div className="absolute inset-0 bg-(--primary-blue)  rounded-xl flex flex-col items-center justify-center gap-1 z-20">
+                  <p>Are you sure you want to delete this item?</p>
+
+                  <div className="flex items-center ">
+                    <button
+                      className="px-3 text-stone-500 hover:text-stone-600 hover:cursor-pointer"
+                      onClick={() => setDeleteId(null)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="px-3 text-red-500 hover:cursor-pointer hover:text-red-600"
+                      onClick={() => {
+                        // TODO: perform deletion here
+                        setDeleteId(null);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )}
             </li>
           );
         })}
       </ul>
-      <button className="underline p-2 w-fit self-center rounded-xl">
+      <button
+        className="underline p-2 w-fit self-center rounded-xl mt-auto"
+        onClick={() => openModal("upcomingCharges")}
+      >
         See All
       </button>
     </section>

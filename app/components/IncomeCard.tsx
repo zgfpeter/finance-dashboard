@@ -8,7 +8,8 @@ export default function IncomeCard() {
   const income = () => {
     return transactions
       ?.filter((t) => t.type === "income")
-      .reduce((sum, t) => sum + t.amount, 0);
+      .reduce((sum, t) => sum + t.amount, 0)
+      .toFixed(2);
   };
 
   return (
@@ -17,7 +18,7 @@ export default function IncomeCard() {
         Income <FaArrowTrendUp color="green" />
       </h2>
       <div className="flex flex-col text-end justify-center gap-1">
-        <p>This month: € {income()}</p>
+        <p>This month: € {Number(income())}</p>
         <p>Last month: €3500.49</p>
         <motion.span
           className="h-0.5 w-5 bg-[#025207] self-end my-1"

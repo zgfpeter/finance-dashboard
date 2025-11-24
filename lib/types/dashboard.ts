@@ -45,3 +45,12 @@ export interface DashboardData {
   debts: Debt[];
   goals: Goal[];
 }
+
+// modal types
+export type ModalType =
+  | "transactions"
+  | "upcomingCharges"
+  | "settings"
+  | "debts "
+  | "savings"
+  | "none";

@@ -11,10 +11,11 @@ import {
 import { FaGear, FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdMenu, MdClose } from "react-icons/md";
 import { useState } from "react";
-
+import { useModal } from "../context/ModalContext";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const sidebarWidth = 300;
+  const { openModal } = useModal();
 
   function toggleMenu() {
     setMenuOpen(!menuOpen);
@@ -38,12 +39,12 @@ export default function Navbar() {
           </li>
 
           {/* Menu Items */}
-          <li className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer">
+          {/* <li className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer">
             <Link href="/" className="flex items-center gap-3 relative">
               <FaRegUserCircle /> PROFILE
               <span className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"></span>
             </Link>
-          </li>
+          </li> */}
           <li className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer">
             <Link
               href="/transactions"
@@ -53,12 +54,15 @@ export default function Navbar() {
               <span className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"></span>
             </Link>
           </li>
-          <li className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer">
+          <button
+            className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer"
+            onClick={() => openModal("settings")}
+          >
             <Link href="/" className="flex items-center gap-3 relative">
               <FaGear /> SETTINGS
               <span className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"></span>
             </Link>
-          </li>
+          </button>
           <div className="flex items-center justify-evenly w-full text-sm ">
             <button className="relative py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer">
               <Link href="/" className="flex items-center gap-3 relative">

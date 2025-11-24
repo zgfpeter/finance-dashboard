@@ -6,6 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function calcAnimationWidth(currentPaid: number, totalAmount: number) {
-  console.log((currentPaid / totalAmount) * 100);
   return Math.floor((currentPaid / totalAmount) * 100);
 }

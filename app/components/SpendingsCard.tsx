@@ -6,7 +6,11 @@ export default function SpendingsCard() {
   const spendings = () => {
     return transactions
       ?.filter((t) => t.type === "expense")
-      .reduce((sum, t) => sum + t.amount, 0);
+      .reduce((sum, t) => sum + t.amount, 0)
+      .toFixed(2);
+    // toPrecision(4) would give me 12.34 for example, and 1.234
+    // toFixed just gives me 2 decimals.
+    // they return a string, so i need Number(spendings()) to turn it into a number
   };
   return (
     <section className="bg-(--primary-blue) text-(--text-light) rounded-xl h-1/2 w-full flex justify-around py-3 md:flex-col md:px-2">
@@ -14,7 +18,7 @@ export default function SpendingsCard() {
         <FaArrowTrendDown color="red" /> Spendings
       </h2>
       <div className="flex flex-col text-start justify-center gap-1">
-        <p>This month: € {spendings()}</p>
+        <p>This month: € {Number(spendings())}</p>
         <p>Last month: € 7.20</p>
         <motion.span
           className="h-0.5 w-5 bg-[#580f0f] my-1 "
