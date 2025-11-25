@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import ModalContainer, { ModalType } from "@/app/components/ModalContainer";
+import ModalContainer from "@/app/components/ModalContainer";
+import { ModalType } from "@/lib/types/dashboard";
 
 interface ModalContextValue {
   openModal: (type: ModalType) => void;

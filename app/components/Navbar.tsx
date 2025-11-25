@@ -2,12 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  FaRegUserCircle,
-  FaSignOutAlt,
-  FaFileImport,
-  FaFileExport,
-} from "react-icons/fa";
+import { FaSignOutAlt, FaFileImport, FaFileExport } from "react-icons/fa";
 import { FaGear, FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdMenu, MdClose } from "react-icons/md";
 import { useState } from "react";

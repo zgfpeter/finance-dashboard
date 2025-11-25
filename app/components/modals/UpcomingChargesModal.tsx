@@ -6,7 +6,6 @@ interface Props {
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useState } from "react";
-import { UpcomingCharge } from "@/lib/types/dashboard";
 export default function UpcomingChargesModal({ onClose }: Props) {
   const UCData = useDashboard().data?.upcomingCharges;
   const [displayedCharges, setDisplayedCharges] = useState(UCData || []);
