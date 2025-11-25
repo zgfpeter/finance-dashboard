@@ -5,7 +5,7 @@ To test the application, you can use the demo account, which contains some dashb
 ---
 DEMO ACCOUNT
 ---
-email: testUser@example.com | password: Abc123
+email: testUser@example.com password: Abc123
 ---
 ## Tech Stack
 * **React**
