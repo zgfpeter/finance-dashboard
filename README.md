@@ -4,7 +4,9 @@ A one-page personal finance dashboard.
 To test the application, you can use the demo account, which contains some dashboard information for testing purposes.
 ---
 DEMO ACCOUNT
+---
 email: testUser@example.com
+---
 password: Abc123
 ---
 ## Tech Stack
