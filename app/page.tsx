@@ -97,7 +97,7 @@ export default function Home() {
           className="
     border-2 border-(--border-blue) bg-(--border-blue) p-3 rounded-xl 
     flex flex-col gap-1
-    order-5 md:order-5 lg:order-5
+    order-5 md:order-5 lg:order-5 relative z-0
   "
         >
           <Debts />

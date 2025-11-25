@@ -37,6 +37,7 @@ export default function Transactions() {
       <button
         className="underline p-2 w-fit self-center rounded-xl hover:cursor-pointer mt-auto"
         onClick={() => openModal("transactions")}
+        aria-label="See All"
       >
         See All
       </button>

@@ -49,13 +49,13 @@ export default function ModalWrapper({
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}
-      onMouseDown={onOverlayClick} // use mouse down so click works reliably
+      onMouseDown={onOverlayClick} //  mouse down
     >
       {/* for the overlay */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       <div
         ref={panelRef}
-        className={`relative z-10 ${widthClass} bg-(--primary-blue) rounded-xl shadow-xl p-5 h-100 overflow-auto border-2 border-teal-500 `}
+        className={`relative z-10 ${widthClass} bg-(--primary-blue) rounded-xl shadow-xl p-5 h-120 border-2 border-teal-500 flex flex-col overflow-hidden`}
         onMouseDown={(e) => e.stopPropagation()} // avoid closing when clicking inside
       >
         {children}

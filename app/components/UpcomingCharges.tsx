@@ -14,6 +14,10 @@ export default function UpcomingCharges() {
   const [tempNotify, setTempNotify] = useState<boolean>(notify); /// for inside the modal
 
   const UCData = useDashboard().data?.upcomingCharges;
+
+  // for the filtered result ( ex. a charge is deleted )
+  const [filteredData, setFilteredData] = useState(UCData || []);
+
   const { openModal } = useModal();
 
   function handleNotifications() {
@@ -30,6 +34,12 @@ export default function UpcomingCharges() {
     setNotificationsModalOpen(false);
   }
 
+  function handleDelete(id: string) {
+    if (!UCData) return;
+    setFilteredData((prev) => prev.filter((charge) => charge.id !== id));
+    setDeleteId(null); // close the delete overlay;
+  }
+
   return (
     <section className="bg-(--hover-blue) row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col text-(--text-light) rounded-xl gap-3 h-full w-full relative">
       {notificationsModalOpen && (
@@ -37,6 +47,7 @@ export default function UpcomingCharges() {
           <button
             className="absolute top-3 right-3 p-1 text-2xl"
             onClick={() => setNotificationsModalOpen(false)}
+            aria-label="Close Notification Modal"
           >
             <MdClose></MdClose>
           </button>
@@ -50,23 +61,23 @@ export default function UpcomingCharges() {
             />
             <span>Notify me about upcoming charges:</span>
             <span
-              className="
-    h-5 w-5 min-w-5 min-h-5 rounded border border-blue-600 
-    peer-checked:bg-blue-600 peer-checked:border-blue-600
-    peer-checked:ring-2 peer-checked:ring-blue-600 
-  "
+              className="h-5 w-5 min-w-5 min-h-5 rounded border border-blue-600 peer-checked:bg-blue-600 peer-checked:border-blue-600
+                peer-checked:ring-2 peer-checked:ring-blue-600 
+              "
             ></span>
           </label>
           <div className="flex justify-evenly w-full">
             <button
               className="px-2 py-1 hover:cursor-pointer"
               onClick={handleDontNotify}
+              aria-label="Cancel"
             >
               Cancel
             </button>
             <button
               className="px-2 py-1 hover:cursor-pointer text-teal-600"
               onClick={handleSaveNotify}
+              aria-label="Save"
             >
               Save
             </button>
@@ -76,13 +87,17 @@ export default function UpcomingCharges() {
       <h2 className="flex items-center justify-between gap-2 p-2 rounded-xl text-xl mb-2">
         {/* <FaMoneyBillTransfer /> Transactions */}
         Upcoming Charges
-        <button className="p-1" onClick={handleNotifications}>
+        <button
+          className="p-1"
+          onClick={handleNotifications}
+          aria-label="Notifications"
+        >
           <LuBellRing color="#efbd08" />
         </button>
       </h2>
       {/* total balance-current net worth across accounts */}
       <ul className="flex flex-col gap-2 h-70 overflow-y-auto ">
-        {UCData?.map((charge) => {
+        {filteredData?.map((charge) => {
           return (
             <li
               key={charge.id}
@@ -99,12 +114,16 @@ export default function UpcomingCharges() {
               <div className="flex justify-between">
                 <div className="text-yellow-500 ">- € {charge.amount}</div>
                 <div className="flex items-center gap-1 ">
-                  <button className="p-1 hover:cursor-pointer">
+                  {/* <button
+                    className="p-1 hover:cursor-pointer"
+                    aria-label="Edit"
+                  >
                     <MdEdit color="orange" />
-                  </button>
+                  </button> */}
                   <button
                     className="p-1 hover:cursor-pointer"
                     onClick={() => setDeleteId(charge.id)}
+                    aria-label="Delete"
                   >
                     <MdDelete color="red" />
                   </button>
@@ -118,15 +137,18 @@ export default function UpcomingCharges() {
                     <button
                       className="px-3 text-stone-500 hover:text-stone-600 hover:cursor-pointer"
                       onClick={() => setDeleteId(null)}
+                      aria-label="Cancel"
                     >
                       Cancel
                     </button>
                     <button
                       className="px-3 text-red-500 hover:cursor-pointer hover:text-red-600"
                       onClick={() => {
-                        // TODO: perform deletion here
-                        setDeleteId(null);
+                        // // TODO: perform deletion here
+                        // setDeleteId(null);
+                        handleDelete(charge.id);
                       }}
+                      aria-label="Confirm Delete"
                     >
                       Delete
                     </button>
@@ -140,6 +162,7 @@ export default function UpcomingCharges() {
       <button
         className="underline p-2 w-fit self-center rounded-xl mt-auto"
         onClick={() => openModal("upcomingCharges")}
+        aria-label="See All"
       >
         See All
       </button>

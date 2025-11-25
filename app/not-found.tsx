@@ -9,6 +9,7 @@ const NotFound: React.FC = () => {
       <Link
         href="/"
         className="text-(--error-blue) underline flex items-center gap-1"
+        aria-label="Return to Homepage"
       >
         <GoArrowLeft /> Return to Homepage
       </Link>

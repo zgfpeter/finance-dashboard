@@ -7,7 +7,7 @@ export default function Debts() {
   console.log(debts);
 
   return (
-    <section className="bg-(--border-blue) flex flex-col justify-evenly text-(--text-light) gap-3 h-1/2 w-full rounded-xl">
+    <section className="bg-(--border-blue) flex flex-col justify-evenly text-(--text-light) gap-3 h-1/2 w-full rounded-xl z-30">
       <div className="flex justify-between p-2">
         <h2 className="flex items-center rounded-xl text-xl">Debts</h2>
         <p className="text-sm text-orange-400">Due Date</p>
@@ -21,7 +21,7 @@ export default function Debts() {
           return (
             <li
               key={debt.id}
-              className="items-center bg-(--border-blue) p-2 rounded-xl flex flex-col gap-2 relative"
+              className="items-center bg-(--border-blue) p-2 rounded-xl flex flex-col gap-2 relative z-20"
             >
               <div className="flex items-center justify-between w-full">
                 <span>{debt.company}</span>
@@ -53,7 +53,10 @@ export default function Debts() {
           );
         })}
       </ul>
-      <button className="underline p-2 w-fit self-center rounded-xl">
+      <button
+        className="underline p-2 w-fit self-center rounded-xl"
+        aria-label="More Debts"
+      >
         More
       </button>
     </section>

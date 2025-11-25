@@ -5,8 +5,23 @@ interface Props {
 }
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useDashboard } from "@/app/hooks/useDashboard";
+import { useState } from "react";
+import { UpcomingCharge } from "@/lib/types/dashboard";
 export default function UpcomingChargesModal({ onClose }: Props) {
   const UCData = useDashboard().data?.upcomingCharges;
+  const [displayedCharges, setDisplayedCharges] = useState(UCData || []);
+
+  function handleSearch(searchTerm: string) {
+    if (!UCData) {
+      // UCData is empty
+      return;
+    }
+    const result = UCData?.filter((charge) => {
+      return charge.company.toLowerCase().includes(searchTerm);
+    });
+
+    setDisplayedCharges(result); // set displayed charges to be the result
+  }
 
   return (
     <div className=" text-(--text-light) rounded">
@@ -17,8 +32,14 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         ✕
       </button>
       <h2 className="text-xl font-semibold mb-4">Upcoming Charges</h2>
-      <ul className="flex flex-col gap-2 h-70 overflow-y-auto ">
-        {UCData?.map((charge) => {
+      <input
+        type="text"
+        placeholder="Search..."
+        className="w-full p-5 mb-2 rounded-xl"
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+      <ul className="flex flex-col gap-2 h-100 overflow-y-auto ">
+        {displayedCharges?.map((charge) => {
           return (
             <li
               key={charge.id}
