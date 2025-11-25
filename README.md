@@ -1,6 +1,8 @@
 # Personal Finance Dashboard
 A one-page personal finance dashboard.
 ---
+[Live Demo](https://finance-dashboard-gules-omega.vercel.app/)
+---
 To test the application, you can use the demo account, which contains some dashboard information for testing purposes.
 ---
 DEMO ACCOUNT
