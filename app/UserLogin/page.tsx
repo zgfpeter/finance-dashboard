@@ -57,14 +57,18 @@ export default function UserLogin() {
     if (result?.error) {
       console.log("Error: ", result.error);
       setLoginError("Invalid email or password.");
+      setLoginSuccess(""); // clear success
     } else {
-      // if the login was successful
       console.log("Success");
       setLoginSuccess("Login successful!");
-      setTimeout(() => {
-        console.log("Redirecting...");
-        redirect("/");
-      }, 2000);
+      setLoginError(""); // clear error
+      setLoginSuccess("");
+      redirect("/");
+      // setTimeout(() => {
+      //   setLoginSuccess(""); // hide after 2 seconds
+      //   console.log("Redirecting...");
+      //   redirect("/");
+      // }, 2000);
     }
   }
 
@@ -149,19 +153,25 @@ export default function UserLogin() {
           whileHover={"hover"}
         >
           <motion.span
-            className="absolute inset-0 bg-cyan-800 z-0 h-0 w-0 rounded -left-58"
+            className="absolute inset-0 bg-cyan-800 z-0 rounded"
+            style={{
+              top: "50%",
+              left: "50%",
+              width: 0,
+              height: 0,
+              transform: "translate(-50%, -50%)",
+            }}
             transition={{
-              duration: 0.5,
+              duration: 0.2,
               ease: "easeOut",
             }}
             variants={{
               hover: {
                 width: "100%",
                 height: "100%",
-                left: 0,
               },
             }}
-          ></motion.span>
+          />
           <span className="relative z-10">Log In</span>
         </motion.button>
         <span>or</span>
