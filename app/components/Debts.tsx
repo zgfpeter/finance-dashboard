@@ -4,7 +4,7 @@ import { useDashboard } from "../hooks/useDashboard";
 import { calcAnimationWidth } from "@/lib/utils";
 export default function Debts() {
   const debts = useDashboard().data?.debts;
-  console.log(debts);
+  // console.log(debts);
 
   return (
     <section className="bg-(--border-blue) flex flex-col justify-evenly text-(--text-light) gap-3 h-1/2 w-full rounded-xl z-30">

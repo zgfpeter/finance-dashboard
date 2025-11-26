@@ -20,7 +20,6 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
-
       {/* This renders above EVERYTHING */}
       <ModalContainer modal={modal} onClose={closeModal} />
     </ModalContext.Provider>

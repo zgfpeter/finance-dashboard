@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 import { motion } from "framer-motion";
 import { FaSignOutAlt, FaFileImport, FaFileExport } from "react-icons/fa";
 import { FaGear, FaMoneyBillTransfer } from "react-icons/fa6";
@@ -105,18 +106,18 @@ export default function Navbar() {
             variants={{ initial: { rotate: 5 }, hover: { rotate: 0 } }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           ></motion.div>{" "}
-          <Link
-            href="/signOut"
-            className=" relative w-full py-5 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) "
+          <button
+            onClick={() => signOut({ callbackUrl: "/UserLogin" })}
+            className=" relative w-full py-5 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) hover:cursor-pointer"
             aria-label="Sign out"
           >
             {" "}
-            SIGN OUT{" "}
+            SIGN OUT
             <motion.div variants={{ hover: { color: "rgba(255,255,255,1)" } }}>
               {" "}
               <FaSignOutAlt />{" "}
             </motion.div>{" "}
-          </Link>
+          </button>
         </motion.div>
       </motion.nav>
 

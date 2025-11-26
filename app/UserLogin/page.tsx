@@ -6,6 +6,7 @@ import { SignInType } from "@/lib/types/FormData";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { redirect } from "next/navigation";
 export default function UserLogin() {
   const [formData, setFormData] = useState<SignInType>({
     email: "",
@@ -50,6 +51,8 @@ export default function UserLogin() {
     // to get the user:
     // const {data:session} = useSession();
     // then i can console.log(session?.user);
+    // signIn does NOT give the user object, it only tells NextAuth: "Hey we successfully authenticated this user, make the session".
+    // the session is stored globally by NextAuth, not returned by signIn.
 
     if (result?.error) {
       console.log("Error: ", result.error);
@@ -58,6 +61,10 @@ export default function UserLogin() {
       // if the login was successful
       console.log("Success");
       setLoginSuccess("Login successful!");
+      setTimeout(() => {
+        console.log("Redirecting...");
+        redirect("/");
+      }, 2000);
     }
   }
 

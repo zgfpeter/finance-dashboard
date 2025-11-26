@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Rowdies } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import QueryProvider from "./providers/QueryProvider";
-
-import { ModalProvider } from "./context/ModalContext";
+import Providers from "./providers/Providers";
 // import { store } from "./store/store";
 const rowdies = Rowdies({
   variable: "--font-rowdies",
@@ -51,14 +49,12 @@ export default function RootLayout({
         {/* wrap my app in the QueryProvider (for tanstack query) */}
         {/* a Provider is a react pattern based on React Context. It makes a value available to all descendant components without passing it as props. QueryClientProvider places teh queryClient into context ( here i have a separate QueryProvider in my providers/QueryProvider.tsx ). The provider connects hooks and components to the central cache and behaviors*/}
         {/* <Provider store={store}> */}
-        <QueryProvider>
-          <ModalProvider>
-            <Navbar />
-            {children}
-            <Footer />
-          </ModalProvider>
-        </QueryProvider>
-        {/* </Provider> */}
+
+        <Providers>
+          {/* <Navbar /> */}
+          {children}
+        </Providers>
+        <Footer />
       </body>
     </html>
   );
