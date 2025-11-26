@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MdClose, MdEdit, MdDelete } from "react-icons/md";
 import { useDashboard } from "../hooks/useDashboard";
 import { useModal } from "../context/ModalContext";
-export default function UpcomingCharges() {
+export default function Subscriptions() {
   const [notificationsModalOpen, setNotificationsModalOpen] =
     useState<boolean>(false);
   // track which item is to be deleted and show the delete confirmation modal
@@ -13,10 +13,10 @@ export default function UpcomingCharges() {
   const [notify, setNotify] = useState<boolean>(false);
   const [tempNotify, setTempNotify] = useState<boolean>(notify); /// for inside the modal
 
-  const UCData = useDashboard().data?.upcomingCharges;
+  const SubscriptionsData = useDashboard().data?.subscriptions;
 
   // for the filtered result ( ex. a charge is deleted )
-  const [filteredData, setFilteredData] = useState(UCData || []);
+  const [filteredData, setFilteredData] = useState(SubscriptionsData || []);
 
   const { openModal } = useModal();
 
@@ -35,7 +35,7 @@ export default function UpcomingCharges() {
   }
 
   function handleDelete(id: string) {
-    if (!UCData) return;
+    if (!SubscriptionsData) return;
     setFilteredData((prev) => prev.filter((charge) => charge.id !== id));
     setDeleteId(null); // close the delete overlay;
   }
@@ -59,7 +59,9 @@ export default function UpcomingCharges() {
               checked={tempNotify}
               onChange={(e) => setTempNotify(e.target.checked)}
             />
-            <span>Notify me about upcoming charges:</span>
+            <span className="w-3/4">
+              Notify me about upcoming subscription charges:
+            </span>
             <span
               className="h-5 w-5 min-w-5 min-h-5 rounded border border-blue-600 peer-checked:bg-blue-600 peer-checked:border-blue-600
                 peer-checked:ring-2 peer-checked:ring-blue-600 
@@ -86,7 +88,7 @@ export default function UpcomingCharges() {
       )}
       <h2 className="flex items-center justify-between gap-2 p-2 rounded-xl text-xl mb-2">
         {/* <FaMoneyBillTransfer /> Transactions */}
-        Upcoming Charges
+        Subscriptions
         <button
           className="p-1"
           onClick={handleNotifications}

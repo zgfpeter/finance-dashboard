@@ -135,5 +135,39 @@
     "company":"Acme Corp",
     "amount":3200
   }
+],
+"subscriptions":[
+  
+    {
+      "id": "sub1",
+      "date": "2025-01-02",
+      "company": "Spotify",
+      "amount": 9.99
+      
+    },
+    {
+      "id": "sub2",
+      "date": "2025-01-04",
+      "company": "Youtube Premium",
+      "amount": 7.99
+    },
+    {
+      "id": "sub3",
+      "date": "2025-01-08",
+      "company": "Apple TV",
+      "amount": 4.99
+    },
+    {
+      "id": "sub4",
+      "date": "2025-01-11",
+      "company": "Hulu",
+      "amount": 6.99
+    },
+    {
+      "id": "sub5",
+      "date": "2025-01-19",
+      "company": "Disney+",
+      "amount": 8.99
+    }
 ]
 }

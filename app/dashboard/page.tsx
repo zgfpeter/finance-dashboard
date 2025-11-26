@@ -10,7 +10,7 @@ import Debts from "../components/Debts";
 import Savings from "../components/Savings";
 import { useDashboard } from "../hooks/useDashboard";
 import LoadingSpinner from "../components/LoadingSpinner";
-
+import Subscriptions from "../components/Subscriptions";
 import { MdError } from "react-icons/md";
 
 export default function DashboardPage() {
@@ -92,6 +92,15 @@ export default function DashboardPage() {
           <UpcomingCharges />
         </div>
 
+        {/* <div
+          className="
+    border-2 border-(--border-blue) p-3 rounded-xl 
+    flex items-center justify-center overflow-hidden
+    order-2 md:order-2 lg:order-2
+  "
+        >
+          <Subscriptions />
+        </div> */}
         {/* Debts + Savings */}
         <div
           className="
@@ -109,10 +118,14 @@ export default function DashboardPage() {
           className="
     border-2 border-(--border-blue) p-3 rounded-xl 
     flex flex-col gap-1 items-center justify-evenly
-    order-6 md:order-6 lg:order-6
+    order-6 md:order-6 relative
   "
         >
           <h2 className="text-(--text-light) text-2xl">Spendings this year</h2>
+          <p className="text-(--text-light) absolute top-20 right-5">
+            Total: <span className="text-red-500">€ 7532</span>
+          </p>
+
           <SpendingChart />
           <MonthlySpendingChart />
         </div>

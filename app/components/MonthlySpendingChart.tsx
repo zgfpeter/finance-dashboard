@@ -24,7 +24,7 @@ const MonthlySpendingChart = () => {
       <BarChart
         style={{
           width: "100%",
-          maxWidth: "700px",
+          maxWidth: "",
           maxHeight: "100px", // sets the height
           aspectRatio: 1.618,
         }}

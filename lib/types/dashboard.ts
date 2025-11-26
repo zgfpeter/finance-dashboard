@@ -19,6 +19,12 @@ export interface UpcomingCharge {
   company: string;
   amount: number; // negative number (-)
 }
+export interface Subscriptions {
+  id: string;
+  date: string;
+  company: string;
+  amount: number; // negative number (-)
+}
 
 export interface Debt {
   id: string;
@@ -42,6 +48,7 @@ export interface DashboardData {
   overview: Overview;
   transactions: Transaction[];
   upcomingCharges: UpcomingCharge[];
+  subscriptions: Subscriptions[];
   debts: Debt[];
   goals: Goal[];
 }
