@@ -121,10 +121,12 @@ export default function DashboardPage() {
     order-6 md:order-6 relative
   "
         >
-          <h2 className="text-(--text-light) text-2xl">Spendings this year</h2>
-          <p className="text-(--text-light) absolute top-20 right-5">
-            Total: <span className="text-red-500">€ 7532</span>
-          </p>
+          <h2 className="text-(--text-light) text-lg flex justify-between w-full">
+            <span>Spendings this year </span>
+            <span className="text-(--text-light)">
+              Total: <span className="text-red-500">€ 7532</span>
+            </span>
+          </h2>
 
           <SpendingChart />
           <MonthlySpendingChart />
