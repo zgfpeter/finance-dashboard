@@ -92,6 +92,27 @@ export default function UserLogin() {
     // if there are no errors in the form, this will return true
     // if there's at least one error, then it will return false
   }
+
+  // TEST FUNCTIONALITY
+  const DEMO_EMAIL = "testUser@example.com";
+  const DEMO_PASSWORD = "Abc123";
+
+  async function handleDemoLogin() {
+    setFormData({
+      email: DEMO_EMAIL,
+      password: DEMO_PASSWORD,
+    });
+    const result = await signIn("credentials", {
+      email: DEMO_EMAIL,
+      password: DEMO_PASSWORD,
+      redirect: false,
+    });
+    if (result?.error) {
+      setLoginError("Demo login failed.");
+    } else {
+      redirect("/dashboard");
+    }
+  }
   return (
     <section className=" h-screen flex items-center justify-center text-(--text-light)">
       <form
@@ -174,6 +195,13 @@ export default function UserLogin() {
           />
           <span className="relative z-10">Log In</span>
         </motion.button>
+        <button
+          className="border p-3 rounded w-30  z-0  hover:cursor-pointer"
+          aria-label="Demo login"
+          onClick={handleDemoLogin}
+        >
+          DEMO
+        </button>
         <span>or</span>
         <Link
           href="/signUp"
