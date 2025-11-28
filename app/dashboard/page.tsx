@@ -32,7 +32,7 @@ export default function DashboardPage() {
     );
 
   return (
-    <div className="flex justify-center py-5">
+    <div className="flex justify-center">
       {/* 
       small screens: grid with 1 column
           medium screens: grid with 2 columns
@@ -42,11 +42,11 @@ export default function DashboardPage() {
       <div className="h-25 fixed top-0 left-0 w-full bg-(--primary-blue) lg:hidden z-10"></div>
       <main
         className="
-  pt-25 lg:ml-21 lg:pt-0 
+  pt-25  lg:pt-3
   grid grid-cols-1 
   md:grid-cols-2 
   lg:grid-cols-3 
-  gap-4 w-full max-w-7xl p-5
+  gap-3 w-full max-w-7xl p-3
 "
       >
         {/* Overview */}
@@ -63,7 +63,7 @@ export default function DashboardPage() {
         <div
           className=" 
     border-2 border-(--border-blue) p-3 rounded-xl 
-    order-4 md:order-4 lg:order-4 
+    order-4 md:order-4 lg:order-4 overflow-hidden
   "
         >
           <Transactions />

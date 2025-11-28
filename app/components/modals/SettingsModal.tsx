@@ -43,13 +43,13 @@ export default function SettingsModal({ onClose }: Props) {
             // object-cover so that the image keeps it's aspect ratio
           ></Image>
           {changeAvatar && (
-            <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-full absolute hover:cursor-pointer">
+            <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-full absolute">
               Change
             </button>
           )}
         </div>
       </div>
-      <div className="flex items-center justify-center p-3 gap-1 border rounded  hover:border-red-500 hover:cursor-pointer">
+      <div className="flex items-center justify-center p-3 gap-1 border rounded  hover:border-red-500 ">
         <MdDelete className="pt-px" color="red" />
         <Link href="" className=" ">
           Delete Account

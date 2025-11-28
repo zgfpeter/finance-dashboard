@@ -36,7 +36,7 @@ export default function Subscriptions() {
 
   function handleDelete(id: string) {
     if (!SubscriptionsData) return;
-    setFilteredData((prev) => prev.filter((charge) => charge.id !== id));
+    setFilteredData((prev) => prev.filter((charge) => charge._id !== id));
     setDeleteId(null); // close the delete overlay;
   }
 
@@ -70,14 +70,14 @@ export default function Subscriptions() {
           </label>
           <div className="flex justify-evenly w-full">
             <button
-              className="px-2 py-1 hover:cursor-pointer"
+              className="px-2 py-1 "
               onClick={handleDontNotify}
               aria-label="Cancel"
             >
               Cancel
             </button>
             <button
-              className="px-2 py-1 hover:cursor-pointer text-teal-600"
+              className="px-2 py-1 text-teal-600"
               onClick={handleSaveNotify}
               aria-label="Save"
             >
@@ -102,12 +102,10 @@ export default function Subscriptions() {
         {filteredData?.map((charge) => {
           return (
             <li
-              key={charge.id}
+              key={charge._id}
               className="grid grid-cols-2 justify-items-stretch items-center bg-(--border-blue) p-2 rounded-xl relative"
             >
               <div className="flex items-center gap-2">
-                {/* <FaPlus color="green" /> */}
-
                 <div className="flex flex-col ">
                   <span>{charge.company}</span>
                   <span>{charge.date}</span>
@@ -116,39 +114,33 @@ export default function Subscriptions() {
               <div className="flex justify-between">
                 <div className="text-yellow-500 ">- € {charge.amount}</div>
                 <div className="flex items-center gap-1 ">
-                  {/* <button
-                    className="p-1 hover:cursor-pointer"
-                    aria-label="Edit"
-                  >
-                    <MdEdit color="orange" />
-                  </button> */}
                   <button
-                    className="p-1 hover:cursor-pointer"
-                    onClick={() => setDeleteId(charge.id)}
+                    className="p-1 "
+                    onClick={() => setDeleteId(charge._id)}
                     aria-label="Delete"
                   >
                     <MdDelete color="red" />
                   </button>
                 </div>
               </div>
-              {deleteId === charge.id && (
+              {deleteId === charge._id && (
                 <div className="absolute inset-0 bg-(--primary-blue)  rounded-xl flex flex-col items-center justify-center gap-1 z-20">
                   <p>Are you sure you want to delete this item?</p>
 
                   <div className="flex items-center ">
                     <button
-                      className="px-3 text-stone-500 hover:text-stone-600 hover:cursor-pointer"
+                      className="px-3 text-stone-500 hover:text-stone-600 "
                       onClick={() => setDeleteId(null)}
                       aria-label="Cancel"
                     >
                       Cancel
                     </button>
                     <button
-                      className="px-3 text-red-500 hover:cursor-pointer hover:text-red-600"
+                      className="px-3 text-red-500  hover:text-red-600"
                       onClick={() => {
                         // // TODO: perform deletion here
                         // setDeleteId(null);
-                        handleDelete(charge.id);
+                        handleDelete(charge._id);
                       }}
                       aria-label="Confirm Delete"
                     >

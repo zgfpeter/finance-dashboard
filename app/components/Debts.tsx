@@ -8,7 +8,7 @@ export default function Debts() {
 
   return (
     <section className="bg-(--border-blue) flex flex-col justify-evenly text-(--text-light) gap-3 h-1/2 w-full rounded-xl z-30">
-      <div className="flex justify-between p-2">
+      <div className="flex justify-between p-2 items-center">
         <h2 className="flex items-center rounded-xl text-xl">Debts</h2>
         <p className="text-sm text-orange-400">Due Date</p>
       </div>
@@ -20,7 +20,7 @@ export default function Debts() {
         {debts?.map((debt) => {
           return (
             <li
-              key={debt.id}
+              key={debt._id}
               className="items-center bg-(--border-blue) p-2 rounded-xl flex flex-col gap-2 relative z-20"
             >
               <div className="flex items-center justify-between w-full">

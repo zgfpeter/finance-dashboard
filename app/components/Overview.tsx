@@ -3,7 +3,8 @@ import { IoMdArrowDropup } from "react-icons/io";
 
 export default function Overview() {
   const dashboardData = useDashboard().data?.overview;
-  //console.log(dashboardData);
+  const nrOfTransactions = useDashboard().data?.transactions;
+
   return (
     <section className="flex flex-col justify-center gap-2 h-full overflow-y-auto  text-(--text-light) ">
       <h1 className="text-4xl">Overview</h1>
@@ -26,8 +27,10 @@ export default function Overview() {
         {`$ ${dashboardData?.monthlyChange} more compared to last month.`}
       </p>
       <p className="bg-(--border-blue) rounded-xl p-2">
-        Total transactions this month:{" "}
-        <span className="text-emerald-600">32</span>
+        Total transactions this month:
+        <span className="text-emerald-600 mx-2">
+          {nrOfTransactions?.length}
+        </span>
       </p>
     </section>
   );

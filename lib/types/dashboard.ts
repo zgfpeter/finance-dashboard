@@ -6,28 +6,28 @@ export interface Overview {
 export type TransactionType = "income" | "expense";
 
 export interface Transaction {
-  id: string;
+  _id?: string;
   date: string;
   company: string;
-  amount: number; // negative = expense, positive = income
-  type: TransactionType;
+  amount: number | string; // negative = expense, positive = income
+  transactionType: TransactionType;
 }
 
 export interface UpcomingCharge {
-  id: string;
+  _id?: string;
   date: string;
   company: string;
-  amount: number; // negative number (-)
+  amount: number | string; // negative number (-)
 }
 export interface Subscriptions {
-  id: string;
+  _id?: string;
   date: string;
   company: string;
   amount: number; // negative number (-)
 }
 
 export interface Debt {
-  id: string;
+  _id?: string;
   company: string;
   currentPaid: number;
   totalAmount: number;
@@ -35,11 +35,17 @@ export interface Debt {
 }
 
 export interface Goal {
-  id: string;
+  _id: string;
   title: string;
   targetDate: string;
   currentAmount: number;
   targetAmount: number;
+}
+
+export interface Income {
+  _id: string;
+  company: string;
+  amount: number;
 }
 
 // for the whole dashboard
@@ -51,6 +57,7 @@ export interface DashboardData {
   subscriptions: Subscriptions[];
   debts: Debt[];
   goals: Goal[];
+  income: Income[];
 }
 
 // modal types
@@ -60,4 +67,18 @@ export type ModalType =
   | "settings"
   | "debts "
   | "savings"
+  | "addTransaction"
+  | "editTransaction"
+  | "addUpcomingCharge"
+  | "editUpcomingCharge"
   | "none";
+
+// // for sending to API
+// export type TransactionPayload = Omit<Transaction, "_id">;
+// export type TransactionResponse = Required<Transaction>;
+// // response includes _id, but request doesn't as _id is assigned by mongodb
+export type UpcomingChargePayload = {
+  date: string;
+  company: string;
+  amount: string | number;
+};

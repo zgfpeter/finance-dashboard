@@ -6,9 +6,9 @@ export default function Savings() {
   const savings = useDashboard().data?.goals;
   return (
     <section className="bg-(--border-blue) flex flex-col justify-evenly text-(--text-light) gap-3 h-1/2 w-full rounded-xl">
-      <div className="flex justify-between px-2">
+      <div className="flex justify-between p-2 items-center">
         <h2 className="flex items-center rounded-xl text-xl">Savings</h2>
-        <p className="text-sm text-green-500">Goal Date</p>
+        <p className="text-sm text-green-400">Goal Date</p>
       </div>
 
       {/* total balance-current net worth across accounts */}
@@ -17,7 +17,7 @@ export default function Savings() {
         {savings?.map((goal) => {
           return (
             <li
-              key={goal.id}
+              key={goal._id}
               className="items-center bg-(--border-blue) p-2 rounded-xl flex flex-col gap-2 relative"
             >
               <div className="flex items-center justify-between w-full">

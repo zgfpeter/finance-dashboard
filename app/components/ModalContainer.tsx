@@ -7,6 +7,8 @@ import TransactionsModal from "./modals/TransactionsModal";
 import { ModalType } from "@/lib/types/dashboard";
 import UpcomingChargesModal from "./modals/UpcomingChargesModal";
 import SettingsModal from "./modals/SettingsModal";
+import AddTransactionModal from "./modals/AddTransactionModal";
+import AddUpcomingChargeModal from "./modals/AddUpcomingChargeModal";
 interface Props {
   modal: ModalType;
   onClose: () => void;
@@ -43,6 +45,25 @@ export default function ModalContainer({ modal, onClose }: Props) {
           ariaLabel="Settings"
         >
           <SettingsModal onClose={onClose} />
+        </ModalWrapper>
+      )}
+      {modal === "addTransaction" && (
+        <ModalWrapper
+          onClose={onClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Add Transaction"
+        >
+          <AddTransactionModal onClose={onClose} />
+        </ModalWrapper>
+      )}
+
+      {modal === "addUpcomingCharge" && (
+        <ModalWrapper
+          onClose={onClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Add Upcoming Charge"
+        >
+          <AddUpcomingChargeModal onClose={onClose} />
         </ModalWrapper>
       )}
 

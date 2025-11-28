@@ -28,21 +28,11 @@ export default function Navbar() {
       >
         <ul className="flex flex-col text-(--primary-orange)  h-2/3 justify-evenly">
           <li className="px-10 flex items-center justify-center">
-            {/* <span className="absolute z-[-1]">
-              <MdDashboard size={150} className="rounded-full" />
-            </span> */}
             <Image src="/logo.png" width={150} height={150} alt="logo"></Image>
           </li>
 
-          {/* Menu Items */}
-          {/* <li className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer">
-            <Link href="/" className="flex items-center gap-3 relative">
-              <FaRegUserCircle /> PROFILE
-              <span className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"></span>
-            </Link>
-          </li> */}
           <button
-            className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer"
+            className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group "
             aria-label="Transactions"
           >
             <Link
@@ -55,7 +45,7 @@ export default function Navbar() {
             </Link>
           </button>
           <button
-            className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer"
+            className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group "
             onClick={() => openModal("settings")}
             aria-label="Settings"
           >
@@ -65,7 +55,7 @@ export default function Navbar() {
             </Link>
           </button>
           <div className="flex items-center justify-evenly w-full text-sm ">
-            <button className="relative py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer">
+            <button className="relative py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group ">
               <Link
                 href="/"
                 className="flex items-center gap-3 relative"
@@ -75,10 +65,9 @@ export default function Navbar() {
                   <FaFileImport />
                   IMPORT
                 </div>
-                {/* <span className="absolute bottom-0 left-0 h-full rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full z-0"></span> */}
               </Link>
             </button>
-            <button className="relative py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group hover:cursor-pointer ">
+            <button className="relative py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group  ">
               <Link
                 href="/"
                 className="flex items-center gap-3 relative"
@@ -88,7 +77,6 @@ export default function Navbar() {
                   EXPORT
                   <FaFileExport />
                 </div>
-                {/* <span className="absolute bottom-0 left-0 h-full rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full z-0"></span> */}
               </Link>
             </button>
           </div>
@@ -108,7 +96,7 @@ export default function Navbar() {
           ></motion.div>{" "}
           <button
             onClick={() => signOut({ callbackUrl: "/UserLogin" })}
-            className=" relative w-full py-5 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) hover:cursor-pointer"
+            className=" relative w-full py-5 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) "
             aria-label="Sign out"
           >
             {" "}
@@ -137,7 +125,7 @@ export default function Navbar() {
       {/* Toggle Button */}
       <motion.button
         onClick={toggleMenu}
-        className="fixed top-4.5 left-0 md:left-0 lg:top-1/2 lg:-translate-y-1/2 rounded-full bg-(--primary-orange) text-white flex items-center justify-center text-4xl z-30 w-16 h-16 hover:cursor-pointer "
+        className="fixed top-4.5 left-0 md:left-0 lg:top-1/2 lg:-translate-y-1/2 rounded-full bg-(--primary-orange) text-white flex items-center justify-center text-4xl z-30 w-16 h-16 "
         aria-label="Toggle Menu"
         animate={{
           x: menuOpen ? sidebarWidth : 20,

@@ -45,7 +45,7 @@ export default function ModalWrapper({
 
   return (
     <div
-      className="fixed inset-0 z-999 flex items-center justify-center"
+      className="fixed inset-0 z-999 flex items-center justify-center px-3"
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}

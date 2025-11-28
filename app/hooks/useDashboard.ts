@@ -9,7 +9,11 @@ import { DashboardData } from "@/lib/types/dashboard"; // the type for the dashb
 export function useDashboard() {
   return useQuery<DashboardData>({
     queryKey: ["dashboardData"],
-    queryFn: getDashboardData, // getDashboardData must return a promise
+    queryFn: getDashboardData,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    // getDashboardData must return a promise
     // defaultOptions: sensible defaults so tha ti don't have to pass options in every hook.
     // if i pass here options like staleTime, it will override the defaults
     // defaultOptions:{

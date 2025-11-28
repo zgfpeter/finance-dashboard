@@ -10,12 +10,35 @@
   /* start - my own colors */
   --primary-orange: #ec9730;
   --limegreen: #8aee20;
-  --primary-blue: #041523f7;
+  --primary-blue: #041523;
   --secondary-blue: #105084b6;
   --text-light: #d7d7d7;
   --error-blue: #7ab2ea;
   --border-blue: #27385895;
   /* end -  my own colors */
+
+  /* start - hide the default scrollbar */
+
+  /* .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;  firefox
+  } */
+  /* end - hide the default scrollbar */
+
+  /* calendar icon color */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(80%) sepia(0%) saturate(0%) hue-rotate(180deg);
+    /*  make the clicking area bigger */
+    padding: 1em;
+  }
+  /* cursor pointer for button on hover */
+  button:hover {
+    cursor: pointer;
+  }
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
