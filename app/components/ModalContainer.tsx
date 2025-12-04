@@ -13,7 +13,6 @@ import AddTransactionModal from "./modals/AddTransactionModal";
 import AddUpcomingChargeModal from "./modals/AddUpcomingChargeModal";
 import EditUpcomingChargeModal from "./modals/EditUpcomingChargeModal"; // your edit modal
 import EditTransactionModal from "./modals/EditTransactionModal";
-import EditOverviewModal from "./modals/EditOverviewModal";
 
 export default function ModalContainer() {
   const dispatch = useDispatch();
@@ -100,16 +99,6 @@ export default function ModalContainer() {
         >
           {/* Modal data is the Transaction to be edited */}
           <EditTransactionModal data={modalData} onClose={handleClose} />
-        </ModalWrapper>
-      );
-    case "editOverview":
-      return (
-        <ModalWrapper
-          onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
-          ariaLabel="Edit Overview"
-        >
-          <EditOverviewModal onClose={handleClose} />
         </ModalWrapper>
       );
 

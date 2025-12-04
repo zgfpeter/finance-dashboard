@@ -1,18 +1,6 @@
 "use client";
 import { Cell, Pie, PieChart, PieLabelRenderProps, Legend } from "recharts";
-import { useDashboard } from "../hooks/useDashboard";
 
-// // #region Sample data
-// const data = [
-//   { name: "Subscriptions", value: 150 },
-//   { name: "Bills", value: 50 },
-//   { name: "Loans", value: 100 },
-//   { name: "Insurance", value: 75 },
-//   { name: "Tax", value: 125 },
-//   { name: "Other", value: 125 },
-// ];
-
-// #endregion
 const RADIAN = Math.PI / 180;
 const COLORS = [
   "#c90a23ea",

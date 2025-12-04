@@ -1,15 +1,14 @@
 "use client";
-import { MdEmail, MdDelete, MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+
 interface Props {
   onClose: () => void;
 }
 
 export default function SettingsModal({ onClose }: Props) {
   const [changeAvatar, setChangeAvatar] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [openConfirmationModal, setOpenConfirmationModal] =
     useState<boolean>(false);
   function handleDelete() {}

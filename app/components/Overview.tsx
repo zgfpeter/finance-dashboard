@@ -1,23 +1,16 @@
 import { useDashboard } from "../hooks/useDashboard";
 import { IoMdArrowDropup } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import { openModal } from "../store/modalSlice";
 export default function Overview() {
   const dashboardData = useDashboard().data?.overview;
   const nrOfTransactions = useDashboard().data?.transactions;
-  const dispatch = useDispatch();
+
   return (
     <section className="flex flex-col gap-2 h-full overflow-y-auto justify-evenly py-2">
       <div className="flex items-center justify-between ">
         <h1 className="text-4xl">Overview</h1>
         <div className="flex gap-5">
-          <button
-            className="text-2xl flex items-center"
-            onClick={() =>
-              dispatch(openModal({ type: "editOverview", data: null }))
-            }
-          >
+          <button className="text-2xl flex items-center">
             <span className="text-yellow-500">
               <MdEdit />
             </span>

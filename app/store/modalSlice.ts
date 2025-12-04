@@ -1,6 +1,6 @@
 // store/modalSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ModalType, UpcomingCharge } from "@/lib/types/dashboard";
+import { ModalType } from "@/lib/types/dashboard";
 
 interface ModalState {
   type: ModalType;

@@ -30,7 +30,7 @@ export const metadata = {
     title: "Personal Finance Dashboard",
     description:
       "A one-page personal finance dashboard built with Next.js, React, and TailwindCSS.",
-    url: "https://your-live-demo.com", // Live demo URL
+    url: "finance-dashboard-git-main-zgfpeters-projects.vercel.app", // Live demo URL
     siteName: "Personal Finance Dashboard",
     locale: "en_US",
     type: "website",

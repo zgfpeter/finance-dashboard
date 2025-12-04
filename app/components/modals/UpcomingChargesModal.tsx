@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData, UpcomingCharge } from "@/lib/types/dashboard";
+import { DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { MdEdit, MdDelete } from "react-icons/md";

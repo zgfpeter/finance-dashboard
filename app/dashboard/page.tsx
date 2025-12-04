@@ -13,7 +13,7 @@ import { useDashboard } from "../hooks/useDashboard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { MdError } from "react-icons/md";
 import CalSpedingCategoriesPercentages from "@/lib/CalculatePiePercentages";
-// import { useModal } from "@/app/context/ModalContext";
+
 // TODO for my editUpcominCharge modal to work, i need to lift up the state. since it needs to be passed to the EditUpcomingChargeModal,
 
 export default function DashboardPage() {
