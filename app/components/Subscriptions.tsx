@@ -41,7 +41,7 @@ export default function Subscriptions() {
   }
 
   return (
-    <section className="bg-(--hover-blue) row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col text-(--text-light) rounded-xl gap-3 h-full w-full relative">
+    <section className="bg-(--hover-blue) row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col  rounded-xl gap-3 h-full w-full relative">
       {notificationsModalOpen && (
         <section className="absolute bg-(--primary-blue) h-full w-full inset-0 flex flex-col items-center justify-evenly gap-3 z-10">
           <button

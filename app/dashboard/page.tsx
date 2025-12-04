@@ -9,17 +9,20 @@ import UpcomingCharges from "../components/UpcomingCharges";
 import Debts from "../components/Debts";
 import Savings from "../components/Savings";
 import { useDashboard } from "../hooks/useDashboard";
+
 import LoadingSpinner from "../components/LoadingSpinner";
-import Subscriptions from "../components/Subscriptions";
 import { MdError } from "react-icons/md";
+import CalSpedingCategoriesPercentages from "@/lib/CalculatePiePercentages";
+// import { useModal } from "@/app/context/ModalContext";
+// TODO for my editUpcominCharge modal to work, i need to lift up the state. since it needs to be passed to the EditUpcomingChargeModal,
 
 export default function DashboardPage() {
-  const { data, isLoading, isError, error } = useDashboard();
-
-  // if (isLoading) return <div>Loading...</div>;
+  const { isLoading, isError } = useDashboard();
+  const spendingsPieData = CalSpedingCategoriesPercentages();
+  console.log(spendingsPieData);
   if (isLoading)
     return (
-      <div className="flex h-screen items-center p-5 text-(--text-light) justify-center relative">
+      <div className="flex h-screen items-center p-5 text-(--text-light) justify-center relative z-100">
         <LoadingSpinner /> Loading...
       </div>
     );
@@ -39,51 +42,52 @@ export default function DashboardPage() {
           large screens: grid with 3 columns
       */}
       {/* empty div for mobile devices, so that burger button doesn't overlap with content */}
-      <div className="h-25 fixed top-0 left-0 w-full bg-(--primary-blue) lg:hidden z-10"></div>
+      <div className="h-25 fixed top-0 left-0 w-full bg-(--primary-blue) lg:hidden z-10 "></div>
       <main
         className="
   pt-25  lg:pt-3
   grid grid-cols-1 
   md:grid-cols-2 
   lg:grid-cols-3 
-  gap-3 w-full max-w-7xl p-3
+  gap-3 w-full max-w-7xl p-3 
+  lg:ml-23 2xl:ml-0
 "
       >
         {/* Overview */}
         <div
           className="
-    border-2 border-(--border-blue) bg-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) bg-(--primary-blue) p-3 rounded-xl 
     order-1 md:order-1 lg:order-1
   "
         >
           <Overview />
         </div>
 
-        {/* Transactions */}
-        <div
-          className=" 
-    border-2 border-(--border-blue) p-3 rounded-xl 
-    order-4 md:order-4 lg:order-4 overflow-hidden
-  "
-        >
-          <Transactions />
-        </div>
-
         {/* Income + Spendings */}
         <div
-          className="
-    border-2 border-(--border-blue) bg-(--border-blue) p-3 rounded-xl 
-    flex flex-col gap-1
-    order-3 md:order-3 lg:order-3
+          className="bg-(--primary-bg)
+    border-2 border-(--border-blue) p-3 rounded-xl 
+    order-4 md:order-4 lg:order-3 overflow-hidden flex flex-col gap-1
   "
         >
           <IncomeCard />
           <SpendingsCard />
         </div>
 
+        {/* Transactions */}
+        <div
+          className=" bg-(--primary-bg)
+    border-2 border-(--border-blue)  p-3 rounded-xl 
+    
+    order-3 md:order-3 lg:order-3 overflow-hidden
+  "
+        >
+          <Transactions />
+        </div>
+
         {/* Upcoming Charges */}
         <div
-          className="
+          className=" bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
     flex items-center justify-center overflow-hidden
     order-2 md:order-2 lg:order-2
@@ -103,8 +107,8 @@ export default function DashboardPage() {
         </div> */}
         {/* Debts + Savings */}
         <div
-          className="
-    border-2 border-(--border-blue) bg-(--border-blue) p-3 rounded-xl 
+          className="  bg-(--primary-bg)
+    border-2 border-(--border-blue) p-3 rounded-xl 
     flex flex-col gap-1
     order-5 md:order-5 lg:order-5 relative z-0
   "
@@ -115,9 +119,9 @@ export default function DashboardPage() {
 
         {/* Spendings this year */}
         <div
-          className="
+          className="  bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
-    flex flex-col gap-1 items-center justify-evenly
+    flex flex-col gap-1 items-center justify-around
     order-6 md:order-6 relative
   "
         >
@@ -128,8 +132,9 @@ export default function DashboardPage() {
             </span>
           </h2>
 
-          <SpendingChart />
+          <SpendingChart pieData={spendingsPieData} />
           <MonthlySpendingChart />
+          <p className="text-center ">Spendings by month</p>
         </div>
       </main>
     </div>

@@ -4,6 +4,7 @@ import "./globals.css";
 // import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Providers from "./providers/Providers";
+import Background from "./components/Background";
 // import { store } from "./store/store";
 const rowdies = Rowdies({
   variable: "--font-rowdies",
@@ -42,9 +43,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${rowdies.className} antialiased  bg-linear-to-r from-[#120319] to-[#0b181c] h-screen`}
+        suppressHydrationWarning
+        className={`${rowdies.className} antialiased  bg-linear-to-r from-[#120319] to-[#0b181c] h-screen text-(--text-light) `}
       >
         {/* wrap my app in the QueryProvider (for tanstack query) */}
         {/* a Provider is a react pattern based on React Context. It makes a value available to all descendant components without passing it as props. QueryClientProvider places teh queryClient into context ( here i have a separate QueryProvider in my providers/QueryProvider.tsx ). The provider connects hooks and components to the central cache and behaviors*/}
@@ -52,6 +54,7 @@ export default function RootLayout({
 
         <Providers>
           {/* <Navbar /> */}
+          <Background />
           {children}
         </Providers>
         <Footer />

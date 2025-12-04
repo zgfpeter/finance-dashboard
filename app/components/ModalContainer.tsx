@@ -1,91 +1,119 @@
-// decides which modal to show
 "use client";
 
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import { closeModal } from "@/app/store/modalSlice";
+
 import ModalWrapper from "./ModalWrapper";
 import TransactionsModal from "./modals/TransactionsModal";
-import { ModalType } from "@/lib/types/dashboard";
 import UpcomingChargesModal from "./modals/UpcomingChargesModal";
 import SettingsModal from "./modals/SettingsModal";
 import AddTransactionModal from "./modals/AddTransactionModal";
 import AddUpcomingChargeModal from "./modals/AddUpcomingChargeModal";
-interface Props {
-  modal: ModalType;
-  onClose: () => void;
-}
+import EditUpcomingChargeModal from "./modals/EditUpcomingChargeModal"; // your edit modal
+import EditTransactionModal from "./modals/EditTransactionModal";
+import EditOverviewModal from "./modals/EditOverviewModal";
 
-export default function ModalContainer({ modal, onClose }: Props) {
-  if (modal === "none") return null;
+export default function ModalContainer() {
+  const dispatch = useDispatch();
 
-  // You can vary width per modal by passing widthClass to ModalWrapper
-  return (
-    <>
-      {modal === "transactions" && (
+  // get the modal type and optional payload from Redux state
+  // payload can be the data the modal has to display
+  const { type: modalType, data: modalData } = useSelector(
+    (state: RootState) => state.modal
+  );
+  // no modal open
+  if (modalType === "none") return null;
+
+  // function passed to every modal to close modal
+  const handleClose = () => dispatch(closeModal());
+
+  switch (modalType) {
+    case "transactions":
+      return (
         <ModalWrapper
-          onClose={onClose}
+          onClose={handleClose}
           widthClass="w-[800px] max-w-full"
           ariaLabel="Transactions"
         >
-          <TransactionsModal onClose={onClose} />
+          <TransactionsModal onClose={handleClose} />
         </ModalWrapper>
-      )}
-      {modal === "upcomingCharges" && (
+      );
+    case "settings":
+      return (
         <ModalWrapper
-          onClose={onClose}
-          widthClass="w-[800px] max-w-full"
-          ariaLabel="Upcoming Charges"
-        >
-          <UpcomingChargesModal onClose={onClose} />
-        </ModalWrapper>
-      )}
-      {modal === "settings" && (
-        <ModalWrapper
-          onClose={onClose}
+          onClose={handleClose}
           widthClass="w-[800px] max-w-full"
           ariaLabel="Settings"
         >
-          <SettingsModal onClose={onClose} />
+          <SettingsModal onClose={handleClose} />
         </ModalWrapper>
-      )}
-      {modal === "addTransaction" && (
+      );
+    case "addTransaction":
+      return (
         <ModalWrapper
-          onClose={onClose}
+          onClose={handleClose}
           widthClass="w-[800px] max-w-full"
           ariaLabel="Add Transaction"
         >
-          <AddTransactionModal onClose={onClose} />
+          <AddTransactionModal onClose={handleClose} />
         </ModalWrapper>
-      )}
-
-      {modal === "addUpcomingCharge" && (
+      );
+    case "addUpcomingCharge":
+      return (
         <ModalWrapper
-          onClose={onClose}
+          onClose={handleClose}
           widthClass="w-[800px] max-w-full"
           ariaLabel="Add Upcoming Charge"
         >
-          <AddUpcomingChargeModal onClose={onClose} />
+          <AddUpcomingChargeModal onClose={handleClose} />
         </ModalWrapper>
-      )}
-
-      {/* {modal === "upcoming" && (
+      );
+    case "editUpcomingCharge":
+      return (
         <ModalWrapper
-          onClose={onClose}
-          widthClass="w-[600px] max-w-full"
-          ariaLabel="Upcoming charges"
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Edit Upcoming Charge"
         >
-          <UpcomingModal onClose={onClose} />
+          {/* data is the Upcoming Charge to be edited */}
+          <EditUpcomingChargeModal data={modalData} onClose={handleClose} />
         </ModalWrapper>
-      )}
-
-      {modal === "profile" && (
+      );
+    case "upcomingCharges":
+      return (
         <ModalWrapper
-          onClose={onClose}
-          widthClass="w-96 max-w-full"
-          ariaLabel="Profile"
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Upcoming Charges"
         >
-          <ProfileModal onClose={onClose} />
+          <UpcomingChargesModal onClose={handleClose} />
         </ModalWrapper>
-      )} */}
-    </>
-  );
+      );
+    case "editTransaction":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Edit Transaction"
+        >
+          {/* Modal data is the Transaction to be edited */}
+          <EditTransactionModal data={modalData} onClose={handleClose} />
+        </ModalWrapper>
+      );
+    case "editOverview":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Edit Overview"
+        >
+          <EditOverviewModal onClose={handleClose} />
+        </ModalWrapper>
+      );
+
+    default:
+      return null;
+  }
 }

@@ -1,102 +1,168 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import { motion } from "framer-motion";
-import { FaSignOutAlt, FaFileImport, FaFileExport } from "react-icons/fa";
-import { FaGear, FaMoneyBillTransfer } from "react-icons/fa6";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  FaSignOutAlt,
+  FaFileImport,
+  FaFileExport,
+  FaWrench,
+  FaSun,
+  FaMoon,
+} from "react-icons/fa";
+
+import { useTheme } from "next-themes";
 import { MdMenu, MdClose } from "react-icons/md";
-import { useState } from "react";
-import { useModal } from "../context/ModalContext";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/app/store/modalSlice";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const sidebarWidth = 300;
-  const { openModal } = useModal();
-
+  const dispatch = useDispatch();
+  const sidebarWidth = 400;
   function toggleMenu() {
     setMenuOpen(!menuOpen);
   }
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    // Schedule the state update after the effect phase
+    const id = requestAnimationFrame(() => {
+      setMounted(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   return (
     <div className="relative z-50">
       {/* Sidebar */}
       <motion.nav
-        className="fixed top-0 left-0 h-screen bg-(--primary-blue) w-[300px] flex flex-col justify-between z-50"
+        className={`fixed top-0 left-0 h-screen bg-(--primary-blue)  flex flex-col justify-between z-50 w-[${sidebarWidth}px]`}
         initial={{ x: -sidebarWidth }}
         animate={{ x: menuOpen ? 0 : -sidebarWidth }}
         transition={{ type: "spring", stiffness: 300, damping: 32 }}
+        aria-label="Sidebar navigation"
       >
-        <ul className="flex flex-col text-(--primary-orange)  h-2/3 justify-evenly">
-          <li className="px-10 flex items-center justify-center">
-            <Image src="/logo.png" width={150} height={150} alt="logo"></Image>
+        <ul className="flex flex-col px-10 text-(--primary-orange) h-2/3 justify-around w-full">
+          <li className="flex items-center justify-center ">
+            <Image
+              src="/logo_1.png"
+              width={300}
+              height={200}
+              alt="Logo"
+            ></Image>
           </li>
 
-          <button
-            className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group "
-            aria-label="Transactions"
-          >
-            <Link
-              href="/"
-              className="flex items-center gap-3 relative"
-              onClick={() => openModal("transactions")}
+          <div className="flex justify-between py-3 items-center">
+            <button
+              className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit"
+              onClick={() =>
+                dispatch(openModal({ type: "settings", data: null }))
+              }
+              aria-label="Settings"
             >
-              <FaMoneyBillTransfer /> TRANSACTIONS
-              <span className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"></span>
-            </Link>
-          </button>
-          <button
-            className="relative px-10 py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group "
-            onClick={() => openModal("settings")}
-            aria-label="Settings"
-          >
-            <Link href="/" className="flex items-center gap-3 relative">
-              <FaGear /> SETTINGS
-              <span className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"></span>
-            </Link>
-          </button>
-          <div className="flex items-center justify-evenly w-full text-sm ">
-            <button className="relative py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group ">
-              <Link
-                href="/"
-                className="flex items-center gap-3 relative"
-                aria-label="Import"
-              >
-                <div className="flex items-center gap-1 border bottom-0 px-2 py-1 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300">
-                  <FaFileImport />
-                  IMPORT
-                </div>
-              </Link>
+              <span className="flex items-center gap-2 relative">
+                <FaWrench /> SETTINGS
+                <span
+                  className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
+                  aria-hidden="true"
+                ></span>
+              </span>
             </button>
-            <button className="relative py-5 flex items-center hover:bg-(--hover-blue) hover:text-white group  ">
-              <Link
-                href="/"
-                className="flex items-center gap-3 relative"
-                aria-label="Export"
+
+            {/* <div className="flex bg-red-400 px-3 py-1 w-20 rounded-xl">
+              <span>
+                <FaSun />
+              </span>
+              <span>
+                <FaMoon />
+              </span>
+            </div>
+          </div> */}
+            {/* the light/dark toggle  */}
+            {mounted && (
+              <div
+                onClick={() => setTheme(isDark ? "light" : "dark")}
+                className={`
+        flex items-center w-15 h-8 rounded-full p-1 cursor-pointer transition-colors duration-300
+        ${isDark ? "bg-slate-800" : "bg-stone-300"}
+      `}
               >
-                <div className="flex items-center gap-1 border bottom-0 px-2 py-1 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300">
-                  EXPORT
-                  <FaFileExport />
-                </div>
-              </Link>
+                <motion.div
+                  className="w-5 h-5 bg-(--text-light) rounded-full shadow-lg flex items-center justify-center relative overflow-hidden"
+                  // 1. Move the handle based on theme state
+                  animate={{
+                    x: isDark ? 30 : 0, // Moves 30px to the right
+                    rotate: isDark ? 360 : 0, // Spins 360 degrees
+                  }}
+                  // 2. The spring gives it that physical "rolling" feel
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                >
+                  {/* SUN ICON */}
+                  <motion.div
+                    className="absolute text-orange-500"
+                    animate={{
+                      scale: isDark ? 0 : 1,
+                      opacity: isDark ? 0 : 1,
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FaSun size={18} />
+                  </motion.div>
+                  {/* MOON ICON */}
+                  <motion.div
+                    className="absolute "
+                    animate={{
+                      scale: isDark ? 1 : 0,
+                      opacity: isDark ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FaMoon size={16} />
+                  </motion.div>
+                </motion.div>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-2 text-xs w-full justify-between rounded-xl">
+            <button className=" hover:bg-(--hover-blue) hover:text-(--text-light) w-36 ">
+              <div
+                className="border px-2 py-3 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 w-full "
+                aria-label="Import data"
+              >
+                <span>IMPORT</span>
+                <FaFileImport />
+              </div>
+            </button>
+            <button
+              className="hover:bg-(--hover-blue) hover:text-(--text-light)"
+              aria-label="Export data"
+            >
+              <div className="border px-2 py-3 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 w-36 ">
+                <span>EXPORT</span>
+                <FaFileExport />
+              </div>
             </button>
           </div>
         </ul>
 
         {/* Sign Out */}
         <motion.div
-          className="relative w-40 self-center mb-20"
+          className="relative w-36 self-center mb-20"
           initial="initial"
           whileHover="hover"
         >
           {" "}
           <motion.div
-            className=" absolute inset-0 border-8 text-(--limegreen)"
+            className=" absolute inset-0 border-8 border-(--text-light)"
             variants={{ initial: { rotate: 5 }, hover: { rotate: 0 } }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           ></motion.div>{" "}
           <button
             onClick={() => signOut({ callbackUrl: "/UserLogin" })}
-            className=" relative w-full py-5 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) "
+            className=" relative w-full h-20 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) "
             aria-label="Sign out"
           >
             {" "}
@@ -111,26 +177,32 @@ export default function Navbar() {
 
       {/* Background Overlay */}
       {/* TODO space button and page content properly */}
-      {menuOpen && (
-        <motion.div
-          onClick={toggleMenu}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-        />
-      )}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            onClick={toggleMenu}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Toggle Button */}
       <motion.button
         onClick={toggleMenu}
-        className="fixed top-4.5 left-0 md:left-0 lg:top-1/2 lg:-translate-y-1/2 rounded-full bg-(--primary-orange) text-white flex items-center justify-center text-4xl z-30 w-16 h-16 "
+        className="fixed top-4.5 left-3  lg:top-1/2 lg:-translate-y-1/2 rounded-full bg-(--primary-orange) text-white flex items-center justify-center text-4xl z-30 w-16 h-16 "
         aria-label="Toggle Menu"
         animate={{
-          x: menuOpen ? sidebarWidth : 20,
+          x: menuOpen ? sidebarWidth : 0,
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 25,
+        }}
       >
         {menuOpen ? <MdClose /> : <MdMenu />}
       </motion.button>

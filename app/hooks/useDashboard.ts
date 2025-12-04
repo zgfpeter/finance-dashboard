@@ -13,6 +13,7 @@ export function useDashboard() {
     staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
+
     // getDashboardData must return a promise
     // defaultOptions: sensible defaults so tha ti don't have to pass options in every hook.
     // if i pass here options like staleTime, it will override the defaults

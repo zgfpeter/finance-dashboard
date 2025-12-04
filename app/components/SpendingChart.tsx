@@ -1,14 +1,16 @@
 "use client";
 import { Cell, Pie, PieChart, PieLabelRenderProps, Legend } from "recharts";
+import { useDashboard } from "../hooks/useDashboard";
 
-// #region Sample data
-const data = [
-  { name: "Bills", value: 150 },
-  { name: "Groceries", value: 50 },
-  { name: "Dining Out", value: 100 },
-  { name: "Subscriptions", value: 75 },
-  { name: "Travel", value: 125 },
-];
+// // #region Sample data
+// const data = [
+//   { name: "Subscriptions", value: 150 },
+//   { name: "Bills", value: 50 },
+//   { name: "Loans", value: 100 },
+//   { name: "Insurance", value: 75 },
+//   { name: "Tax", value: 125 },
+//   { name: "Other", value: 125 },
+// ];
 
 // #endregion
 const RADIAN = Math.PI / 180;
@@ -18,6 +20,7 @@ const COLORS = [
   "#c88f14ea",
   "#db5411ea",
   "#049537ea",
+  "#4b494dea",
 ];
 
 const renderCustomizedLabel = ({
@@ -51,10 +54,13 @@ const renderCustomizedLabel = ({
 };
 
 export default function SpendingChart({
+  pieData,
   isAnimationActive = true,
 }: {
+  pieData: { name: string; value: number }[];
   isAnimationActive?: boolean;
 }) {
+  //console.log(pieData);
   return (
     <PieChart
       style={{
@@ -67,7 +73,7 @@ export default function SpendingChart({
     >
       <Legend />
       <Pie
-        data={data}
+        data={pieData}
         labelLine={false}
         label={renderCustomizedLabel}
         fill="#8884d8"
@@ -76,7 +82,7 @@ export default function SpendingChart({
         stroke="#0b181c"
         strokeWidth={5}
       >
-        {data.map((entry, index) => (
+        {pieData.map((entry, index) => (
           <Cell
             key={`cell-${entry.name}`}
             fill={COLORS[index % COLORS.length]}

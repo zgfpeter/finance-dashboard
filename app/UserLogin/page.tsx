@@ -1,12 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaInfoCircle } from "react-icons/fa";
 import { SignInType } from "@/lib/types/FormData";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+
 export default function UserLogin() {
   const [formData, setFormData] = useState<SignInType>({
     email: "",
@@ -16,10 +17,20 @@ export default function UserLogin() {
     email: "",
     password: "",
   });
+  // get the session
+  const { data: session } = useSession();
+  const router = useRouter();
+  // if the user is already logged in
+  useEffect(() => {
+    if (session?.user) {
+      router.push("/dashboard");
+    }
+  }, [session, router]);
+
   // states for the user sign in
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
-  const [loginSuccess, setLoginSuccess] = useState("");
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const [showPasswordInfo, setShowPasswordInfo] = useState(false);
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -31,55 +42,36 @@ export default function UserLogin() {
   }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!validateForm()) {
-      console.log("Sign in form has errors: ", errors);
-      return;
-    }
+    if (!validateForm()) return;
 
-    // sends a POST request to api/auth/[...nextauth]/route.ts
-    // then NextAuth receives the request and calls the authorize () function
+    setIsLoading(true);
+    setLoginError("");
 
     const result = await signIn("credentials", {
       email: formData.email,
       password: formData.password,
-      redirect: false,
+      redirect: false, // prevents automatic redirection
     });
 
-    console.log("NextAuth result ", result);
-    // this doesn't print the user, evne though that's what the authorize() does
-    // this gives something like {ok:true, status:200,error:null} if the user was authorized
-    // to get the user:
-    // const {data:session} = useSession();
-    // then i can console.log(session?.user);
-    // signIn does NOT give the user object, it only tells NextAuth: "Hey we successfully authenticated this user, make the session".
-    // the session is stored globally by NextAuth, not returned by signIn.
+    setIsLoading(false);
 
     if (result?.error) {
-      console.log("Error: ", result.error);
       setLoginError("Invalid email or password.");
-      setLoginSuccess(""); // clear success
-    } else {
-      console.log("Success");
-      setLoginSuccess("Login successful!");
-      setLoginError(""); // clear error
-      setLoginSuccess("");
-      redirect("/");
-      // setTimeout(() => {
-      //   setLoginSuccess(""); // hide after 2 seconds
-      //   console.log("Redirecting...");
-      //   redirect("/");
-      // }, 2000);
+    } else if (result?.ok) {
+      setLoginSuccess(true);
+      console.log("login success");
+      // redirect manually after login
+      router.push("/dashboard");
     }
   }
 
   function validateForm() {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.email.includes("@")) {
-      newErrors.email = "Please enter a valid email address.";
-    }
     if (!formData.email) {
       newErrors.email = "Email cannot be empty.";
+    } else if (!formData.email.includes("@")) {
+      newErrors.email = "Please enter a valid email address.";
     }
 
     if (formData.password.length < 6) {
@@ -102,17 +94,23 @@ export default function UserLogin() {
       email: DEMO_EMAIL,
       password: DEMO_PASSWORD,
     });
+    setIsLoading(true);
+
     const result = await signIn("credentials", {
       email: DEMO_EMAIL,
       password: DEMO_PASSWORD,
       redirect: false,
     });
+
+    setIsLoading(false);
+
     if (result?.error) {
       setLoginError("Demo login failed.");
     } else {
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
   }
+
   return (
     <section className=" h-screen flex items-center justify-center text-(--text-light)">
       <form
@@ -146,7 +144,7 @@ export default function UserLogin() {
             <span className="text-red-500">{errors.password}</span>
           )}
           {showPasswordInfo && (
-            <span className="absolute bg-cyan-700 p-3 rounded left-28 top-5 z-20 h-25 w-100 flex items-center justify-center">
+            <span className="absolute bg-cyan-700 p-3 rounded left-28 top-5 z-20 h-24 w-96 flex items-center justify-center">
               Password must be at least 6 characters long and contain at least
               one uppercase letter and one number. email: testUser@example.com,
               password: Abc123
@@ -170,7 +168,7 @@ export default function UserLogin() {
 
         <motion.button
           className="border p-3 rounded w-30 relative z-0  hover:cursor-pointer"
-          aria-label="Sign up"
+          aria-label="Log in"
           whileHover={"hover"}
         >
           <motion.span

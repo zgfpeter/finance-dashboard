@@ -42,7 +42,6 @@ const MonthlySpendingChart = () => {
         <XAxis dataKey="name" />
         <YAxis />
       </BarChart>
-      <p className="text-(--text-light) text-center">Spendings by month</p>
     </section>
   );
 };

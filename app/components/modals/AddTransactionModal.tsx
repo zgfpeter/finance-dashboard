@@ -7,14 +7,16 @@ interface Props {
   onClose: () => void;
 }
 export default function AddTransactionModal({ onClose }: Props) {
+  // local state for creating a new transaction
   const [data, setData] = useState<Transaction>({
     date: "",
     company: "",
     amount: "",
     transactionType: "expense",
+    category: "Other",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({
-    // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
+    // holds validation error messages, ex. a required field is empty
     id: "",
     date: "",
     company: "",
@@ -22,8 +24,13 @@ export default function AddTransactionModal({ onClose }: Props) {
     transactionType: "expense",
     generalError: "",
   });
+
+  // displays a success message if the transaction has been added successfully
   const [transactionAdded, setTransactionAdded] = useState<boolean>(false);
+
   const queryClient = useQueryClient();
+
+  // handle change in input
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
@@ -31,13 +38,14 @@ export default function AddTransactionModal({ onClose }: Props) {
 
     setData((prev) => ({
       ...prev,
-      [name === "transactionTypes" ? "transactionType" : name]: value,
+      [name]: value,
     }));
   }
 
+  // simple form validation
   function validateForm() {
     const newErrors: { [key: string]: string } = {};
-    // set the errors state so that i can use it to show error messages
+    // set the errors state so that it can use it to show error messages
     if (!data.company.trim()) {
       newErrors.company = "Company is required.";
     }
@@ -61,51 +69,20 @@ export default function AddTransactionModal({ onClose }: Props) {
     // if there's at least one error, then it will return false
   }
 
+  // tanstack query mutation to POST a new transaction
   const addMutation = useMutation({
     mutationFn: (payload: Transaction) =>
       axios.post("http://localhost:4000/api/dashboard/transactions", payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-      // when i cal invalidateQueries, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical if i want fresh UI data updates
+      // when invalidateQueries is called, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical for fresh UI data updates
     },
   });
 
+  // handles the submit, checks if form is valid, then calls mutation
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateForm()) return;
-
-    // console.log("Form is valid");
-    // console.log(data);
-    // if i use axios, i won't get the most up to date data unless i refresh.
-    // i need ot use a mutation hook form tanstack if i want the most up to date data, without reloading
-    // axios
-    //   .post("http://localhost:4000/api/dashboard/transaction", {
-    //     ...data,
-    //     amount: Number(data.amount),
-    //   })
-    //   .then((res) => {
-    //     if (res.status === 201) {
-    //       console.log("Transaction added successfully.");
-    //       setTransactionAdded(true);
-    //       // hide success message after 2 seconds
-    //       // setTimeout(() => {
-    //       setTransactionAdded(false);
-    //       onClose();
-    //       // }, 1000);
-    //       // reset the form
-    //       setData({
-    //         date: "",
-    //         company: "",
-    //         amount: "",
-    //         transactionType: "expense",
-    //       });
-    //     } else {
-    //       alert("Failed to add transaction.");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("Server error. Please try again. ", error);
-    //   });
 
     addMutation.mutate({
       ...data,
@@ -118,20 +95,30 @@ export default function AddTransactionModal({ onClose }: Props) {
       company: "",
       amount: "",
       transactionType: "expense",
+      category: "Other",
     });
 
+    // closes the modal
     onClose();
   }
 
   return (
-    <div className=" h-full flex items-center flex-col justify-evenly text-(--text-light)">
+    <div
+      className=" h-full flex items-center flex-col justify-evenly "
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
       <button
         onClick={onClose}
         className="absolute right-10 top-4 text-red-500 text-xl"
+        aria-label="Close modal"
       >
         ✕
       </button>
-      <h2 className="text-xl font-semibold">Add a new transaction</h2>
+      <h2 id="modal-title" className="text-xl font-semibold">
+        Add a new transaction
+      </h2>
 
       {errors.generalError && (
         <p className="text-red-500">{errors.generalError}</p>
@@ -147,7 +134,10 @@ export default function AddTransactionModal({ onClose }: Props) {
               <label htmlFor="company">Company</label>
               {/* A general error if the form validation fails */}
               {errors.company && (
-                <span className="text-red-500 absolute right-5">
+                <span
+                  id="company-error"
+                  className="text-red-500 absolute right-5"
+                >
                   {errors.company}
                 </span>
               )}
@@ -159,12 +149,16 @@ export default function AddTransactionModal({ onClose }: Props) {
                 name="company"
                 id="company"
                 className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                aria-describedby="company-error"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative">
               <label htmlFor="amount">Amount</label>
               {errors.amount && (
-                <span className="text-red-500 absolute right-5">
+                <span
+                  id="amount-error"
+                  className="text-red-500 absolute right-5"
+                >
                   {errors.amount}
                 </span>
               )}
@@ -175,6 +169,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 name="amount"
                 id="amount"
                 className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                aria-describedby="amount-error"
               />
             </div>
           </div>
@@ -190,6 +185,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 name="date"
                 id="date"
                 className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor"
+                aria-describedby="date-error"
               />
             </div>
 
@@ -202,7 +198,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 id="transactionType"
                 value={data.transactionType}
                 onChange={handleChange}
-                name="transactionTypes"
+                name="transactionType"
                 required
                 className="border border-(--secondary-blue) px-2 rounded h-11 flex"
               >
@@ -212,7 +208,9 @@ export default function AddTransactionModal({ onClose }: Props) {
             </div>
           </div>
           {errors.date && (
-            <span className="text-red-500 pl-12">{errors.date}</span>
+            <span id="date-error" className="text-red-500 pl-12">
+              {errors.date}
+            </span>
           )}
         </div>
 

@@ -1,7 +1,11 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { type AuthOptions } from "next-auth";
+import axios from "axios";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export const authOptions: AuthOptions = {
+  // because my backend is in a different project folder, i need to make an axios request
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -10,33 +14,23 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-        // here credentials.email is whatever the user typed in the form email field
-        // password is whatever the user typed in the form password field
+        if (!credentials?.email || !credentials?.password) return null;
 
-        // Look up the user in the database
-        // Validate password
-        // Return user object if valid, otherwise return null
-        const testUser = {
-          id: "123",
-          name: "testUser",
-          email: "testUser@example.com",
-          password: "Abc123", // FIX WITH REAL USER DATABASE
-        };
-        if (
-          credentials.email === testUser.email &&
-          credentials.password === testUser.password
-        ) {
-          return {
-            id: testUser.id,
-            name: testUser.name,
-            email: testUser.email,
-          };
+        try {
+          const res = await axios.post(`${apiUrl}/api/users/login`, {
+            email: credentials.email,
+            password: credentials.password,
+          });
+
+          const user = res.data.user;
+          return user || null;
+        } catch (err) {
+          if (axios.isAxiosError(err)) {
+            console.log(err.response?.data);
+          } else {
+            console.log(err);
+          }
         }
-        return null;
-        // if authorize() returns a user, NextAuth creates the session
       },
     }),
   ],
@@ -46,7 +40,6 @@ export const authOptions: AuthOptions = {
     // sets a cookie called next-auth.session-token
     // stores the user info inside
   },
-  // using as const p
 };
 
 const handler = NextAuth(authOptions);

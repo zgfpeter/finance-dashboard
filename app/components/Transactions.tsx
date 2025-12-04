@@ -1,57 +1,78 @@
 import { FaMoneyBillTransfer, FaPlus } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
-import { useModal } from "../context/ModalContext";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/app/store/modalSlice";
 export default function Transactions() {
+  // get transaction data from the dashboard hook
   const TransactionsData = useDashboard().data?.transactions;
-  const { openModal } = useModal();
+  console.log(TransactionsData);
+  const dispatch = useDispatch();
 
   return (
-    <section className="bg-(--hover-blue) flex flex-col text-(--text-light) rounded-xl gap-3 w-full h-full">
+    <section className=" flex flex-col  rounded-xl gap-3 w-full h-full">
       <div className="flex items-center justify-between ">
         <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
           <FaMoneyBillTransfer /> Transactions
         </h2>
         <button
           className="text-2xl flex items-center"
-          onClick={() => openModal("addTransaction")}
+          onClick={() =>
+            dispatch(openModal({ type: "addTransaction", data: null }))
+          }
         >
           <span className="text-yellow-500">
             <FaPlus />
           </span>
         </button>
       </div>
-      {/* total balance-current net worth across accounts */}
-      <ul className="flex flex-col gap-2 h-70 overflow-y-auto ">
+      {/* scrollable list of all transactions*/}
+      <ul className="flex flex-col gap-2 h-109 overflow-y-auto ">
         {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
         {TransactionsData?.map((transaction) => {
           return (
             <li
               key={transaction._id}
-              className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl"
+              className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl relative"
             >
               <div className="flex items-center gap-2">
                 <div className="flex flex-col">
                   <span>{transaction.company}</span>
-                  <span>{transaction.date}</span>
+                  {transaction.category && (
+                    <div className="text-xs text-yellow-500">
+                      {transaction.category}
+                    </div>
+                  )}
                 </div>
               </div>
-              {/* <TbPointFilled color="red" /> */}
-              {transaction.transactionType === "expense" ? (
-                <p className="text-red-500">- € {transaction.amount}</p>
-              ) : (
-                <p className="text-green-500">+ € {transaction.amount}</p>
-              )}
+
+              {/* coloc-coded amount base on transaction type */}
+              <div className="flex justify-between items-center">
+                <div className="text-yellow-500 ">
+                  {transaction.transactionType === "expense" ? (
+                    <p className="text-red-500">- € {transaction.amount}</p>
+                  ) : (
+                    <p className="text-green-500">+ € {transaction.amount}</p>
+                  )}
+                </div>
+                <div className="flex flex-col text-sm items-center  rounded gap-3">
+                  <span className="text-xs">{transaction.date}</span>
+                </div>
+              </div>
             </li>
           );
         })}
       </ul>
+      {/* shows full modal with all transactions, and options like edit and delete */}
       <button
         className="underline p-2 w-fit self-center rounded-xl  mt-auto"
-        onClick={() => openModal("transactions")}
+        onClick={() =>
+          dispatch(openModal({ type: "transactions", data: null }))
+        }
         aria-label="See All"
       >
         See All
       </button>
+      <button></button>
     </section>
   );
 }

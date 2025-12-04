@@ -2,15 +2,25 @@ export interface Overview {
   totalBalance: number;
   monthlyChange: number; // positive or negative
 }
+export interface EditOverview {
+  totalBalance: number;
+}
 
 export type TransactionType = "income" | "expense";
-
+export type ExpenseCategory =
+  | "Subscription"
+  | "Bill"
+  | "Loan"
+  | "Insurance"
+  | "Tax"
+  | "Other";
 export interface Transaction {
   _id?: string;
   date: string;
   company: string;
   amount: number | string; // negative = expense, positive = income
   transactionType: TransactionType;
+  category: ExpenseCategory;
 }
 
 export interface UpcomingCharge {
@@ -18,12 +28,8 @@ export interface UpcomingCharge {
   date: string;
   company: string;
   amount: number | string; // negative number (-)
-}
-export interface Subscriptions {
-  _id?: string;
-  date: string;
-  company: string;
-  amount: number; // negative number (-)
+  category: ExpenseCategory;
+  recurring?: boolean; // may use it later, for a recurring charge
 }
 
 export interface Debt {
@@ -54,7 +60,6 @@ export interface DashboardData {
   overview: Overview;
   transactions: Transaction[];
   upcomingCharges: UpcomingCharge[];
-  subscriptions: Subscriptions[];
   debts: Debt[];
   goals: Goal[];
   income: Income[];
@@ -69,16 +74,7 @@ export type ModalType =
   | "savings"
   | "addTransaction"
   | "editTransaction"
+  | "editOverview"
   | "addUpcomingCharge"
   | "editUpcomingCharge"
   | "none";
-
-// // for sending to API
-// export type TransactionPayload = Omit<Transaction, "_id">;
-// export type TransactionResponse = Required<Transaction>;
-// // response includes _id, but request doesn't as _id is assigned by mongodb
-export type UpcomingChargePayload = {
-  date: string;
-  company: string;
-  amount: string | number;
-};

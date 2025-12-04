@@ -4,12 +4,15 @@
 import { DashboardData } from "../types/dashboard";
 import axios from "axios";
 export async function getDashboardData(): Promise<DashboardData> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   try {
     //console.log("fetching dashboard data");
     // const res = await axios.get<DashboardData>("./data/dashboardData.json");
-    const res = await axios.get<DashboardData>(
-      "http://localhost:4000/api/dashboard"
-    );
+    const res = await axios.get<DashboardData>(`${apiUrl}/api/dashboard`);
+    if (!res.data) {
+      throw new Error("Dashboard data is empty.");
+    }
     // console.log(res.data);
     return res.data;
     // this works because axios automatically parses JSON

@@ -1,19 +1,24 @@
 "use client";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UpcomingChargePayload } from "@/lib/types/dashboard";
 import axios from "axios";
-import { UpcomingCharge } from "@/lib/types/dashboard";
+import { UpcomingCharge, ExpenseCategory } from "@/lib/types/dashboard";
 interface Props {
   onClose: () => void;
 }
 
 export default function AddUpcomingChargeModal({ onClose }: Props) {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const [data, setData] = useState<UpcomingCharge>({
     date: "",
     company: "",
     amount: "",
+    category: "Bill",
   });
+  const [chargeCategory, setChargeCategory] = useState<ExpenseCategory>(
+    data?.category ?? "Bill"
+  );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
@@ -24,39 +29,43 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
     generalError: "",
   });
 
+  // boolean used to show a success message after the charge has been added successfully
   const [chargeAdded, setChargeAdded] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
+  // handle the input change
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
+    const { name, value } = e.target;
     setData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   }
 
+  // simple form validation
   function validateForm() {
     const newErrors: { [key: string]: string } = {};
     // set the errors state so that i can use it to show error messages
-    // if (!data.company.trim()) {
-    //   newErrors.company = "Company is required.";
-    // }
-    // if (Number(data.amount) <= 0) {
-    //   newErrors.amount = "Amount must be > 0";
-    // }
-    // if (!data.date) {
-    //   newErrors.date = "Date is required";
-    // } else {
-    //   // to check if the entered date is not a future date:
-    //   const chargeDate = new Date(data.date);
-    //   const today = new Date();
-    //   today.setHours(0, 0, 0, 0);
-    //   if (chargeDate < today) {
-    //     newErrors.date = "Upcoming charge date cannot be in the past.";
-    //   }
-    // }
-    // setErrors(newErrors);
+    if (!data.company.trim()) {
+      newErrors.company = "Company is required.";
+    }
+    if (Number(data.amount) <= 0) {
+      newErrors.amount = "Amount must be > 0";
+    }
+    if (!data.date) {
+      newErrors.date = "Date is required";
+    } else {
+      // to check if the entered date is not a future date:
+      const chargeDate = new Date(data.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (chargeDate < today) {
+        newErrors.date = "Upcoming charge date cannot be in the past.";
+      }
+    }
+    setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
     // if there are no errors in the for, this will return true
     // if there's at least one error, then it will return false
@@ -64,19 +73,19 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
   const addMutation = useMutation({
     mutationFn: (payload: UpcomingCharge) =>
-      axios.post(
-        "http://localhost:4000/api/dashboard/upcomingCharges",
-        payload
-      ),
+      axios.post(`${apiUrl}/api/dashboard/upcomingCharges`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
       // when i cal invalidateQueries, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical if i want fresh UI data updates
     },
   });
+
+  // handle the submit: check if form is valid, then call the mutate method that makes the POST request
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateForm()) return;
 
+    // calls the tanstack query POST
     addMutation.mutate({
       ...data,
       amount: Number(data.amount), // change the amount to a number, as it can be string also
@@ -87,16 +96,24 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
       date: "",
       company: "",
       amount: "",
+      category: "Bill", // default category is Bill
     });
 
+    // closes the modal
     onClose();
   }
 
   return (
-    <div className=" h-full flex items-center flex-col justify-evenly text-(--text-light)">
+    <div
+      className=" h-full flex items-center flex-col justify-evenly"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
       <button
         onClick={onClose}
         className="absolute right-10 top-4 text-red-500 text-xl"
+        aria-label="Close modal"
       >
         ✕
       </button>
@@ -147,7 +164,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               />
             </div>
           </div>
-          <div className="flex relative">
+          <div className="flex relative justify-between">
             <div className="flex flex-col p-3 gap-3 relative">
               <label htmlFor="date">Date</label>
 
@@ -160,6 +177,30 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 id="date"
                 className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor"
               />
+            </div>
+            <div className="flex relative ">
+              <div className="flex flex-col p-3 gap-3 relative">
+                <label htmlFor="chargeCategories">Category</label>
+                {/* {errors.type && (
+                            <span className="text-red-500">{errors.type}</span>
+                          )} */}
+                <select
+                  id="chargeCategories"
+                  value={data.category}
+                  onChange={handleChange}
+                  name="chargeCategories"
+                  required
+                  className="border border-(--secondary-blue) px-2 rounded h-11 flex"
+                >
+                  <option value="Subscription">Subscription</option>
+                  <option value="Bill">Bill</option>
+                  <option value="Tax">Tax</option>
+                  <option value="Insurance">Insurance</option>
+                  <option value="Loan">Loan</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              {/* TODO maybe add a recurring transaction, or subscription */}
             </div>
             {/* TODO maybe add a recurring charge, or subscription */}
             {/* <div className="flex items-center p-3 gap-3 ">

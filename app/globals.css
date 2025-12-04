@@ -7,14 +7,16 @@
 }
 
 :root {
+  /*  ea for opacity */
   /* start - my own colors */
   --primary-orange: #ec9730;
   --limegreen: #8aee20;
-  --primary-blue: #041523;
-  --secondary-blue: #105084b6;
+  --primary-blue: #041523f7;
+  --secondary-blue: #105084ee;
   --text-light: #d7d7d7;
   --error-blue: #7ab2ea;
-  --border-blue: #27385895;
+  --border-blue: #0845714e;
+  --primary-bg: #030f17d7;
   /* end -  my own colors */
 
   /* start - hide the default scrollbar */
@@ -113,6 +115,18 @@
 }
 
 .dark {
+  /* start - my own colors for dark mode */
+  --primary-orange: #ec9730;
+  --limegreen: #274603;
+  --primary-blue: #e9e9e9f7;
+  --secondary-blue: #105084ee;
+  --text-light: #000000;
+  --error-blue: #7ab2ea;
+  --border-blue: #fffffffb;
+  --primary-bg: #fffffff0;
+
+  /* end -  my own colors */
+
   --background: oklch(0.147 0.004 49.25);
   --foreground: oklch(0.985 0.001 106.423);
   --card: oklch(0.216 0.006 56.043);
