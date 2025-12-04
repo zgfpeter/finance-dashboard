@@ -117,13 +117,13 @@
 .dark {
   /* start - my own colors for dark mode */
   --primary-orange: #ec9730;
-  --limegreen: #274603;
-  --primary-blue: #e9e9e9f7;
+  --limegreen: #289a05;
+  --primary-blue: #00000088;
   --secondary-blue: #105084ee;
-  --text-light: #000000;
+  --text-light: #e2e2e2;
   --error-blue: #7ab2ea;
-  --border-blue: #fffffffb;
-  --primary-bg: #fffffff0;
+  --border-blue: #00000025;
+  --primary-bg: #00000088;
 
   /* end -  my own colors */
 

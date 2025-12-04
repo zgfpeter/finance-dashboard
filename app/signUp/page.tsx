@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 export default function SignUp() {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  console.log("API URL:", apiUrl);
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -50,7 +51,11 @@ export default function SignUp() {
     };
 
     try {
-      const res = await axios.post(`${apiUrl}/api/users/signup`, userData);
+      // const res = await axios.post(`${apiUrl}/api/users/signup`, userData);
+      const res = await axios.post(
+        `http://localhost:4000/api/users/signup`,
+        userData
+      );
       if (res.status === 201) {
         setRegistrationSuccess(true);
         setErrorMessage(null); // clear any previous errors

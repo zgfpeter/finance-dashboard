@@ -19,7 +19,6 @@ import CalSpedingCategoriesPercentages from "@/lib/CalculatePiePercentages";
 export default function DashboardPage() {
   const { isLoading, isError } = useDashboard();
   const spendingsPieData = CalSpedingCategoriesPercentages();
-  console.log(spendingsPieData);
   if (isLoading)
     return (
       <div className="flex h-screen items-center p-5 text-(--text-light) justify-center relative z-100">

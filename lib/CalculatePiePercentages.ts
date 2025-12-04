@@ -1,9 +1,7 @@
 "use client";
 import { useDashboard } from "@/app/hooks/useDashboard";
-type PieDataItem = { name: string; value: number }; // ex: Bills: 23, where 23 is the percentage of bills amount out of total
 export default function CalSpedingCategoriesPercentages() {
   const transactions = useDashboard().data?.transactions;
-  console.log(transactions);
   const totals: Record<string, number> = {};
   transactions?.forEach((transaction) => {
     if (transaction.transactionType === "expense") {
@@ -21,6 +19,5 @@ export default function CalSpedingCategoriesPercentages() {
     name,
     value,
   }));
-  console.log(pieData);
   return pieData;
 }

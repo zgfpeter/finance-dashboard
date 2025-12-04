@@ -24,6 +24,7 @@ export default function Navbar() {
     setMenuOpen(!menuOpen);
   }
   const [mounted, setMounted] = useState(false);
+  const [tempTheme, setTempTheme] = useState(false);
 
   useEffect(() => {
     // Schedule the state update after the effect phase

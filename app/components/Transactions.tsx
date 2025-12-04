@@ -5,7 +5,6 @@ import { openModal } from "@/app/store/modalSlice";
 export default function Transactions() {
   // get transaction data from the dashboard hook
   const TransactionsData = useDashboard().data?.transactions;
-  console.log(TransactionsData);
   const dispatch = useDispatch();
 
   return (
