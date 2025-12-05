@@ -10,22 +10,22 @@ import {
   FaSun,
   FaMoon,
 } from "react-icons/fa";
-
 import { useTheme } from "next-themes";
 import { MdMenu, MdClose } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
+import { useSession } from "next-auth/react";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const dispatch = useDispatch();
-  const sidebarWidth = 400;
+  const sidebarWidth = 350;
+  const { data: session } = useSession();
+  const username = session?.user?.username; // get username
   function toggleMenu() {
     setMenuOpen(!menuOpen);
   }
   const [mounted, setMounted] = useState(false);
-  const [tempTheme, setTempTheme] = useState(false);
-
   useEffect(() => {
     // Schedule the state update after the effect phase
     const id = requestAnimationFrame(() => {
@@ -40,21 +40,25 @@ export default function Navbar() {
     <div className="relative z-50">
       {/* Sidebar */}
       <motion.nav
-        className={`fixed top-0 left-0 h-screen bg-(--primary-blue)  flex flex-col justify-between z-50 w-[${sidebarWidth}px]`}
+        className={`fixed top-0 left-0 h-screen bg-(--primary-blue)  flex flex-col justify-between z-50 w-[350px]`}
         initial={{ x: -sidebarWidth }}
         animate={{ x: menuOpen ? 0 : -sidebarWidth }}
         transition={{ type: "spring", stiffness: 300, damping: 32 }}
         aria-label="Sidebar navigation"
       >
         <ul className="flex flex-col px-10 text-(--primary-orange) h-2/3 justify-around w-full">
-          <li className="flex items-center justify-center ">
+          <div className="flex flex-col items-center justify-center ">
             <Image
               src="/logo_1.png"
               width={300}
               height={200}
               alt="Logo"
             ></Image>
-          </li>
+          </div>
+
+          <p className="bg-linear-to-r from-teal-500 via-cyan-600 to-teal-900 bg-clip-text text-transparent text-center text-xl  border-l border-r border-orange-500 w-fit self-center px-5 py-1 rounded ">
+            {username}
+          </p>
 
           <div className="flex justify-between py-3 items-center">
             <button
@@ -118,7 +122,7 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          <div className="flex items-center gap-2 text-xs w-full justify-between rounded-xl">
+          <div className="flex items-center gap-3 text-xs w-full justify-between rounded-xl ">
             <button className=" hover:bg-(--hover-blue) hover:text-(--text-light) w-36 ">
               <div
                 className="border px-2 py-3 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 w-full "
@@ -129,10 +133,10 @@ export default function Navbar() {
               </div>
             </button>
             <button
-              className="hover:bg-(--hover-blue) hover:text-(--text-light)"
+              className="hover:bg-(--hover-blue) hover:text-(--text-light) w-36"
               aria-label="Export data"
             >
-              <div className="border px-2 py-3 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 w-36 ">
+              <div className="border px-2 py-3 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 ">
                 <span>EXPORT</span>
                 <FaFileExport />
               </div>

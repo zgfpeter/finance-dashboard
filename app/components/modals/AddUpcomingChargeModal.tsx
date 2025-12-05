@@ -3,12 +3,14 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { UpcomingCharge } from "@/lib/types/dashboard";
+import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 interface Props {
   onClose: () => void;
 }
 
 export default function AddUpcomingChargeModal({ onClose }: Props) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // get the axiosAuth instance
+  const axiosAuth = useAxiosAuth();
 
   const [data, setData] = useState<UpcomingCharge>({
     date: "",
@@ -70,7 +72,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
   const addMutation = useMutation({
     mutationFn: (payload: UpcomingCharge) =>
-      axios.post(`${apiUrl}/api/dashboard/upcomingCharges`, payload),
+      axiosAuth.post(`/api/dashboard/upcomingCharges`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
       // when i cal invalidateQueries, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical if i want fresh UI data updates

@@ -70,7 +70,7 @@ export type ModalType =
   | "transactions"
   | "upcomingCharges"
   | "settings"
-  | "debts "
+  | "debts"
   | "savings"
   | "addTransaction"
   | "editTransaction"

@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { DashboardData } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
+import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 // -- end imports --
 // the props the component takes
 interface Props {
@@ -19,7 +20,8 @@ interface Props {
 }
 
 export default function EditTransactionModal({ data, onClose }: Props) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // get the axiosAuth instance
+  const axiosAuth = useAxiosAuth();
 
   const queryClient = useQueryClient();
   const [company, setCompany] = useState(data?.company ?? "");
@@ -44,8 +46,8 @@ export default function EditTransactionModal({ data, onClose }: Props) {
   const updateMutation = useMutation({
     // sends the update to the backend, doesn't wait to finish to update UI
     mutationFn: (updatedTransaction: Transaction) =>
-      axios.put(
-        `${apiUrl}/api/dashboard/transactions/${updatedTransaction._id}`,
+      axiosAuth.put(
+        `/api/dashboard/transactions/${updatedTransaction._id}`,
         updatedTransaction
       ),
     // runs immediately when i click 'Save"

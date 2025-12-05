@@ -4,12 +4,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDashboardData } from "@/lib/api/getDashboardData"; // this is the custom fetch function i made with axios
 import { DashboardData } from "@/lib/types/dashboard"; // the type for the dashboard data
-
+import useAxiosAuth from "./useAxiosAuth";
+// import session
+import { useSession } from "next-auth/react";
 // a custom hook to wrap the query
 export function useDashboard() {
+  // get th authenticated axios instance
+  const axiosAuth = useAxiosAuth();
+  const fetchDashboard = async () => {
+    // just call .get(). The interceptor handles the token automatically
+    const res = await axiosAuth.get<DashboardData>("/api/dashboard");
+    return res.data;
+  };
+
+  const { data: session, status } = useSession();
+
   return useQuery<DashboardData>({
-    queryKey: ["dashboardData"],
-    queryFn: getDashboardData,
+    // adds the token to the queryKey, so if the user switches, cache resets
+    queryKey: ["dashboardData", session?.user?.accessToken],
+    queryFn: fetchDashboard,
+    // only run htis query if authenticated
+    enabled: status === "authenticated" && !!session?.user?.accessToken,
+
     staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,

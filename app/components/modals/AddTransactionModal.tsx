@@ -3,10 +3,13 @@ import { useState } from "react";
 import { Transaction } from "@/lib/types/dashboard";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 interface Props {
   onClose: () => void;
 }
 export default function AddTransactionModal({ onClose }: Props) {
+  // get the axiosAuth instance
+  const axiosAuth = useAxiosAuth();
   // local state for creating a new transaction
   const [data, setData] = useState<Transaction>({
     date: "",
@@ -72,7 +75,7 @@ export default function AddTransactionModal({ onClose }: Props) {
   // tanstack query mutation to POST a new transaction
   const addMutation = useMutation({
     mutationFn: (payload: Transaction) =>
-      axios.post("http://localhost:4000/api/dashboard/transactions", payload),
+      axiosAuth.post(`/api/dashboard/transactions`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
       // when invalidateQueries is called, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical for fresh UI data updates

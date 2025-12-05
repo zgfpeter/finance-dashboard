@@ -13,6 +13,7 @@ export default function UpcomingCharges() {
   const [notificationsModalOpen, setNotificationsModalOpen] =
     useState<boolean>(false);
   const dispatch = useDispatch();
+  const hasUpcomingCharges = UCData && UCData.length > 0; // if true, there are some transactions
 
   // the modals are controlled by redux now, so dispatch opens the appropriate modal.
   // without redux, i'd have to lift state up to pass the charge
@@ -120,45 +121,53 @@ export default function UpcomingCharges() {
           </button>
         </div>
       </div>
-      {/* total balance-current net worth across accounts */}
-      <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
-        {UCData?.map((charge) => {
-          return (
-            <li
-              key={charge._id}
-              className="grid grid-cols-2 justify-items-stretch items-center bg-(--border-blue) p-3 gap-2 rounded-xl relative"
-            >
-              <div className="flex items-center gap-2">
-                {/* <FaPlus color="green" /> */}
+      {!hasUpcomingCharges ? (
+        <p className="text-gray-500 text-center text-sm">
+          No upcoming charges yet. Add one to get started.
+        </p>
+      ) : (
+        <>
+          {/* total balance-current net worth across accounts */}
+          <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
+            {UCData?.map((charge) => {
+              return (
+                <li
+                  key={charge._id}
+                  className="grid grid-cols-2 justify-items-stretch items-center bg-(--border-blue) p-3 gap-2 rounded-xl relative"
+                >
+                  <div className="flex items-center gap-2">
+                    {/* <FaPlus color="green" /> */}
 
-                <div className="flex flex-col gap-3">
-                  <span>{charge.company}</span>
-                  {charge.category && (
-                    <div className="text-xs text-yellow-500">
-                      {charge.category}
+                    <div className="flex flex-col gap-3">
+                      <span>{charge.company}</span>
+                      {charge.category && (
+                        <div className="text-xs text-yellow-500">
+                          {charge.category}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="text-yellow-500 ">- € {charge.amount}</div>
-                <div className="flex flex-col text-sm items-center  rounded gap-3">
-                  <span>In 3 days</span>
-                  <span className="text-xs">{charge.date}</span>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div className="text-yellow-500 ">- € {charge.amount}</div>
+                    <div className="flex flex-col text-sm items-center  rounded gap-3">
+                      <span>In 3 days</span>
+                      <span className="text-xs">{charge.date}</span>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
 
-      <button
-        className="underline p-2 w-fit self-center rounded-xl mt-auto"
-        onClick={handleSeeAll}
-        aria-label="See All"
-      >
-        See All
-      </button>
+          <button
+            className="underline p-2 w-fit self-center rounded-xl mt-auto"
+            onClick={handleSeeAll}
+            aria-label="See All"
+          >
+            See All
+          </button>
+        </>
+      )}
     </section>
   );
 }

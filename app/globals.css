@@ -11,7 +11,7 @@
   /* start - my own colors */
   --primary-orange: #ec9730;
   --limegreen: #8aee20;
-  --primary-blue: #041523f7;
+  --primary-blue: #041523e2;
   --secondary-blue: #105084ee;
   --text-light: #d7d7d7;
   --error-blue: #7ab2ea;
@@ -122,7 +122,7 @@
   --secondary-blue: #105084ee;
   --text-light: #e2e2e2;
   --error-blue: #7ab2ea;
-  --border-blue: #00000025;
+  --border-blue: #0000009d;
   --primary-bg: #00000088;
 
   /* end -  my own colors */

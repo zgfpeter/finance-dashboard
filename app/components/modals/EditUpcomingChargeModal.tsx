@@ -11,6 +11,7 @@ import {
   ExpenseCategory,
 } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
+import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 
 // -- end imports --
 // the props the component takes
@@ -20,6 +21,8 @@ interface Props {
 }
 
 export default function EditUpcomingChargeModal({ data, onClose }: Props) {
+  // get the axiosAuth instance
+  const axiosAuth = useAxiosAuth();
   const queryClient = useQueryClient();
   const [company, setCompany] = useState(data?.company ?? "");
   const [amount, setAmount] = useState(data?.amount ?? "");
@@ -27,7 +30,6 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
   const [category, setCategory] = useState<ExpenseCategory>(
     data?.category ?? "Other"
   ); // Default category is Other
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
     id: "",
@@ -43,8 +45,8 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
   const updateMutation = useMutation({
     // sends the update to the backend, doesn't wait to finish to update UI
     mutationFn: (updatedCharge: UpcomingCharge) =>
-      axios.put(
-        `${apiUrl}}/api/dashboard/upcomingCharges/${updatedCharge._id}`,
+      axiosAuth.put(
+        `/api/dashboard/upcomingCharges/${updatedCharge._id}`,
         updatedCharge
       ),
     // runs immediately when i click 'Save"

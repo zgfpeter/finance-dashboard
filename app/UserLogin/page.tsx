@@ -86,8 +86,8 @@ export default function UserLogin() {
   }
 
   // TEST FUNCTIONALITY
-  const DEMO_EMAIL = "testUser@example.com";
-  const DEMO_PASSWORD = "Abc123";
+  const DEMO_EMAIL = "testuser@example.com";
+  const DEMO_PASSWORD = "Abc12345";
 
   async function handleDemoLogin() {
     setFormData({

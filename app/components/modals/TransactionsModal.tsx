@@ -16,10 +16,12 @@ import axios from "axios";
 import { DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
+import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 // -- end imports --
 
 export default function TransactionsModal({ onClose }: Props) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // get the axiosAuth instance
+  const axiosAuth = useAxiosAuth();
 
   const dispatch = useDispatch();
 
@@ -73,7 +75,7 @@ export default function TransactionsModal({ onClose }: Props) {
   const deleteMutation = useMutation({
     // this is the function that runs when i call deleteMutation.mutate(id) in the confirm delete modal
     mutationFn: (id: string) =>
-      axios.delete(`${apiUrl}/api/dashboard/transactions/${id}`),
+      axiosAuth.delete(`/api/dashboard/transactions/${id}`),
 
     // this runs before the request is send
     // we can do optimistic UI updates here

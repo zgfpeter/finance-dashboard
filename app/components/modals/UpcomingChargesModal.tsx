@@ -7,6 +7,7 @@ import { DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { MdEdit, MdDelete } from "react-icons/md";
+import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import axios from "axios";
 
 interface Props {
@@ -14,7 +15,8 @@ interface Props {
 }
 
 export default function UpcomingChargesModal({ onClose }: Props) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  // get the axiosAuth instance
+  const axiosAuth = useAxiosAuth();
 
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -42,7 +44,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
   // DELETE mutation with optimistic updates
   const deleteMutation = useMutation({
     mutationFn: (id: string) =>
-      axios.delete(`${apiUrl}/api/dashboard/upcomingCharges/${id}`),
+      axiosAuth.delete(`/api/dashboard/upcomingCharges/${id}`),
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: ["dashboardData"] });
       const previous = queryClient.getQueryData<DashboardData>([

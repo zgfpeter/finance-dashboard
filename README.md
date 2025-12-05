@@ -6,7 +6,7 @@ To test the application, you can use the demo account, which contains some dashb
 ---
 DEMO ACCOUNT
 ---
-email: testUser@example.com password: Abc123
+email: testuser@example.com password: Abc12345
 ---
 *Note: Due to Render's free tier, the website might take a moment to load.*
 

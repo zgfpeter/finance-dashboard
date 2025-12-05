@@ -6,7 +6,7 @@ export default function Transactions() {
   // get transaction data from the dashboard hook
   const TransactionsData = useDashboard().data?.transactions;
   const dispatch = useDispatch();
-
+  const hasTransactions = TransactionsData && TransactionsData.length > 0; // if true, there are some transactions
   return (
     <section className=" flex flex-col  rounded-xl gap-3 w-full h-full">
       <div className="flex items-center justify-between ">
@@ -24,54 +24,66 @@ export default function Transactions() {
           </span>
         </button>
       </div>
-      {/* scrollable list of all transactions*/}
-      <ul className="flex flex-col gap-2 h-109 overflow-y-auto ">
-        {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
-        {TransactionsData?.map((transaction) => {
-          return (
-            <li
-              key={transaction._id}
-              className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl relative"
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col">
-                  <span>{transaction.company}</span>
-                  {transaction.category && (
-                    <div className="text-xs text-yellow-500">
-                      {transaction.category}
+      {!hasTransactions ? (
+        <p className="text-gray-500 text-center text-sm">
+          No transactions yet. Add one to get started.
+        </p>
+      ) : (
+        <>
+          <ul className="flex flex-col gap-2 h-109 overflow-y-auto ">
+            {" "}
+            {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
+            {TransactionsData?.map((transaction) => {
+              return (
+                <li
+                  key={transaction._id}
+                  className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl relative"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="flex flex-col">
+                      <span>{transaction.company}</span>
+                      {transaction.category && (
+                        <div className="text-xs text-yellow-500">
+                          {transaction.category}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
+                  </div>
 
-              {/* coloc-coded amount base on transaction type */}
-              <div className="flex justify-between items-center">
-                <div className="text-yellow-500 ">
-                  {transaction.transactionType === "expense" ? (
-                    <p className="text-red-500">- € {transaction.amount}</p>
-                  ) : (
-                    <p className="text-green-500">+ € {transaction.amount}</p>
-                  )}
-                </div>
-                <div className="flex flex-col text-sm items-center  rounded gap-3">
-                  <span className="text-xs">{transaction.date}</span>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-      {/* shows full modal with all transactions, and options like edit and delete */}
-      <button
-        className="underline p-2 w-fit self-center rounded-xl  mt-auto"
-        onClick={() =>
-          dispatch(openModal({ type: "transactions", data: null }))
-        }
-        aria-label="See All"
-      >
-        See All
-      </button>
-      <button></button>
+                  {/* coloc-coded amount base on transaction type */}
+                  <div className="flex justify-between items-center">
+                    <div className="text-yellow-500 ">
+                      {transaction.transactionType === "expense" ? (
+                        <p className="text-red-500">- € {transaction.amount}</p>
+                      ) : (
+                        <p className="text-green-500">
+                          + € {transaction.amount}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col text-sm items-center  rounded gap-3">
+                      <span className="text-xs">{transaction.date}</span>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* scrollable list of all transactions*/}
+
+          {/* shows full modal with all transactions, and options like edit and delete */}
+          <button
+            className="underline p-2 w-fit self-center rounded-xl  mt-auto"
+            onClick={() =>
+              dispatch(openModal({ type: "transactions", data: null }))
+            }
+            aria-label="See All"
+          >
+            See All
+          </button>
+        </>
+      )}
     </section>
   );
 }

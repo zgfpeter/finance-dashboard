@@ -3,13 +3,18 @@
 // get the type for the dashboard data
 import { DashboardData } from "../types/dashboard";
 import axios from "axios";
-export async function getDashboardData(): Promise<DashboardData> {
+export async function getDashboardData(token: string): Promise<DashboardData> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   try {
     //console.log("fetching dashboard data");
     // const res = await axios.get<DashboardData>("./data/dashboardData.json");
-    const res = await axios.get<DashboardData>(`${apiUrl}/api/dashboard`);
+    const res = await axios.get<DashboardData>(`${apiUrl}/api/dashboard`, {
+      // add the authorization header
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!res.data) {
       throw new Error("Dashboard data is empty.");
     }

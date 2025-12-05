@@ -4,12 +4,11 @@ import { motion } from "framer-motion";
 import { FaInfoCircle } from "react-icons/fa";
 import { FormData } from "@/lib/types/FormData";
 import Link from "next/link";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import customAxios from "@/lib/axios";
+import { isAxiosError } from "axios";
 export default function SignUp() {
   const router = useRouter();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  console.log("API URL:", apiUrl);
 
   const [formData, setFormData] = useState<FormData>({
     email: "",
@@ -52,7 +51,7 @@ export default function SignUp() {
 
     try {
       // const res = await axios.post(`${apiUrl}/api/users/signup`, userData);
-      const res = await axios.post(`${apiUrl}/api/users/signup`, userData);
+      const res = await customAxios.post(`/api/users/signup`, userData);
       if (res.status === 201) {
         setRegistrationSuccess(true);
         setErrorMessage(null); // clear any previous errors
@@ -65,7 +64,7 @@ export default function SignUp() {
       }
     } catch (error: unknown) {
       setRegistrationSuccess(false);
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         setErrorMessage(error.response?.data?.message || "An error occurred.");
       } else if (error instanceof Error) {
         setErrorMessage(error.message);
