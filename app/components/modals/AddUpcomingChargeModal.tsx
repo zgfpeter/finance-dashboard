@@ -185,7 +185,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                   id="chargeCategories"
                   value={data.category}
                   onChange={handleChange}
-                  name="chargeCategories"
+                  name="category"
                   required
                   className="border border-(--secondary-blue) px-2 rounded h-11 flex"
                 >
