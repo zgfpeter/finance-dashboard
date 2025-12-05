@@ -8,6 +8,10 @@ DEMO ACCOUNT
 ---
 email: testUser@example.com password: Abc123
 ---
+*Note: Due to Render's free tier, the website might take a moment to load.*
+
+[LIVE DEMO](https://finance-dashboard-gules-omega.vercel.app/dashboard)
+---
 ## Tech Stack
 * **React**
 * **Next.js**
