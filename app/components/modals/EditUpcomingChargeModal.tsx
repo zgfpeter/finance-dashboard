@@ -27,7 +27,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
   const [category, setCategory] = useState<ExpenseCategory>(
     data?.category ?? "Other"
   ); // Default category is Other
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
     id: "",
@@ -44,7 +44,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     // sends the update to the backend, doesn't wait to finish to update UI
     mutationFn: (updatedCharge: UpcomingCharge) =>
       axios.put(
-        `http://localhost:4000/api/dashboard/upcomingCharges/${updatedCharge._id}`,
+        `${apiUrl}}/api/dashboard/upcomingCharges/${updatedCharge._id}`,
         updatedCharge
       ),
     // runs immediately when i click 'Save"
