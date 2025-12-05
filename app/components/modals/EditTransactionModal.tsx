@@ -28,9 +28,6 @@ export default function EditTransactionModal({ data, onClose }: Props) {
   const [transactionType, setTransactionType] = useState<TransactionType>(
     data?.transactionType ?? "expense"
   );
-  const [category, setCategory] = useState<ExpenseCategory>(
-    data?.category ?? "Other"
-  );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
@@ -94,10 +91,6 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     },
 
     // runs always, for refetch or cleanup
-    // onSettled: () => {
-    //   queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-    //   onClose();
-    // },
   });
 
   if (!data) return null;

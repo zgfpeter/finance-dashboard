@@ -86,12 +86,6 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
       console.log("An error has occured: ", _err);
       queryClient.setQueryData(["dashboardData"], context?.previous);
     },
-
-    // runs always, for refetch or cleanup
-    // onSettled: () => {
-    //   queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-    //   onClose();
-    // },
   });
 
   if (!data) return null;
@@ -120,17 +114,6 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
   };
 
   // Same as AddTransaction, because i need a dropdown for the categories
-  //// handle change in input
-  // function handleChange(
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  // ) {
-  //   const { name, value } = e.target;
-
-  //   setData((prev) => ({
-  //     ...prev,
-  //     [name === "transactionTypes" ? "transactionType" : name]: value,
-  //   }));
-  // }
 
   // simple form validation
   // TODO add a more robust validation

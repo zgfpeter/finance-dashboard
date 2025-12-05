@@ -73,15 +73,6 @@ export default function Navbar() {
               </span>
             </button>
 
-            {/* <div className="flex bg-red-400 px-3 py-1 w-20 rounded-xl">
-              <span>
-                <FaSun />
-              </span>
-              <span>
-                <FaMoon />
-              </span>
-            </div>
-          </div> */}
             {/* the light/dark toggle  */}
             {mounted && (
               <div

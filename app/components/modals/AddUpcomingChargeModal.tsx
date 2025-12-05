@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { UpcomingCharge, ExpenseCategory } from "@/lib/types/dashboard";
+import { UpcomingCharge } from "@/lib/types/dashboard";
 interface Props {
   onClose: () => void;
 }
@@ -16,9 +16,6 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
     amount: "",
     category: "Bill",
   });
-  const [chargeCategory, setChargeCategory] = useState<ExpenseCategory>(
-    data?.category ?? "Bill"
-  );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
@@ -200,25 +197,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                   <option value="Other">Other</option>
                 </select>
               </div>
-              {/* TODO maybe add a recurring transaction, or subscription */}
             </div>
-            {/* TODO maybe add a recurring charge, or subscription */}
-            {/* <div className="flex items-center p-3 gap-3 ">
-              <label htmlFor="charge">Recurring</label>
-              <select
-                id="charge"
-                value={data.recurring}
-                onChange={handleChange}
-                required
-                className="border border-(--secondary-blue) px-2 rounded h-11 flex"
-              >
-                {" "}
-                <option value="no">No</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-                <option value="yearly">Yearly</option>
-              </select>
-            </div> */}
           </div>
           {errors.date && (
             <span className="text-red-500 pl-12">{errors.date}</span>
