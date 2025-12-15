@@ -7,7 +7,7 @@ import SpendingsCard from "../components/SpendingsCard";
 import MonthlySpendingChart from "../components/MonthlySpendingChart";
 import UpcomingCharges from "../components/UpcomingCharges";
 import Debts from "../components/Debts";
-import Savings from "../components/Savings";
+import Goals from "../components/Goals";
 import { useDashboard } from "../hooks/useDashboard";
 
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -47,7 +47,7 @@ export default function DashboardPage() {
   pt-25  lg:pt-3
   grid grid-cols-1 
   md:grid-cols-2 
-  lg:grid-cols-3 
+  xl:grid-cols-3 
   gap-3 w-full max-w-7xl p-3 
   lg:ml-23 2xl:ml-0
 "
@@ -104,7 +104,7 @@ export default function DashboardPage() {
         >
           <Subscriptions />
         </div> */}
-        {/* Debts + Savings */}
+        {/* Debts + Goals */}
         <div
           className="  bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
@@ -113,7 +113,7 @@ export default function DashboardPage() {
   "
         >
           <Debts />
-          <Savings />
+          <Goals />
         </div>
 
         {/* Spendings this year */}

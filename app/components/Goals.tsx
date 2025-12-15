@@ -2,31 +2,31 @@
 import { useDashboard } from "../hooks/useDashboard";
 import { motion } from "framer-motion";
 import { calcAnimationWidth } from "@/lib/utils";
-export default function Savings() {
-  const savings = useDashboard().data?.goals;
-  const hasSavings = savings && savings.length > 0;
+import { useDispatch } from "react-redux";
+import { openModal } from "@/app/store/modalSlice";
+export default function Goals() {
+  const goals = useDashboard().data?.goals;
+  const hasgoals = goals && goals.length > 0;
+  const dispatch = useDispatch();
   return (
     <section
       className=" flex flex-col justify-evenly  gap-3 h-1/2 w-full rounded-xl"
-      aria-describedby="savings-heading"
+      aria-describedby="goals-heading"
     >
       <div className="flex justify-between p-2 items-center">
-        <h2
-          id="savings-heading"
-          className="flex items-center rounded-xl text-xl"
-        >
-          Savings
+        <h2 id="goals-heading" className="flex items-center rounded-xl text-xl">
+          Goals
         </h2>
-        <p className="text-sm text-green-400">Goal Date</p>
+        <p className="text-sm text-green-400">Target Date</p>
       </div>
-      {!hasSavings ? (
+      {!hasgoals ? (
         <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
       ) : (
         <>
           {/* total balance-current net worth across accounts */}
-          <ul className="flex flex-col gap-1 w-full">
+          <ul className="flex flex-col gap-2 h-72 overflow-y-auto ">
             {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
-            {savings?.map((goal) => {
+            {goals?.map((goal) => {
               return (
                 <li
                   key={goal._id}
@@ -77,7 +77,8 @@ export default function Savings() {
           </ul>
           <button
             className="underline p-2 w-fit self-center rounded-xl"
-            aria-label="More savings"
+            aria-label="More goals"
+            onClick={() => dispatch(openModal({ type: "goals", data: null }))}
           >
             More
           </button>

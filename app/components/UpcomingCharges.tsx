@@ -112,7 +112,7 @@ export default function UpcomingCharges() {
             </span>
           </button>
           <button
-            className="text-2xl flex items-center"
+            className="text-xl flex items-center"
             onClick={handleAddUpcomingCharge}
           >
             <span className="text-yellow-500">

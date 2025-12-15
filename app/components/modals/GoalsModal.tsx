@@ -4,21 +4,24 @@
 // onClose is a function with no arguments and no return value
 // ()=> void is the TypeScript way to write "a function that returns nothing"
 interface Props {
+  data: Goal | null;
   onClose: () => void;
 }
 
 // -- imports --
-import { MdEdit, MdDelete } from "react-icons/md";
+import { motion } from "framer-motion";
+import { calcAnimationWidth } from "@/lib/utils";
+import { MdEdit, MdDelete, MdOutlineWatchLater } from "react-icons/md";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData } from "@/lib/types/dashboard";
+import { DashboardData, Goal } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 // -- end imports --
 
-export default function TransactionsModal({ onClose }: Props) {
+export default function GoalsModal({ onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
 
@@ -34,7 +37,7 @@ export default function TransactionsModal({ onClose }: Props) {
   // if data exists and data.transactions exists, use it, otherwise fall bcak to an empty array
 
   // /?? is called the nullish coalescing operator, it returns the right side only if the left side is null or undefined.
-  const transactions = useMemo(() => data?.transactions ?? [], [data]);
+  const goals = useMemo(() => data?.goals ?? [], [data]);
 
   // state for deleting
   // delete: track which item is to be deleted and show the delete confirmation modal
@@ -50,22 +53,19 @@ export default function TransactionsModal({ onClose }: Props) {
 
   // filters by date, company, amount and transaction type (expense or income)
   // so if the user types "expense" or "income", it will find the transactions that are expenses or incomes
-  const filteredTransactions = useMemo(() => {
+  const filteredgoals = useMemo(() => {
     const term = search.trim().toLowerCase();
     // trim spaces and convert to lowercase for case-insensitivity
-    if (!term) return transactions;
+    if (!term) return goals;
 
-    return transactions.filter((transaction) => {
-      const companyMatch = transaction.company.toLowerCase().includes(term);
-      const dateMatch = transaction.date.toLowerCase().includes(term);
-      const amountMatch = transaction.amount.toString().includes(term);
-      const typeMatch = transaction.transactionType
-        .toLowerCase()
-        .includes(term);
+    // filter by goal title, due date
+    return goals.filter((goal) => {
+      const titleMatch = goal.title.toLowerCase().includes(term);
+      const dateMatch = goal.targetDate.toLowerCase().includes(term);
 
-      return companyMatch || dateMatch || amountMatch || typeMatch;
+      return titleMatch || dateMatch;
     });
-  }, [search, transactions]);
+  }, [search, goals]);
 
   /**
    * DELETE mutation with optimistic updates
@@ -73,8 +73,7 @@ export default function TransactionsModal({ onClose }: Props) {
   // useMutation wraps a function that changes server state (POST,PUT,DELETE). Mutations are not cached automatically like queries, i need to update/query the cache manually after a mutation
   const deleteMutation = useMutation({
     // this is the function that runs when i call deleteMutation.mutate(id) in the confirm delete modal
-    mutationFn: (id: string) =>
-      axiosAuth.delete(`/api/dashboard/transactions/${id}`),
+    mutationFn: (id: string) => axiosAuth.delete(`/api/dashboard/goals/${id}`),
 
     // this runs before the request is send
     // we can do optimistic UI updates here
@@ -94,7 +93,7 @@ export default function TransactionsModal({ onClose }: Props) {
 
         return {
           ...old,
-          transactions: old.transactions.filter((c) => c._id !== id),
+          debts: old.debts.filter((c) => c._id !== id),
         };
       });
 
@@ -116,6 +115,7 @@ export default function TransactionsModal({ onClose }: Props) {
     },
   });
 
+  // TODO fix goals and goals, use one term only consistently
   return (
     <div
       className="h-full w-full flex items-center flex-col justify-evenly"
@@ -131,87 +131,89 @@ export default function TransactionsModal({ onClose }: Props) {
         ✕
       </button>
 
-      <h2 className="text-xl font-semibold mb-4">Transactions</h2>
+      <h2 className="text-xl font-semibold mb-4">Goals</h2>
       <input
         type="text"
         placeholder="Search..."
         className="w-full p-5 mb-2 rounded-xl"
         onChange={(e) => setSearch(e.target.value)}
       />
+
       <ul className="w-full flex flex-col gap-2  overflow-y-auto grow ">
-        {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
-        {filteredTransactions?.map((transaction) => {
+        {/* each goal goal li is a grid with 2 columns, one for company+date and one for amount */}
+        {filteredgoals?.map((goal) => {
           return (
             <li
-              key={transaction._id}
-              className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center p-3 bg-(--border-blue) rounded-xl relative "
+              key={goal._id}
+              className=" bg-(--border-blue) p-2 rounded-xl  gap-2 grid grid-cols-[1fr_4fr_1fr]"
             >
-              <div className="flex flex-col gap-3 justify-self-start">
-                <span>{transaction.company}</span>
-                {transaction.category && (
-                  <span className="text-xs text-yellow-500">
-                    {transaction.category}
-                  </span>
-                )}
+              <div className="flex flex-col gap-1 items-center justify-center text-xs">
+                <MdOutlineWatchLater /> x days
               </div>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between w-full py-2">
+                  <span aria-label="Goal title">{goal.title}</span>
+                  <span aria-label={`Goal date: ${goal.targetDate}`}>
+                    {goal.targetDate}
+                  </span>
+                </div>
+                <div className="relative w-full">
+                  <p className="flex justify-between px-2 border border-teal-700 py-1 rounded-2xl w-full text-sm z-10 relative">
+                    <span aria-label={`Goal ${goal.title} current amount`}>
+                      {goal.currentAmount}
+                    </span>
+                    <span>/</span>
+                    <span
+                      aria-label={`Goal ${goal.title} target amount: ${goal.targetAmount}`}
+                    >
+                      {goal.targetAmount}
+                    </span>
+                  </p>
 
-              {transaction.transactionType === "expense" ? (
-                <p className="text-red-500">- € {transaction.amount}</p>
-              ) : (
-                <p className="text-green-500">+ € {transaction.amount}</p>
-              )}
-
-              <p className="justify-self-end">{transaction.date}</p>
-              <div className="flex items-center gap-3 justify-self-end mr-3">
+                  <motion.span
+                    // z indes smaller than price <p> so that it sits below the text
+                    className="absolute left-0 top-0 h-full bg-teal-600 rounded-2xl z-0"
+                    initial={{ width: 0 }}
+                    role="progressbar"
+                    aria-valuenow={goal.currentAmount}
+                    aria-valuemin={0}
+                    aria-valuemax={goal.targetAmount}
+                    aria-label={`Amount paid for ${goal.title}`}
+                    animate={{
+                      width: `${calcAnimationWidth(
+                        goal.currentAmount,
+                        goal.targetAmount
+                      )}%`,
+                    }}
+                    transition={{
+                      duration: 1.8,
+                    }}
+                  ></motion.span>
+                </div>
+              </div>
+              <div className="flex items-center  justify-center gap-3">
                 <button
-                  onClick={() =>
-                    dispatch(
-                      openModal({
-                        type: "editTransaction",
-                        data: transaction,
-                      })
-                    )
-                  }
+                  //   onClick={() =>
+                  //     dispatch(
+                  //       openModal({
+                  //         type: "editDebt",
+                  //         data: debt,
+                  //       })
+                  //     )
+                  //   }
                   className="p-1"
-                  aria-label="Edit transaction"
+                  aria-label="Edit goals goal"
                 >
                   <MdEdit color="orange" />
                 </button>
                 <button className="p-1 ">
                   <MdDelete
                     color="red"
-                    onClick={() => setDeleteId(transaction._id)}
-                    aria-label="Delete transaction"
+                    onClick={() => setDeleteId(goal._id)}
+                    aria-label="Delete goals goal"
                   />
                 </button>
               </div>
-
-              {deleteId === transaction._id && (
-                <div className="absolute inset-0 bg-(--primary-blue)  rounded-xl flex flex-col items-center gap-1 z-20">
-                  <p>Are you sure you want to delete this item?</p>
-
-                  <div className="flex items-center ">
-                    <button
-                      className="px-3 text-stone-500 hover:text-stone-600"
-                      onClick={() => setDeleteId(null)}
-                      aria-label="Cancel"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="px-3 text-red-500  hover:text-red-600"
-                      onClick={() => {
-                        if (!transaction._id) return;
-                        deleteMutation.mutate(transaction._id);
-                        setDeleteId(null);
-                      }}
-                      aria-label="Confirm Delete"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              )}
             </li>
           );
         })}

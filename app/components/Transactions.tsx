@@ -14,7 +14,7 @@ export default function Transactions() {
           <FaMoneyBillTransfer /> Transactions
         </h2>
         <button
-          className="text-2xl flex items-center"
+          className="text-xl flex items-center"
           onClick={() =>
             dispatch(openModal({ type: "addTransaction", data: null }))
           }
@@ -37,7 +37,7 @@ export default function Transactions() {
               return (
                 <li
                   key={transaction._id}
-                  className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl relative"
+                  className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl relative pr-4"
                 >
                   <div className="flex items-center gap-2">
                     <div className="flex flex-col">

@@ -4,6 +4,16 @@ export interface Overview {
 }
 export interface EditOverview {
   totalBalance: number;
+  accounts: Account[];
+}
+
+export type AccountType = "checking" | "savings" | "credit" | "cash";
+export interface Account {
+  _id?: string;
+  userId?: string;
+  type: AccountType;
+  balance: number;
+  createdAt?: string;
 }
 
 export type TransactionType = "income" | "expense";
@@ -58,6 +68,7 @@ export interface Income {
 
 export interface DashboardData {
   overview: Overview;
+  accounts: Account[]; // will hold all of user's accounts
   transactions: Transaction[];
   upcomingCharges: UpcomingCharge[];
   debts: Debt[];
@@ -68,13 +79,17 @@ export interface DashboardData {
 // modal types
 export type ModalType =
   | "transactions"
-  | "upcomingCharges"
-  | "settings"
-  | "debts"
-  | "savings"
   | "addTransaction"
   | "editTransaction"
-  | "editOverview"
+  | "upcomingCharges"
   | "addUpcomingCharge"
   | "editUpcomingCharge"
+  | "settings"
+  | "editOverview"
+  | "goals"
+  | "addGoal"
+  | "editGoals"
+  | "debts"
+  | "addDebt"
+  | "editDebt"
   | "none";

@@ -28,9 +28,10 @@ export default function IncomeCard() {
       ) : (
         <div className="flex flex-col text-end justify-center gap-2 bg-(--primary-bg) p-2 rounded-xl w-2/3 md:w-full">
           <p aria-label={`This month's income is ${getIncome} euros`}>
-            This month: € {getIncome.toFixed(2)}
+            This month:{" "}
+            <span className="text-green-500"> € {getIncome.toFixed(2)}</span>
           </p>
-          <p>Last month: €3500.49</p>
+          <p>Last month: € 3500.49</p>
           <motion.span
             aria-hidden="true"
             className="h-0.5 w-5 bg-[#025207] self-end my-1"

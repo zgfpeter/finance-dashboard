@@ -98,38 +98,42 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         {filteredCharges.map((charge) => (
           <li
             key={charge._id}
-            className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl relative"
+            className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center bg-(--border-blue) p-3 rounded-xl relative text-sm"
           >
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-3 justify-self-start">
               <span>{charge.company}</span>
-              <span>{charge.date}</span>
+              {charge.category && (
+                <span className="text-xs text-yellow-500">
+                  {charge.category}
+                </span>
+              )}
             </div>
 
-            <div className="flex justify-between items-center">
-              <div className="text-yellow-500">- € {charge.amount}</div>
-              <div className="flex items-center gap-2 mr-5 ">
-                {/* Edit button now dispatches Redux action */}
-                <button
-                  onClick={() =>
-                    dispatch(
-                      openModal({ type: "editUpcomingCharge", data: charge })
-                    )
-                  }
-                  aria-label="Edit upcoming charge"
-                  className="p-1"
-                >
-                  <MdEdit color="orange" />
-                </button>
+            <p className="text-yellow-500">- € {charge.amount}</p>
+            <p className="">{charge.date}</p>
+            {/* <p className="justify-self-end">Monthly</p> */}
+            <div className="flex items-center gap-3 justify-self-end mr-3">
+              {/* Edit button now dispatches Redux action */}
+              <button
+                onClick={() =>
+                  dispatch(
+                    openModal({ type: "editUpcomingCharge", data: charge })
+                  )
+                }
+                aria-label="Edit upcoming charge"
+                className="p-1"
+              >
+                <MdEdit color="orange" />
+              </button>
 
-                {/* Delete button */}
-                <button
-                  onClick={() => setDeleteId(charge._id)}
-                  aria-label="Delete upcoming charge"
-                  className="p-1"
-                >
-                  <MdDelete color="red" />
-                </button>
-              </div>
+              {/* Delete button */}
+              <button
+                onClick={() => setDeleteId(charge._id)}
+                aria-label="Delete upcoming charge"
+                className="p-1"
+              >
+                <MdDelete color="red" />
+              </button>
             </div>
 
             {/* Delete confirmation overlay */}

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Transaction } from "@/lib/types/dashboard";
+import { ExpenseCategory, Transaction } from "@/lib/types/dashboard";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
@@ -25,6 +25,7 @@ export default function AddTransactionModal({ onClose }: Props) {
     company: "",
     amount: "",
     transactionType: "expense",
+    category: "",
     generalError: "",
   });
 
@@ -128,56 +129,57 @@ export default function AddTransactionModal({ onClose }: Props) {
       )}
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative h-full"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between ">
-          <div>
-            <div className="flex flex-col p-3 gap-3 relative">
-              <label htmlFor="company">Company</label>
-              {/* A general error if the form validation fails */}
-              {errors.company && (
-                <span
-                  id="company-error"
-                  className="text-red-500 absolute right-5"
-                >
-                  {errors.company}
-                </span>
-              )}
-              <input
-                type="text"
-                value={data.company}
-                required
-                onChange={handleChange}
-                name="company"
-                id="company"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
-                aria-describedby="company-error"
-              />
-            </div>
-            <div className="flex flex-col p-3 gap-3 relative">
-              <label htmlFor="amount">Amount</label>
-              {errors.amount && (
-                <span
-                  id="amount-error"
-                  className="text-red-500 absolute right-5"
-                >
-                  {errors.amount}
-                </span>
-              )}
-              <input
-                type="number"
-                value={data.amount}
-                onChange={handleChange}
-                name="amount"
-                id="amount"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
-                aria-describedby="amount-error"
-              />
-            </div>
+        <div className="w-full flex flex-col gap-5 ">
+          <div className="flex flex-col gap-3 relative">
+            <label htmlFor="company">Company</label>
+            {/* A general error if the form validation fails */}
+            {errors.company && (
+              <span
+                id="company-error"
+                className="text-red-500 absolute right-5"
+              >
+                {errors.company}
+              </span>
+            )}
+            <input
+              type="text"
+              value={data.company}
+              required
+              onChange={handleChange}
+              name="company"
+              id="company"
+              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+              aria-describedby="company-error"
+            />
           </div>
-          <div className="flex justify-evenly relative">
-            <div className="flex items-center p-3 gap-3 relative">
+          <div className="flex flex-col  gap-3 relative">
+            <label htmlFor="amount">Amount</label>
+            {errors.amount && (
+              <span id="amount-error" className="text-red-500 absolute right-5">
+                {errors.amount}
+              </span>
+            )}
+            <input
+              type="number"
+              value={data.amount}
+              onChange={handleChange}
+              name="amount"
+              id="amount"
+              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+              aria-describedby="amount-error"
+            />
+          </div>
+          <div
+            className={`flex relative gap-3 items-center ${
+              data.transactionType === "expense"
+                ? "justify-between"
+                : "justify-items-start"
+            }`}
+          >
+            <div className="flex flex-col gap-3 relative">
               <label htmlFor="date">Date</label>
 
               <input
@@ -187,12 +189,12 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor w-42"
                 aria-describedby="date-error"
               />
             </div>
 
-            <div className="flex items-center p-3 gap-3 ">
+            <div className="flex flex-col gap-3 ">
               <label htmlFor="transactionType">Type</label>
               {/* {errors.type && (
                 <span className="text-red-500">{errors.type}</span>
@@ -203,12 +205,35 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="transactionType"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-11 flex"
+                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-42"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
               </select>
             </div>
+            {data.transactionType === "expense" && (
+              <div className="flex flex-col gap-3 relative">
+                <label htmlFor="transactionCategory">Category</label>
+                {/* {errors.type && (
+                            <span className="text-red-500">{errors.type}</span>
+                          )} */}
+                <select
+                  id="transactionCategory"
+                  value={data.category}
+                  onChange={handleChange}
+                  name="category"
+                  required
+                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-42"
+                >
+                  <option value="Subscription">Subscription</option>
+                  <option value="Bill">Bill</option>
+                  <option value="Tax">Tax</option>
+                  <option value="Insurance">Insurance</option>
+                  <option value="Loan">Loan</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            )}
           </div>
           {errors.date && (
             <span id="date-error" className="text-red-500 pl-12">

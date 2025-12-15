@@ -141,7 +141,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-    // if there are no errors in the for, this will return true
+    // if there are no errors in the form, this will return true
     // if there's at least one error, then it will return false
   }
 
@@ -228,12 +228,12 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
                 required
                 className="border border-(--secondary-blue) px-2 rounded h-11 flex min-w-40"
               >
-                <option value="subscription">Subscription</option>
-                <option value="bill">Bill</option>
-                <option value="tax">Tax</option>
-                <option value="insurance">Insurance</option>
-                <option value="loan">Loan</option>
-                <option value="other">Other</option>
+                <option value="Subscription">Subscription</option>
+                <option value="Bill">Bill</option>
+                <option value="Tax">Tax</option>
+                <option value="Insurance">Insurance</option>
+                <option value="Loan">Loan</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>

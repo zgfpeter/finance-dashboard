@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaInfoCircle } from "react-icons/fa";
+import { MdEmail, MdInfoOutline, MdAccountCircle, MdKey } from "react-icons/md";
+
 import { FormData } from "@/lib/types/FormData";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -99,9 +100,9 @@ export default function SignUp() {
     // if there's at least one error, then it will return false
   }
   return (
-    <section className=" h-screen flex items-center justify-center text-(--text-light)">
+    <section className=" h-screen flex items-center justify-center text-(--text-light)  ">
       <form
-        className="flex flex-col items-center gap-3 justify-evenly py-10 rounded  w-full max-w-xl border-none inset-ring-4 inset-ring-cyan-600"
+        className="flex flex-col items-center gap-3 justify-evenly py-10 rounded  w-full max-w-2xl border-none inset-ring-4 inset-ring-cyan-600 z-20 bg-black/50"
         onSubmit={handleSubmit}
       >
         {registrationSuccess && (
@@ -109,7 +110,12 @@ export default function SignUp() {
         )}
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
-        <div className="flex flex-col w-2/3  p-3 gap-3">
+        <div className="flex flex-col w-2/3  p-3 gap-3 relative">
+          <span className="absolute top-15.5 left-6.5 ">
+            <span className="text-cyan-500">
+              <MdEmail />
+            </span>
+          </span>
           <label htmlFor="email">Email</label>
           {errors.email && <span className="text-red-500">{errors.email}</span>}
           <input
@@ -119,10 +125,15 @@ export default function SignUp() {
             name="email"
             id="email"
             placeholder="example@gmail.com"
-            className="border rounded p-2  focus:outline-none focus:border-cyan-500"
+            className="border rounded p-2 pl-10  focus:outline-none focus:border-cyan-500"
           />
         </div>
-        <div className="flex flex-col w-2/3 p-3 gap-3">
+        <div className="flex flex-col w-2/3 p-3 gap-3 relative">
+          <span className="absolute top-15.5 left-6.5 ">
+            <span className="text-cyan-500">
+              <MdAccountCircle />
+            </span>
+          </span>
           <label htmlFor="username">Username</label>
           {errors.username && (
             <span className="text-red-500">{errors.username}</span>
@@ -133,13 +144,18 @@ export default function SignUp() {
             id="username"
             value={formData.username}
             onChange={handleChange}
-            className="border rounded p-2  focus:outline-none focus:border-cyan-500"
+            className="border rounded p-2 pl-10 focus:outline-none focus:border-cyan-500"
           />
         </div>
         <div className="flex flex-col w-2/3 p-3 gap-3 relative">
+          <span className="absolute top-15.5 left-6.5 ">
+            <span className="text-cyan-500">
+              <MdKey />
+            </span>
+          </span>
           <label htmlFor="password" className="flex items-center gap-2">
             Password{" "}
-            <FaInfoCircle
+            <MdInfoOutline
               className="hover:cursor-pointer"
               onMouseEnter={() => setShowPasswordInfo(true)}
               onMouseLeave={() => setShowPasswordInfo(false)}
@@ -161,7 +177,7 @@ export default function SignUp() {
             id="password"
             value={formData.password}
             onChange={handleChange}
-            className="border rounded p-2 focus:outline-none focus:border-cyan-500  "
+            className="border rounded p-2 pl-10 focus:outline-none focus:border-cyan-500  "
           />
         </div>
 
@@ -190,7 +206,7 @@ export default function SignUp() {
               },
             }}
           />
-          <span className="relative z-10">Sign Up</span>
+          <span className="relative z-10 ">Sign Up</span>
         </motion.button>
         <span>or</span>
         <Link href="/UserLogin" aria-label="Create an account">

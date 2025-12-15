@@ -2,10 +2,14 @@
 import { motion } from "framer-motion";
 import { useDashboard } from "../hooks/useDashboard";
 import { calcAnimationWidth } from "@/lib/utils";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/app/store/modalSlice";
 export default function Debts() {
   // debts data
   const debts = useDashboard().data?.debts;
   const hasDebts = debts && debts.length > 0;
+  const dispatch = useDispatch();
+
   return (
     <section
       className="flex flex-col justify-evenly  gap-3 h-1/2 w-full rounded-xl z-30"
@@ -23,7 +27,7 @@ export default function Debts() {
         <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
       ) : (
         <>
-          <ul className="flex flex-col gap-1 w-full">
+          <ul className="flex flex-col gap-2 h-72 overflow-y-auto ">
             {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
             {debts?.map((debt) => {
               return (
@@ -74,6 +78,7 @@ export default function Debts() {
           <button
             className="underline p-2 w-fit self-center rounded-xl"
             aria-label="Open debts modal"
+            onClick={() => dispatch(openModal({ type: "debts", data: null }))}
           >
             More
           </button>

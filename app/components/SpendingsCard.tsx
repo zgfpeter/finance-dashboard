@@ -18,7 +18,10 @@ export default function SpendingsCard() {
         <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
       ) : (
         <div className=" bg-(--primary-bg) rounded-xl flex flex-col text-start justify-center gap-2 p-2 w-2/3 md:w-full">
-          <p>This month: € {getSpendings?.toFixed(2)}</p>
+          <p>
+            This month:{" "}
+            <span className="text-red-500">€ {getSpendings?.toFixed(2)}</span>
+          </p>
           <p>Last month: € 7.20</p>
           <motion.span
             aria-hidden="true"
