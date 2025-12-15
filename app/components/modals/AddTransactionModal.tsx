@@ -76,7 +76,7 @@ export default function AddTransactionModal({ onClose }: Props) {
   // tanstack query mutation to POST a new transaction
   const addMutation = useMutation({
     mutationFn: (payload: Transaction) =>
-      axiosAuth.post(`/api/dashboard/transactions`, payload),
+      axiosAuth.post(`/dashboard/transactions`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
       // when invalidateQueries is called, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical for fresh UI data updates

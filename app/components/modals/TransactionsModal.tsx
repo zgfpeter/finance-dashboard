@@ -74,7 +74,7 @@ export default function TransactionsModal({ onClose }: Props) {
   const deleteMutation = useMutation({
     // this is the function that runs when i call deleteMutation.mutate(id) in the confirm delete modal
     mutationFn: (id: string) =>
-      axiosAuth.delete(`/api/dashboard/transactions/${id}`),
+      axiosAuth.delete(`/dashboard/transactions/${id}`),
 
     // this runs before the request is send
     // we can do optimistic UI updates here

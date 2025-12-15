@@ -142,7 +142,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
   const updateOverviewMutation = useMutation({
     // sends the update to the backend, doesn't wait to finish to update UI
     mutationFn: (updatedOverview: UpdateOverviewPayload) =>
-      axiosAuth.put("/api/dashboard/overview", updatedOverview),
+      axiosAuth.put("/dashboard/overview", updatedOverview),
     // runs immediately when i click 'Save"
     // this runs before the PUT request is send, i can do optimistic updates here
     // cancel queries: because maybe another refetch is happening at the same time

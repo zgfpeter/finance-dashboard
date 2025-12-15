@@ -73,7 +73,7 @@ export default function GoalsModal({ onClose }: Props) {
   // useMutation wraps a function that changes server state (POST,PUT,DELETE). Mutations are not cached automatically like queries, i need to update/query the cache manually after a mutation
   const deleteMutation = useMutation({
     // this is the function that runs when i call deleteMutation.mutate(id) in the confirm delete modal
-    mutationFn: (id: string) => axiosAuth.delete(`/api/dashboard/goals/${id}`),
+    mutationFn: (id: string) => axiosAuth.delete(`/dashboard/goals/${id}`),
 
     // this runs before the request is send
     // we can do optimistic UI updates here

@@ -16,14 +16,10 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const baseURL =
-          process.env.NEXT_PUBLIC_API_URL === "/api"
-            ? `${process.env.NEXTAUTH_URL}/api` // NEXTAUTH_URL is required in NextAuth for server
-            : process.env.NEXT_PUBLIC_API_URL;
         if (!credentials?.email || !credentials?.password) return null;
 
         try {
-          const res = await customAxios.post(`${baseURL}/users/login`, {
+          const res = await customAxios.post("/users/login", {
             email: credentials.email,
             password: credentials.password,
           });

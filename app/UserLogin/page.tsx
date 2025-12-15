@@ -114,7 +114,7 @@ export default function UserLogin() {
   return (
     <section className=" h-screen flex items-center justify-center text-(--text-light)">
       <form
-        className="flex flex-col items-center gap-3 justify-evenly py-10 rounded  w-full max-w-xl border-none inset-ring-4 inset-ring-cyan-600"
+        className="flex flex-col items-center gap-3 justify-evenly py-10 rounded  w-full max-w-2xl border-none inset-ring-4 inset-ring-cyan-600 z-20 bg-black/50"
         onSubmit={handleSubmit}
       >
         {errors.email && <span className="text-red-500">{errors.email}</span>}

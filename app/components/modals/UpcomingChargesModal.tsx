@@ -44,7 +44,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
   // DELETE mutation with optimistic updates
   const deleteMutation = useMutation({
     mutationFn: (id: string) =>
-      axiosAuth.delete(`/api/dashboard/upcomingCharges/${id}`),
+      axiosAuth.delete(`/dashboard/upcomingCharges/${id}`),
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey: ["dashboardData"] });
       const previous = queryClient.getQueryData<DashboardData>([

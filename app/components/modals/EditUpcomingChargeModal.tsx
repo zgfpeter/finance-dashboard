@@ -46,7 +46,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     // sends the update to the backend, doesn't wait to finish to update UI
     mutationFn: (updatedCharge: UpcomingCharge) =>
       axiosAuth.put(
-        `/api/dashboard/upcomingCharges/${updatedCharge._id}`,
+        `/dashboard/upcomingCharges/${updatedCharge._id}`,
         updatedCharge
       ),
     // runs immediately when i click 'Save"

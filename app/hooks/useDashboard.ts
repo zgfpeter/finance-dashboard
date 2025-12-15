@@ -13,7 +13,7 @@ export function useDashboard() {
   const axiosAuth = useAxiosAuth();
   const fetchDashboard = async () => {
     // just call .get(). The interceptor handles the token automatically
-    const res = await axiosAuth.get<DashboardData>("/api/dashboard");
+    const res = await axiosAuth.get<DashboardData>("/dashboard");
     return res.data;
   };
 

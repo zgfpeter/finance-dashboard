@@ -47,7 +47,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     // sends the update to the backend, doesn't wait to finish to update UI
     mutationFn: (updatedTransaction: Transaction) =>
       axiosAuth.put(
-        `/api/dashboard/transactions/${updatedTransaction._id}`,
+        `/dashboard/transactions/${updatedTransaction._id}`,
         updatedTransaction
       ),
     // runs immediately when i click 'Save"

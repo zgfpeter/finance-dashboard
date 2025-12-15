@@ -71,7 +71,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
   const addMutation = useMutation({
     mutationFn: (payload: UpcomingCharge) =>
-      axiosAuth.post(`/api/dashboard/upcomingCharges`, payload),
+      axiosAuth.post(`/dashboard/upcomingCharges`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
       // when i cal invalidateQueries, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical if i want fresh UI data updates

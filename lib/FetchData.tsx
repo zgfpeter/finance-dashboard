@@ -13,7 +13,7 @@ export async function uploadFile(file: File) {
   //     const formData = new FormData();
   //     formData.append("file", file); // add the form data to the file state
   //     const result = await axios.post(
-  //       "http://localhost:4000/api/upload",
+  //       "http://localhost:4000/upload",
   //       formData,
   //       {
   //         headers: { "Content-Type": "multipart/form-data" },

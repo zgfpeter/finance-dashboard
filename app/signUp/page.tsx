@@ -51,8 +51,8 @@ export default function SignUp() {
     };
 
     try {
-      // const res = await axios.post(`${apiUrl}/api/users/signup`, userData);
-      const res = await customAxios.post(`/api/users/signup`, userData);
+      // const res = await axios.post(`${apiUrl}/users/signup`, userData);
+      const res = await customAxios.post(`/users/signup`, userData);
       if (res.status === 201) {
         setRegistrationSuccess(true);
         setErrorMessage(null); // clear any previous errors

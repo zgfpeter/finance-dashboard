@@ -9,7 +9,7 @@ export async function getDashboardData(token: string): Promise<DashboardData> {
   try {
     //console.log("fetching dashboard data");
     // const res = await axios.get<DashboardData>("./data/dashboardData.json");
-    const res = await axios.get<DashboardData>(`${apiUrl}/api/dashboard`, {
+    const res = await axios.get<DashboardData>(`${apiUrl}/dashboard`, {
       // add the authorization header
       headers: {
         Authorization: `Bearer ${token}`,
