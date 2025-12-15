@@ -1,3 +1,4 @@
+import { UpcomingCharge } from "@/lib/types/dashboard";
 import mongoose, { Document, Schema } from "mongoose";
 export type ExpenseCategory =
   | "subscription"
@@ -172,7 +173,9 @@ export type TransactionCSV = {
 };
 
 // don't allow duplicate charges
-DashboardSchema.path("upcomingCharges").validate(function (charges: any[]) {
+DashboardSchema.path("upcomingCharges").validate(function (
+  charges: UpcomingCharge[]
+) {
   const seen = new Set();
   for (const charge of charges) {
     // define what counts as a duplicate: company + date
@@ -181,7 +184,8 @@ DashboardSchema.path("upcomingCharges").validate(function (charges: any[]) {
     seen.add(key);
   }
   return true;
-}, "Duplicate upcoming charges are not allowed.");
+},
+"Duplicate upcoming charges are not allowed.");
 
 // the model Dashboard is what i use to query the database
 export default mongoose.model<IDashboard>(
