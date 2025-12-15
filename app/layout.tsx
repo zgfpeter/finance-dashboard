@@ -13,7 +13,7 @@ const rowdies = Rowdies({
 
 // Metadata
 export const metadata = {
-  title: "Personal Finance Dashboard",
+  title: "Pocket Memory",
   description:
     "A one-page personal finance dashboard built with Next.js, React, and TailwindCSS.",
   keywords: [
@@ -27,11 +27,11 @@ export const metadata = {
   ],
   authors: [{ name: "zgfpeter" }],
   openGraph: {
-    title: "Personal Finance Dashboard",
+    title: "Pocket Memory",
     description:
       "A one-page personal finance dashboard built with Next.js, React, and TailwindCSS.",
     url: "finance-dashboard-git-main-zgfpeters-projects.vercel.app", // Live demo URL
-    siteName: "Personal Finance Dashboard",
+    siteName: "Pocket Memory",
     locale: "en_US",
     type: "website",
   },
