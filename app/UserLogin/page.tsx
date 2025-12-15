@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { MdEmail, MdInfoOutline, MdAccountCircle, MdKey } from "react-icons/md";
+import { MdEmail, MdInfoOutline, MdKey } from "react-icons/md";
 import { SignInType } from "@/lib/types/FormData";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
