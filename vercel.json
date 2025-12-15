@@ -6,11 +6,11 @@
       "use": "@vercel/node"
     },
     {
-      "src": "package.json",
+      "src": "app/package.json",
       "use": "@vercel/next"
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.ts" }
+    { "src": "/api/(.*)", "dest": "/api/index.ts" }
   ]
 }
