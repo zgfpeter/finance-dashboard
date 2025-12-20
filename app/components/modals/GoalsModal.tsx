@@ -10,7 +10,7 @@ interface Props {
 
 // -- imports --
 import { motion } from "framer-motion";
-import { calcAnimationWidth } from "@/lib/utils";
+import { calcProgressPercent as calcAnimationWidth } from "@/lib/utils";
 import { MdEdit, MdDelete, MdOutlineWatchLater } from "react-icons/md";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useState, useMemo } from "react";
@@ -18,6 +18,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardData, Goal } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
+import { calculateDeadline } from "@/lib/utils";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 // -- end imports --
 
@@ -145,19 +146,21 @@ export default function GoalsModal({ onClose }: Props) {
           return (
             <li
               key={goal._id}
-              className=" bg-(--border-blue) p-2 rounded-xl  gap-2 grid grid-cols-[1fr_4fr_1fr]"
+              className="bg-(--border-blue) p-2 rounded-xl gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
             >
-              <div className="flex flex-col gap-1 items-center justify-center text-xs">
-                <MdOutlineWatchLater /> x days
+              <div className="flex flex-col gap-1 items-center justify-self-start md:justify-center text-xs ">
+                <MdOutlineWatchLater color="orange" />
+                {calculateDeadline(goal.targetDate)}
               </div>
-              <div className="flex flex-col gap-1">
+
+              <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
                 <div className="flex items-center justify-between w-full py-2">
                   <span aria-label="Goal title">{goal.title}</span>
                   <span aria-label={`Goal date: ${goal.targetDate}`}>
                     {goal.targetDate}
                   </span>
                 </div>
-                <div className="relative w-full">
+                <div className="relative">
                   <p className="flex justify-between px-2 border border-teal-700 py-1 rounded-2xl w-full text-sm z-10 relative">
                     <span aria-label={`Goal ${goal.title} current amount`}>
                       {goal.currentAmount}
@@ -175,14 +178,14 @@ export default function GoalsModal({ onClose }: Props) {
                     className="absolute left-0 top-0 h-full bg-teal-600 rounded-2xl z-0"
                     initial={{ width: 0 }}
                     role="progressbar"
-                    aria-valuenow={goal.currentAmount}
+                    aria-valuenow={Number(goal.currentAmount)}
                     aria-valuemin={0}
-                    aria-valuemax={goal.targetAmount}
+                    aria-valuemax={Number(goal.targetAmount)}
                     aria-label={`Amount paid for ${goal.title}`}
                     animate={{
                       width: `${calcAnimationWidth(
-                        goal.currentAmount,
-                        goal.targetAmount
+                        Number(goal.currentAmount),
+                        Number(goal.targetAmount)
                       )}%`,
                     }}
                     transition={{
@@ -191,16 +194,16 @@ export default function GoalsModal({ onClose }: Props) {
                   ></motion.span>
                 </div>
               </div>
-              <div className="flex items-center  justify-center gap-3">
+              <div className="flex items-center justify-self-end md:justify-center gap-3 col-start-2 row-start-1 md:col-start-auto md:row-start-auto">
                 <button
-                  //   onClick={() =>
-                  //     dispatch(
-                  //       openModal({
-                  //         type: "editDebt",
-                  //         data: debt,
-                  //       })
-                  //     )
-                  //   }
+                  onClick={() =>
+                    dispatch(
+                      openModal({
+                        type: "editGoal",
+                        data: goal,
+                      })
+                    )
+                  }
                   className="p-1"
                   aria-label="Edit goals goal"
                 >
@@ -214,6 +217,32 @@ export default function GoalsModal({ onClose }: Props) {
                   />
                 </button>
               </div>
+              {deleteId === goal._id && (
+                <div className="absolute inset-0 bg-(--primary-bg)  rounded-xl flex flex-col items-center justify-center  gap-1 z-20">
+                  <p>Are you sure you want to delete this item?</p>
+
+                  <div className="flex items-center ">
+                    <button
+                      className="px-3 text-stone-500 hover:text-stone-600"
+                      onClick={() => setDeleteId(null)}
+                      aria-label="Cancel"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="px-3 text-red-500  hover:text-red-600"
+                      onClick={() => {
+                        if (!goal._id) return;
+                        deleteMutation.mutate(goal._id);
+                        setDeleteId(null);
+                      }}
+                      aria-label="Confirm Delete"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )}
             </li>
           );
         })}

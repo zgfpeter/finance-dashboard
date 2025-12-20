@@ -1,7 +1,8 @@
 "use client";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
-
+import type { MonthlySpending } from "@/lib/types/dashboard";
 // #region Sample data
+
 const data = [
   { name: "Jan", Spending: 1000 },
   { name: "Feb", Spending: 400 },
@@ -17,8 +18,12 @@ const data = [
   { name: "Dec", Spending: 0 },
 ];
 
+interface Props {
+  data: MonthlySpending[] | [];
+}
+
 // #endregion
-const MonthlySpendingChart = () => {
+const MonthlySpendingChart = ({ data }: Props) => {
   return (
     <section className="flex flex-col w-full mr-4">
       <BarChart
@@ -27,6 +32,7 @@ const MonthlySpendingChart = () => {
           maxWidth: "",
           maxHeight: "100px", // sets the height
           aspectRatio: 1.618,
+          pointerEvents: "none",
         }}
         responsive
         data={data} // tells rechart what to read
@@ -38,6 +44,7 @@ const MonthlySpendingChart = () => {
           fill="#ed960a"
           name={"Monthly Spending"}
           barSize={15}
+          activeBar={false}
         />
         <XAxis dataKey="name" />
         <YAxis />

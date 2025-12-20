@@ -6,6 +6,7 @@ import { MdClose } from "react-icons/md";
 import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
+import { calculateDeadline } from "@/lib/utils";
 export default function UpcomingCharges() {
   const UCData = useDashboard().data?.upcomingCharges;
   // console.log(UCData);
@@ -147,10 +148,12 @@ export default function UpcomingCharges() {
                       )}
                     </div>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="grid grid-cols-[2fr_1fr] items-center">
                     <div className="text-yellow-500 ">- € {charge.amount}</div>
-                    <div className="flex flex-col text-sm items-center  rounded gap-3">
-                      <span>In 3 days</span>
+                    <div className="flex flex-col text-center text-sm rounded gap-3">
+                      <div className="text-xs">
+                        {calculateDeadline(charge.date)}
+                      </div>
                       <span className="text-xs">{charge.date}</span>
                     </div>
                   </div>

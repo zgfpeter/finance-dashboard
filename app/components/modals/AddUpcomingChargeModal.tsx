@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UpcomingCharge } from "@/lib/types/dashboard";
+import { MdEventRepeat } from "react-icons/md";
+
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 interface Props {
   onClose: () => void;
@@ -162,8 +164,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               />
             </div>
           </div>
-          <div className="flex relative justify-between">
-            <div className="flex flex-col p-3 gap-3 relative">
+          <div className="grid grid-cols-2 md:grid-cols-3 relative gap-3 items-center">
+            <div className="flex flex-col p-3 gap-3 relative w-full md:w-42">
               <label htmlFor="date">Date</label>
 
               <input
@@ -173,33 +175,60 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor"
+                className="border border-(--secondary-blue) rounded  pl-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
               />
             </div>
-            <div className="flex relative ">
-              <div className="flex flex-col p-3 gap-3 relative">
-                <label htmlFor="chargeCategories">Category</label>
-                {/* {errors.type && (
+
+            <div className="flex flex-col p-3 gap-3 relative w-full md:w-42">
+              <label htmlFor="chargeCategories">Category</label>
+              {/* {errors.type && (
                             <span className="text-red-500">{errors.type}</span>
                           )} */}
-                <select
-                  id="chargeCategories"
-                  value={data.category}
-                  onChange={handleChange}
-                  name="category"
-                  required
-                  className="border border-(--secondary-blue) px-2 rounded h-11 flex"
-                >
-                  <option value="Subscription">Subscription</option>
-                  <option value="Bill">Bill</option>
-                  <option value="Tax">Tax</option>
-                  <option value="Insurance">Insurance</option>
-                  <option value="Loan">Loan</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
+              <select
+                id="chargeCategories"
+                value={data.category}
+                onChange={handleChange}
+                name="category"
+                required
+                className="border border-(--secondary-blue) px-1 rounded h-11 flex"
+              >
+                <option value="Subscription">Subscription</option>
+                <option value="Bill">Bill</option>
+                <option value="Tax">Tax</option>
+                <option value="Insurance">Insurance</option>
+                <option value="Loan">Loan</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div className="flex flex-col p-3 gap-3 relative w-full md:w-42">
+              <label htmlFor="repeating" className="flex items-center gap-2">
+                Repeats <MdEventRepeat />
+              </label>
+              {/* {errors.type && (
+                            <span className="text-red-500">{errors.type}</span>
+                          )} */}
+              <select
+                id="repeating"
+                onChange={handleChange}
+                name="repeating"
+                required
+                className="border border-(--secondary-blue) px-1 rounded h-11 flex"
+              >
+                {/* weekly: lessons, allowances, memberships */}
+                {/* bi-weekly: salaries, some subscriptions */}
+                {/* monthly: subscriptions, rent, utilities */}
+                {/* yearly: insurance, domains, hosting, tax */}
+
+                <option value="noRepeat">Does not repeat</option>
+                <option value="Weekly">Weekly</option>
+                <option value="BiWeekly">Bi-Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option>
+                {/* TODO add custom repeating date */}
+              </select>
             </div>
           </div>
+
           {errors.date && (
             <span className="text-red-500 pl-12">{errors.date}</span>
           )}

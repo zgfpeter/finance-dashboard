@@ -24,6 +24,13 @@ export type ExpenseCategory =
   | "Insurance"
   | "Tax"
   | "Other";
+
+export type RepeatingUpcomingCharge =
+  | "noRepeat"
+  | "Weekly"
+  | "BiWeekly"
+  | "Monthly"
+  | "Yearly";
 export interface Transaction {
   _id?: string;
   date: string;
@@ -45,23 +52,23 @@ export interface UpcomingCharge {
 export interface Debt {
   _id?: string;
   company: string;
-  currentPaid: number;
-  totalAmount: number;
+  currentPaid: number | string;
+  totalAmount: number | string;
   dueDate: string;
 }
 
 export interface Goal {
-  _id: string;
+  _id?: string;
   title: string;
   targetDate: string;
-  currentAmount: number;
-  targetAmount: number;
+  currentAmount: number | string;
+  targetAmount: number | string;
 }
 
 export interface Income {
   _id: string;
   company: string;
-  amount: number;
+  amount: number | string;
 }
 
 // for the whole dashboard
@@ -88,8 +95,13 @@ export type ModalType =
   | "editOverview"
   | "goals"
   | "addGoal"
-  | "editGoals"
+  | "editGoal"
   | "debts"
   | "addDebt"
   | "editDebt"
   | "none";
+
+export type MonthlySpending = {
+  name: string;
+  Spending: number;
+};

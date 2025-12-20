@@ -155,7 +155,8 @@ export default function AddTransactionModal({ onClose }: Props) {
               aria-describedby="company-error"
             />
           </div>
-          <div className="flex flex-col  gap-3 relative">
+
+          <div className="flex flex-col gap-3 relative">
             <label htmlFor="amount">Amount</label>
             {errors.amount && (
               <span id="amount-error" className="text-red-500 absolute right-5">
@@ -173,7 +174,7 @@ export default function AddTransactionModal({ onClose }: Props) {
             />
           </div>
           <div
-            className={`flex relative gap-3 items-center ${
+            className={`grid grid-cols-2 md:grid-cols-3 relative gap-3 items-center ${
               data.transactionType === "expense"
                 ? "justify-between"
                 : "justify-items-start"
@@ -189,12 +190,12 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor w-42"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor w-full md:w-42"
                 aria-describedby="date-error"
               />
             </div>
 
-            <div className="flex flex-col gap-3 ">
+            <div className=" flex flex-col gap-3 ">
               <label htmlFor="transactionType">Type</label>
               {/* {errors.type && (
                 <span className="text-red-500">{errors.type}</span>
@@ -205,7 +206,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="transactionType"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-42"
+                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full md:w-42"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -223,7 +224,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                   onChange={handleChange}
                   name="category"
                   required
-                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-42"
+                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full md:w-42"
                 >
                   <option value="Subscription">Subscription</option>
                   <option value="Bill">Bill</option>
@@ -235,6 +236,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               </div>
             )}
           </div>
+
           {errors.date && (
             <span id="date-error" className="text-red-500 pl-12">
               {errors.date}

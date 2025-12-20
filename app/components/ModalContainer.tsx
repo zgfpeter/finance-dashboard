@@ -16,6 +16,11 @@ import EditTransactionModal from "./modals/EditTransactionModal";
 import EditOverviewModal from "./modals/EditOverviewModal";
 import Goals from "./modals/GoalsModal";
 import Debts from "./modals/DebtsModal";
+import AddDebtModal from "./modals/AddDebtModal";
+import AddGoalModal from "./modals/AddGoalModal";
+import EditDebtModal from "./modals/EditDebtModal";
+import EditGoalModal from "./modals/EditGoalModal";
+
 export default function ModalContainer() {
   const dispatch = useDispatch();
 
@@ -123,6 +128,27 @@ export default function ModalContainer() {
           <Debts data={modalData} onClose={handleClose} />
         </ModalWrapper>
       );
+    case "addDebt":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Add a debt"
+        >
+          <AddDebtModal onClose={handleClose} />
+        </ModalWrapper>
+      );
+    case "editDebt":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Edit Debt"
+        >
+          <EditDebtModal data={modalData} onClose={handleClose} />
+        </ModalWrapper>
+      );
+
     case "goals":
       return (
         <ModalWrapper
@@ -131,6 +157,26 @@ export default function ModalContainer() {
           ariaLabel="More Goals"
         >
           <Goals data={modalData} onClose={handleClose} />
+        </ModalWrapper>
+      );
+    case "addGoal":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Add a Goal"
+        >
+          <AddGoalModal onClose={handleClose} />
+        </ModalWrapper>
+      );
+    case "editGoal":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Edit Goal"
+        >
+          <EditGoalModal data={modalData} onClose={handleClose} />
         </ModalWrapper>
       );
 

@@ -8,7 +8,7 @@ export default function IncomeCard() {
   const hasIncomes = incomes && incomes.length > 0;
   // TODO : find a better way to get the income, maybe user can manually add another amount or source
   const getIncome =
-    incomes?.reduce((sum, income) => sum + income.amount, 0) ?? 0;
+    incomes?.reduce((sum, income) => sum + Number(income.amount), 0) ?? 0;
 
   // the ?? 0 is a fallback, if data isn't loaded, it will be 0
 
@@ -26,7 +26,7 @@ export default function IncomeCard() {
       {!hasIncomes ? (
         <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
       ) : (
-        <div className="flex flex-col text-end justify-center gap-2 bg-(--primary-bg) p-2 rounded-xl w-2/3 md:w-full">
+        <div className="flex flex-col justify-center gap-2 bg-(--primary-bg) p-3 rounded-xl w-2/3 md:w-full">
           <p aria-label={`This month's income is ${getIncome} euros`}>
             This month:{" "}
             <span className="text-green-500"> € {getIncome.toFixed(2)}</span>

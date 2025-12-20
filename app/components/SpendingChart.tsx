@@ -56,6 +56,7 @@ export default function SpendingChart({
         maxWidth: "500px",
         maxHeight: "30vh",
         aspectRatio: 1,
+        pointerEvents: "none", // if enabled, shows some border when clicking on pie pieces
       }}
       responsive
     >

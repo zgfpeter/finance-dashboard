@@ -17,7 +17,7 @@ export default function SpendingsCard() {
       {!hasSpendings ? (
         <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
       ) : (
-        <div className=" bg-(--primary-bg) rounded-xl flex flex-col text-start justify-center gap-2 p-2 w-2/3 md:w-full">
+        <div className=" bg-(--primary-bg) rounded-xl flex flex-col justify-center gap-2 p-3 w-2/3 md:w-full">
           <p>
             This month:{" "}
             <span className="text-red-500">€ {getSpendings?.toFixed(2)}</span>

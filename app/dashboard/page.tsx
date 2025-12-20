@@ -9,15 +9,18 @@ import UpcomingCharges from "../components/UpcomingCharges";
 import Debts from "../components/Debts";
 import Goals from "../components/Goals";
 import { useDashboard } from "../hooks/useDashboard";
-
+import { getTotalSpendings } from "@/lib/utils";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { MdError } from "react-icons/md";
 import CalSpedingCategoriesPercentages from "@/lib/CalculatePiePercentages";
+import { getMonthlySpendingsData } from "@/lib/utils";
 
 // TODO for my editUpcominCharge modal to work, i need to lift up the state. since it needs to be passed to the EditUpcomingChargeModal,
 
 export default function DashboardPage() {
   const { isLoading, isError } = useDashboard();
+  const transactions = useDashboard().data?.transactions;
+  const spentThisYear = getTotalSpendings(transactions || []);
   const spendingsPieData = CalSpedingCategoriesPercentages();
   if (isLoading)
     return (
@@ -48,7 +51,7 @@ export default function DashboardPage() {
   grid grid-cols-1 
   md:grid-cols-2 
   xl:grid-cols-3 
-  gap-3 w-full max-w-7xl p-3 
+  gap-3 w-full max-w-[1500px] 
   lg:ml-23 2xl:ml-0
 "
       >
@@ -66,7 +69,7 @@ export default function DashboardPage() {
         <div
           className="bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
-    order-4 md:order-4 lg:order-3 overflow-hidden flex flex-col gap-1
+    order-2 md:order-2 lg:order-4 xl:order-3 overflow-hidden flex flex-col gap-1
   "
         >
           <IncomeCard />
@@ -78,7 +81,7 @@ export default function DashboardPage() {
           className=" bg-(--primary-bg)
     border-2 border-(--border-blue)  p-3 rounded-xl 
     
-    order-3 md:order-3 lg:order-3 overflow-hidden
+    order-3 md:order-3 md:col-span-2 lg:order-3 lg:col-span-1 xl:order-4 overflow-hidden
   "
         >
           <Transactions />
@@ -89,7 +92,7 @@ export default function DashboardPage() {
           className=" bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
     flex items-center justify-center overflow-hidden
-    order-2 md:order-2 lg:order-2
+    order-2 md:order-2 md:col-span-2 lg:order-2 lg:col-span-1
   "
         >
           <UpcomingCharges />
@@ -109,10 +112,18 @@ export default function DashboardPage() {
           className="  bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
     flex flex-col gap-1
-    order-5 md:order-5 lg:order-5 relative z-0
+    order-5 md:order-5 md:col-span-2 lg:order-5 lg:col-span-1 relative z-0
   "
         >
           <Debts />
+        </div>
+        <div
+          className="  bg-(--primary-bg)
+    border-2 border-(--border-blue) p-3 rounded-xl 
+    flex flex-col gap-1
+    order-5 md:order-5 md:col-span-2 lg:order-5 lg:col-span-1 relative z-0
+  "
+        >
           <Goals />
         </div>
 
@@ -121,18 +132,30 @@ export default function DashboardPage() {
           className="  bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
     flex flex-col gap-1 items-center justify-around
-    order-6 md:order-6 relative
+    order-7 col-span-1 md:col-span-2 lg:col-span-3 relative
   "
         >
+          {/* div
+          className="  bg-(--primary-bg)
+    border-2 border-(--border-blue) p-3 rounded-xl 
+    flex flex-col gap-1 items-center justify-around
+    order-6 md:order-6 md:col-span-3 lg:col-span-1 relative
+  "
+        > */}
           <h2 className="text-(--text-light) text-lg flex justify-between w-full">
             <span>Spendings this year </span>
             <span className="text-(--text-light)">
-              Total: <span className="text-red-500">€ 7532</span>
+              Total:{" "}
+              <span className="text-red-500">
+                € {getTotalSpendings(transactions || [])}
+              </span>
             </span>
           </h2>
 
           <SpendingChart pieData={spendingsPieData} />
-          <MonthlySpendingChart />
+          <MonthlySpendingChart
+            data={getMonthlySpendingsData(transactions || [])}
+          />
           <p className="text-center ">Spendings by month</p>
         </div>
       </main>
