@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { MdEdit, MdDelete } from "react-icons/md";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
-import axios from "axios";
+import { prettifyDate } from "@/lib/utils";
 
 interface Props {
   onClose: () => void;
@@ -110,7 +110,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
             </div>
 
             <p className="text-yellow-500">- € {charge.amount}</p>
-            <p className="">{charge.date}</p>
+            <p className="">{prettifyDate(charge.date)}</p>
             {/* <p className="justify-self-end">Monthly</p> */}
             <div className="flex items-center gap-3 justify-self-end mr-3">
               {/* Edit button now dispatches Redux action */}

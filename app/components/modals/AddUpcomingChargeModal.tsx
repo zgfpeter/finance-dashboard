@@ -17,7 +17,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
     date: "",
     company: "",
     amount: "",
-    category: "Bill",
+    category: "bill",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
@@ -96,7 +96,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
       date: "",
       company: "",
       amount: "",
-      category: "Bill", // default category is Bill
+      category: "bill", // default category is Bill
     });
 
     // closes the modal
@@ -164,8 +164,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 relative gap-3 items-center">
-            <div className="flex flex-col p-3 gap-3 relative w-full md:w-42">
+          <div className="grid grid-cols-2 md:grid-cols-3 relative  p-3 gap-3 md:gap-0">
+            <div className="flex flex-col gap-3 relative w-full md:w-42">
               <label htmlFor="date">Date</label>
 
               <input
@@ -179,7 +179,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               />
             </div>
 
-            <div className="flex flex-col p-3 gap-3 relative w-full md:w-42">
+            <div className="flex flex-col gap-3 relative w-full md:w-42">
               <label htmlFor="chargeCategories">Category</label>
               {/* {errors.type && (
                             <span className="text-red-500">{errors.type}</span>
@@ -192,15 +192,15 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 required
                 className="border border-(--secondary-blue) px-1 rounded h-11 flex"
               >
-                <option value="Subscription">Subscription</option>
-                <option value="Bill">Bill</option>
-                <option value="Tax">Tax</option>
-                <option value="Insurance">Insurance</option>
-                <option value="Loan">Loan</option>
-                <option value="Other">Other</option>
+                <option value="subscription">Subscription</option>
+                <option value="bill">Bill</option>
+                <option value="tax">Tax</option>
+                <option value="insurance">Insurance</option>
+                <option value="loan">Loan</option>
+                <option value="other">Other</option>
               </select>
             </div>
-            <div className="flex flex-col p-3 gap-3 relative w-full md:w-42">
+            <div className="flex flex-col gap-3 relative w-full  ">
               <label htmlFor="repeating" className="flex items-center gap-2">
                 Repeats <MdEventRepeat />
               </label>
@@ -219,7 +219,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 {/* monthly: subscriptions, rent, utilities */}
                 {/* yearly: insurance, domains, hosting, tax */}
 
-                <option value="noRepeat">Does not repeat</option>
+                <option value="noRepeat">No repeat</option>
                 <option value="Weekly">Weekly</option>
                 <option value="BiWeekly">Bi-Weekly</option>
                 <option value="Monthly">Monthly</option>

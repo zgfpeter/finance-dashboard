@@ -18,7 +18,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardData, Goal } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import { calculateDeadline } from "@/lib/utils";
+import { calculateDeadline, prettifyDate } from "@/lib/utils";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 // -- end imports --
 
@@ -148,7 +148,7 @@ export default function GoalsModal({ onClose }: Props) {
               key={goal._id}
               className="bg-(--border-blue) p-2 rounded-xl gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
             >
-              <div className="flex flex-col gap-1 items-center justify-self-start md:justify-center text-xs ">
+              <div className="flex flex-col gap-1 items-center justify-self-start md:justify-center text-xs w-full ">
                 <MdOutlineWatchLater color="orange" />
                 {calculateDeadline(goal.targetDate)}
               </div>
@@ -157,7 +157,7 @@ export default function GoalsModal({ onClose }: Props) {
                 <div className="flex items-center justify-between w-full py-2">
                   <span aria-label="Goal title">{goal.title}</span>
                   <span aria-label={`Goal date: ${goal.targetDate}`}>
-                    {goal.targetDate}
+                    {prettifyDate(goal.targetDate)}
                   </span>
                 </div>
                 <div className="relative">

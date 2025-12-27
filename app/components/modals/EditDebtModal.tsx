@@ -27,7 +27,11 @@ export default function EditDebtModal({ data, onClose }: Props) {
   const [company, setCompany] = useState(data?.company ?? "");
   const [currentPaid, setCurrentPaid] = useState(data?.currentPaid ?? "");
   const [totalAmount, setTotalAmount] = useState(data?.totalAmount ?? "");
-  const [dueDate, setDueDate] = useState(data?.dueDate ?? "");
+
+  const [dueDate, setDueDate] = useState(() => {
+    if (!data?.dueDate) return "";
+    return new Date(data?.dueDate).toISOString().slice(0, 10);
+  });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that

@@ -56,14 +56,15 @@ export default function AddGoalModal({ onClose }: Props) {
     }
     if (!data.targetDate) {
       newErrors.date = "Date is required";
-    } else {
-      // to check if the entered date is not a future date:
-      const debtDate = new Date(data.targetDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (debtDate < today) {
-        newErrors.date = "Date cannot be in the past.";
-      }
+      // its fine if date is in the past
+      // } else {
+      //   // to check if the entered date is not a future date:
+      //   const debtDate = new Date(data.targetDate);
+      //   const today = new Date();
+      //   today.setHours(0, 0, 0, 0);
+      //   if (debtDate < today) {
+      //     newErrors.date = "Date cannot be in the past.";
+      //   }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

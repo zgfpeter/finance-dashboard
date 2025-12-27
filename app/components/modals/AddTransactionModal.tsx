@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
 import { ExpenseCategory, Transaction } from "@/lib/types/dashboard";
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import { useDashboard } from "@/app/hooks/useDashboard";
 interface Props {
   onClose: () => void;
 }
 export default function AddTransactionModal({ onClose }: Props) {
+  const accounts = useDashboard().data?.accounts;
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
   // local state for creating a new transaction
@@ -16,7 +17,7 @@ export default function AddTransactionModal({ onClose }: Props) {
     company: "",
     amount: "",
     transactionType: "expense",
-    category: "Other",
+    category: "other",
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // holds validation error messages, ex. a required field is empty
@@ -99,7 +100,7 @@ export default function AddTransactionModal({ onClose }: Props) {
       company: "",
       amount: "",
       transactionType: "expense",
-      category: "Other",
+      category: "other",
     });
 
     // closes the modal
@@ -129,10 +130,10 @@ export default function AddTransactionModal({ onClose }: Props) {
       )}
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative h-full"
+        className="flex flex-col items-center w-full max-w-xl justify-evenly relative h-full"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col gap-5 ">
+        <div className="w-full flex flex-col  h-full justify-evenly ">
           <div className="flex flex-col gap-3 relative">
             <label htmlFor="company">Company</label>
             {/* A general error if the form validation fails */}
@@ -174,11 +175,7 @@ export default function AddTransactionModal({ onClose }: Props) {
             />
           </div>
           <div
-            className={`grid grid-cols-2 md:grid-cols-3 relative gap-3 items-center ${
-              data.transactionType === "expense"
-                ? "justify-between"
-                : "justify-items-start"
-            }`}
+            className={`grid grid-cols-2 md:grid-cols-3 relative gap-3 items-center justify-between `}
           >
             <div className="flex flex-col gap-3 relative">
               <label htmlFor="date">Date</label>
@@ -190,7 +187,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor w-full md:w-42"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor w-full"
                 aria-describedby="date-error"
               />
             </div>
@@ -206,13 +203,13 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="transactionType"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full md:w-42"
+                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
               </select>
             </div>
-            {data.transactionType === "expense" && (
+            {data.transactionType === "expense" ? (
               <div className="flex flex-col gap-3 relative">
                 <label htmlFor="transactionCategory">Category</label>
                 {/* {errors.type && (
@@ -224,38 +221,46 @@ export default function AddTransactionModal({ onClose }: Props) {
                   onChange={handleChange}
                   name="category"
                   required
-                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full md:w-42"
+                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full"
                 >
-                  <option value="Subscription">Subscription</option>
-                  <option value="Bill">Bill</option>
-                  <option value="Tax">Tax</option>
-                  <option value="Insurance">Insurance</option>
-                  <option value="Loan">Loan</option>
-                  <option value="Other">Other</option>
+                  <option value="subscription">Subscription</option>
+                  <option value="bill">Bill</option>
+                  <option value="tax">Tax</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="loan">Loan</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 relative">
+                <label htmlFor="accountType">Select Account</label>
+                <select
+                  id="accountType"
+                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full"
+                >
+                  {accounts?.map((account, index) => (
+                    <option value={account.type} key={index}>
+                      {account.type}
+                    </option>
+                  ))}
                 </select>
               </div>
             )}
           </div>
 
-          {errors.date && (
-            <span id="date-error" className="text-red-500 pl-12">
-              {errors.date}
-            </span>
-          )}
+          <button
+            type="submit"
+            className="border p-3 rounded w-50 relative z-0  hover:border-teal-500 self-center"
+            aria-label="Add transaction"
+          >
+            {transactionAdded && (
+              <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
+                Success
+              </div>
+            )}
+            <span>Add Transaction</span>
+          </button>
         </div>
-
-        <button
-          type="submit"
-          className="border p-3 rounded w-50 relative z-0  hover:border-teal-500"
-          aria-label="Add transaction"
-        >
-          {transactionAdded && (
-            <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
-              Success
-            </div>
-          )}
-          <span>Add Transaction</span>
-        </button>
       </form>
     </div>
   );

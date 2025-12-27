@@ -6,7 +6,7 @@ import { MdClose } from "react-icons/md";
 import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import { calculateDeadline } from "@/lib/utils";
+import { calculateDeadline, prettifyDate } from "@/lib/utils";
 export default function UpcomingCharges() {
   const UCData = useDashboard().data?.upcomingCharges;
   // console.log(UCData);
@@ -45,15 +45,15 @@ export default function UpcomingCharges() {
   }
 
   return (
-    <section className="row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col  rounded-xl gap-3 h-full w-full relative">
+    <section className="row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col  rounded-xl gap-3 h-full min-h-50 w-full relative">
       {/* backdrop for the notifications modal */}
       {notificationsModalOpen && (
-        <div className="absolute h-full inset-0 bg-black/50 backdrop-blur-sm z-10"></div>
+        <div className="absolute h-full inset-0 bg-black/50 backdrop-blur-sm z-10 "></div>
       )}
       {/* notifications modal */}
       {notificationsModalOpen && (
         <section
-          className="absolute bg-(--primary-blue) h-1/2 self-center w-full inset-0 flex flex-col items-center justify-center gap-5 z-10 rounded-xl"
+          className="absolute bg-(--primary-blue) h-full self-center w-full inset-0 flex flex-col items-center justify-center gap-5 z-10 rounded-xl "
           role="dialog"
         >
           <button
@@ -67,7 +67,7 @@ export default function UpcomingCharges() {
             {/* custom checkbox, easier to style */}
             <input
               type="checkbox"
-              className="peer hidden accent-white"
+              className="peer hidden accent-white "
               checked={tempNotify}
               onChange={(e) => setTempNotify(e.target.checked)}
             />
@@ -123,7 +123,7 @@ export default function UpcomingCharges() {
         </div>
       </div>
       {!hasUpcomingCharges ? (
-        <p className="text-gray-500 text-center text-sm">
+        <p className="text-gray-500 text-sm h-full flex items-center justify-center">
           No upcoming charges yet. Add one to get started.
         </p>
       ) : (
@@ -154,7 +154,9 @@ export default function UpcomingCharges() {
                       <div className="text-xs">
                         {calculateDeadline(charge.date)}
                       </div>
-                      <span className="text-xs">{charge.date}</span>
+                      <span className="text-xs">
+                        {prettifyDate(charge.date)}
+                      </span>
                     </div>
                   </div>
                 </li>

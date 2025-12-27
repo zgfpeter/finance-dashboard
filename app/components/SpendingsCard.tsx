@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
 import LoadingSpinner from "./LoadingSpinner";
+
 export default function SpendingsCard() {
   const transactions = useDashboard().data?.transactions;
   const getSpendings = transactions
@@ -22,7 +23,7 @@ export default function SpendingsCard() {
             This month:{" "}
             <span className="text-red-500">€ {getSpendings?.toFixed(2)}</span>
           </p>
-          <p>Last month: € 7.20</p>
+          <p>Last month: € 0.00</p>
           <motion.span
             aria-hidden="true"
             className="h-0.5 w-5 bg-[#580f0f] my-1 "
@@ -30,7 +31,7 @@ export default function SpendingsCard() {
             animate={{ width: "100%" }}
             transition={{ duration: 2 }}
           ></motion.span>
-          <p>- € 7.29 less than last month</p>
+          <p>- € {getSpendings?.toFixed(2)} less than last month</p>
         </div>
       )}
     </section>

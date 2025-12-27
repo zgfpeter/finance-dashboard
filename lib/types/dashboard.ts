@@ -18,12 +18,12 @@ export interface Account {
 
 export type TransactionType = "income" | "expense";
 export type ExpenseCategory =
-  | "Subscription"
-  | "Bill"
-  | "Loan"
-  | "Insurance"
-  | "Tax"
-  | "Other";
+  | "subscription"
+  | "bill"
+  | "loan"
+  | "insurance"
+  | "tax"
+  | "other";
 
 export type RepeatingUpcomingCharge =
   | "noRepeat"
@@ -69,6 +69,15 @@ export interface Income {
   _id: string;
   company: string;
   amount: number | string;
+  date: string;
+}
+
+export interface IncomeSummary {
+  // no need for _id because this is not stored in mongodb, not queried, not updated, not referenced, not uniquely identifiable
+  // it is computed from other data, exists only in memory, only for this response, only as a calculation result, there's nothing to identify
+  thisMonth: number;
+  lastMonth: number;
+  difference: number;
 }
 
 // for the whole dashboard
@@ -80,7 +89,8 @@ export interface DashboardData {
   upcomingCharges: UpcomingCharge[];
   debts: Debt[];
   goals: Goal[];
-  income: Income[];
+  // income: Income[];
+  incomeSummary: IncomeSummary;
 }
 
 // modal types

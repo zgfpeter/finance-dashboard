@@ -1,7 +1,10 @@
 "use client";
 import { useDashboard } from "../hooks/useDashboard";
 import { motion } from "framer-motion";
-import { calcProgressPercent as calcAnimationWidth } from "@/lib/utils";
+import {
+  calcProgressPercent as calcAnimationWidth,
+  prettifyDate,
+} from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { FaPlus } from "react-icons/fa6";
@@ -11,11 +14,11 @@ export default function Goals() {
   const dispatch = useDispatch();
   return (
     <section
-      className=" flex flex-col justify-evenly  gap-3 h-full w-full rounded-xl"
+      className=" flex flex-col rounded-xl gap-3 w-full h-full min-h-50"
       aria-describedby="goals-heading"
     >
-      <div className="flex justify-between p-2 items-center">
-        <h2 id="goals-heading" className="flex items-center rounded-xl text-xl">
+      <div className="flex items-center justify-between ">
+        <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
           Goals
         </h2>{" "}
         <button
@@ -28,7 +31,9 @@ export default function Goals() {
         </button>
       </div>
       {!hasgoals ? (
-        <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
+        <p className="text-gray-500 text-sm h-full flex items-center justify-center">
+          Nothing here.
+        </p>
       ) : (
         <>
           {/* total balance-current net worth across accounts */}
@@ -44,8 +49,11 @@ export default function Goals() {
                 >
                   <div className="flex items-center justify-between w-full">
                     <span aria-label="Goal title">{goal.title}</span>
-                    <span aria-label={`Goal date: ${goal.targetDate}`}>
-                      {goal.targetDate}
+                    <span
+                      aria-label={`Goal date: ${goal.targetDate}`}
+                      className="text-xs"
+                    >
+                      {prettifyDate(goal.targetDate)}
                     </span>
                   </div>
                   <div className="relative w-full">

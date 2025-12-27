@@ -8,7 +8,6 @@ import {
   TransactionType,
 } from "@/lib/types/dashboard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { DashboardData } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
@@ -26,9 +25,15 @@ export default function EditTransactionModal({ data, onClose }: Props) {
   const queryClient = useQueryClient();
   const [company, setCompany] = useState(data?.company ?? "");
   const [amount, setAmount] = useState(data?.amount ?? "");
-  const [date, setDate] = useState(data?.date ?? "");
+  const [date, setDate] = useState(() => {
+    if (!data?.date) return "";
+    return new Date(data.date).toISOString().slice(0, 10);
+  });
   const [transactionType, setTransactionType] = useState<TransactionType>(
     data?.transactionType ?? "expense"
+  );
+  const [category, setCategory] = useState<ExpenseCategory>(
+    data?.category ?? "other"
   );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
@@ -38,6 +43,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     company: "",
     amount: "",
     transactionType: transactionType,
+    category: "",
     generalError: "",
   });
 
@@ -105,7 +111,8 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     if (
       company === data.company &&
       amount === data.amount &&
-      date === data.date
+      date === data.date &&
+      category === data.category
     ) {
       onClose();
       return;
@@ -116,7 +123,14 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     }
 
     // if there are no errors in the form
-    updateMutation.mutate({ ...data, company, amount, date });
+    updateMutation.mutate({
+      ...data,
+      company,
+      amount,
+      date,
+      transactionType,
+      category,
+    });
   };
 
   // simple form validation
@@ -210,52 +224,76 @@ export default function EditTransactionModal({ data, onClose }: Props) {
               />
             </div>
           </div>
-          <div className="flex justify-between relative">
-            <div className="flex relative">
-              <div className="flex flex-col p-3 gap-3 relative">
-                {errors.date && (
-                  <span className="text-red-500 flex items-center absolute">
-                    {errors.date}
-                  </span>
-                )}
-                <label htmlFor="date">Date </label>
+          <div
+            className={`flex items-center justify-between p-3 ${
+              transactionType === "expense" ? "w-full" : "w-fit"
+            }`}
+          >
+            <div className="flex flex-col gap-3">
+              {errors.date && (
+                <span className="text-red-500 flex items-center absolute">
+                  {errors.date}
+                </span>
+              )}
+              <label htmlFor="date">Date </label>
 
-                <input
-                  type="date"
-                  value={date}
-                  required
-                  onChange={(e) => setDate(e.target.value)}
-                  name="date"
-                  id="date"
-                  className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor"
-                />
-              </div>
-
-              {/* TODO maybe add a recurring transaction, or subscription */}
+              <input
+                type="date"
+                value={date}
+                required
+                onChange={(e) => setDate(e.target.value)}
+                name="date"
+                id="date"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor"
+              />
             </div>
 
-            <div className="flex relative">
-              <div className="flex flex-col p-3 gap-3 relative">
-                <label htmlFor="transactionType">Type</label>
-                {/* {errors.type && (
+            <div className="flex flex-col p-3 gap-3 relative">
+              <label htmlFor="transactionType">Type</label>
+              {/* {errors.type && (
                 <span className="text-red-500">{errors.type}</span>
               )} */}
+              <select
+                id="transactionType"
+                value={transactionType}
+                onChange={(e) =>
+                  setTransactionType(e.target.value as TransactionType)
+                }
+                name="transactionTypes"
+                required
+                className="border border-(--secondary-blue) px-2 rounded h-11 flex"
+              >
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </div>
+
+            {/* TODO maybe add a recurring transaction, or subscription */}
+
+            {transactionType === "expense" && (
+              <div className="flex flex-col gap-3">
+                <label htmlFor="category">Category</label>
+                {/* {errors.type && (
+                            <span className="text-red-500">{errors.type}</span>
+                          )} */}
                 <select
-                  id="transactionType"
-                  value={transactionType}
+                  id="category"
+                  value={category}
                   onChange={(e) =>
-                    setTransactionType(e.target.value as TransactionType)
+                    setCategory(e.target.value as ExpenseCategory)
                   }
-                  name="transactionTypes"
-                  required
-                  className="border border-(--secondary-blue) px-2 rounded h-11 flex"
+                  name="category"
+                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full md:w-42"
                 >
-                  <option value="expense">Expense</option>
-                  <option value="income">Income</option>
+                  <option value="subscription">Subscription</option>
+                  <option value="bill">Bill</option>
+                  <option value="tax">Tax</option>
+                  <option value="insurance">Insurance</option>
+                  <option value="loan">Loan</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
-              {/* TODO maybe add a recurring transaction, or subscription */}
-            </div>
+            )}
           </div>
         </div>
 

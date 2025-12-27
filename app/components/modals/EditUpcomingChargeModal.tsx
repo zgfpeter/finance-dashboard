@@ -26,9 +26,13 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
   const queryClient = useQueryClient();
   const [company, setCompany] = useState(data?.company ?? "");
   const [amount, setAmount] = useState(data?.amount ?? "");
-  const [date, setDate] = useState(data?.date ?? "");
+  const [date, setDate] = useState(() => {
+    if (!data?.date) return "";
+    return new Date(data.date).toISOString().slice(0, 10);
+  });
+
   const [category, setCategory] = useState<ExpenseCategory>(
-    data?.category ?? "Other"
+    data?.category ?? "other"
   ); // Default category is Other
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
@@ -200,7 +204,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
             />
           </div>
-          <div className="flex relative justify-between">
+          <div className="flex relative">
             <div className="flex flex-col p-3 gap-3 relative">
               <label htmlFor="date">Date</label>
 
@@ -228,12 +232,12 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
                 required
                 className="border border-(--secondary-blue) px-2 rounded h-11 flex min-w-40"
               >
-                <option value="Subscription">Subscription</option>
-                <option value="Bill">Bill</option>
-                <option value="Tax">Tax</option>
-                <option value="Insurance">Insurance</option>
-                <option value="Loan">Loan</option>
-                <option value="Other">Other</option>
+                <option value="subscription">Subscription</option>
+                <option value="bill">Bill</option>
+                <option value="tax">Tax</option>
+                <option value="insurance">Insurance</option>
+                <option value="loan">Loan</option>
+                <option value="other">Other</option>
               </select>
             </div>
           </div>

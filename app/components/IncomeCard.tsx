@@ -3,12 +3,18 @@ import { motion } from "framer-motion";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
 import LoadingSpinner from "./LoadingSpinner";
+import { calculateIncomeSummary } from "@/lib/utils";
 export default function IncomeCard() {
-  const incomes = useDashboard().data?.income;
-  const hasIncomes = incomes && incomes.length > 0;
+  const transactions = useDashboard().data?.transactions;
+
+  const totalIncome = transactions
+    ?.filter((t) => t.transactionType === "income")
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  //const { thisMonth, lastMonth, difference } = //calculateIncomeSummary(incomes);
+
+  const hasIncome = totalIncome && totalIncome > 0;
   // TODO : find a better way to get the income, maybe user can manually add another amount or source
-  const getIncome =
-    incomes?.reduce((sum, income) => sum + Number(income.amount), 0) ?? 0;
 
   // the ?? 0 is a fallback, if data isn't loaded, it will be 0
 
@@ -23,15 +29,19 @@ export default function IncomeCard() {
       >
         Income <FaArrowLeftLong color="green" aria-hidden="true" />
       </h2>
-      {!hasIncomes ? (
+      {!hasIncome ? (
         <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
       ) : (
         <div className="flex flex-col justify-center gap-2 bg-(--primary-bg) p-3 rounded-xl w-2/3 md:w-full">
-          <p aria-label={`This month's income is ${getIncome} euros`}>
+          <p
+            aria-label={`This month's income is ${totalIncome?.toFixed(
+              2
+            )} euros`}
+          >
             This month:{" "}
-            <span className="text-green-500"> € {getIncome.toFixed(2)}</span>
+            <span className="text-green-500"> € {totalIncome?.toFixed(2)}</span>
           </p>
-          <p>Last month: € 3500.49</p>
+          <p>Last month: € 0</p>
           <motion.span
             aria-hidden="true"
             className="h-0.5 w-5 bg-[#025207] self-end my-1"
@@ -39,7 +49,14 @@ export default function IncomeCard() {
             animate={{ width: "100%" }}
             transition={{ duration: 2 }}
           ></motion.span>
-          <p>+ €25 more compared to last month.</p>
+          <p>
+            {/* {thisMonth > lastMonth
+            ? `+ ${difference} more compared to last month`
+            : thisMonth < lastMonth
+            ? `-${difference} less than last month`
+            : "Same as last month"} */}
+            + € {totalIncome} more compared to last month
+          </p>
         </div>
       )}
     </section>

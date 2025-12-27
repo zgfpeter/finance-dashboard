@@ -16,6 +16,7 @@ import { DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import { prettifyDate } from "@/lib/utils";
 // -- end imports --
 
 export default function TransactionsModal({ onClose }: Props) {
@@ -161,7 +162,9 @@ export default function TransactionsModal({ onClose }: Props) {
                 <p className="text-green-500">+ € {transaction.amount}</p>
               )}
 
-              <p className="justify-self-end">{transaction.date}</p>
+              <p className="justify-self-end">
+                {prettifyDate(transaction.date)}
+              </p>
               <div className="flex items-center gap-3 justify-self-end mr-3">
                 <button
                   onClick={() =>

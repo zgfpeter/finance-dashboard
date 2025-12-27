@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { MonthlySpending, Transaction } from "./types/dashboard";
+import { Income, MonthlySpending, Transaction } from "./types/dashboard";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,7 +44,7 @@ export function calculateDeadline(date: string) {
     if (overdueDays > 0) {
       return `Overdue by ${overdueDays} day${overdueDays > 1 ? "s" : ""}`;
     } else if (overdueHours > 0) {
-      return `Overdye by ${overdueHours} hour${overdueHours > 1 ? "s" : ""}`;
+      return `Overdue by ${overdueHours} hour${overdueHours > 1 ? "s" : ""}`;
     } else {
       return "Overdue";
     }
@@ -100,4 +100,63 @@ export function getMonthlySpendingsData(
     name: month,
     Spending: Math.round(monthlyTotals[index] * 100) / 100,
   }));
+}
+
+// calculate income summary (inc differences between this month and last month income)
+export function calculateIncomeSummary(income: Income[] | undefined): {
+  thisMonth: number;
+  lastMonth: number;
+  difference: number;
+} {
+  if (income === undefined) {
+    const thisMonth = 0;
+    const lastMonth = 0;
+    const difference = 0;
+    return { thisMonth, lastMonth, difference };
+  }
+
+  const now = new Date();
+  const currentMonth = now.getMonth(); // in numbers 0 to 11
+  const currentYear = now.getFullYear();
+
+  // edge cases
+  const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+  let thisMonthTotal = 0;
+  let lastMonthTotal = 0;
+
+  for (const entry of income) {
+    // Safely convert date
+    const date = new Date(entry.date);
+
+    if (isNaN(date.getTime())) continue; // invalid date → skip
+
+    // Safely convert amount
+    const amount = Number(entry.amount);
+    if (!Number.isFinite(amount)) continue;
+
+    const entryMonth = date.getMonth();
+    const entryYear = date.getFullYear();
+
+    if (entryMonth === currentMonth && entryYear === currentYear) {
+      thisMonthTotal += amount;
+    } else if (entryMonth === lastMonth && entryYear === lastMonthYear) {
+      lastMonthTotal += amount;
+    }
+  }
+
+  return {
+    thisMonth: thisMonthTotal,
+    lastMonth: lastMonthTotal,
+    difference: thisMonthTotal - lastMonthTotal,
+  };
+}
+
+export function prettifyDate(date: string) {
+  return new Date(date).toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 }

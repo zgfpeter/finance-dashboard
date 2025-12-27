@@ -18,7 +18,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardData, Debt } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import { calculateDeadline } from "@/lib/utils";
+import { calculateDeadline, prettifyDate } from "@/lib/utils";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 // -- end imports --
 
@@ -145,14 +145,16 @@ export default function DebtsModal({ onClose }: Props) {
               key={debt._id}
               className="bg-(--border-blue) p-2 rounded-xl gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
             >
-              <div className="flex flex-col gap-1 items-center justify-self-start md:justify-center text-xs ">
-                <MdOutlineWatchLater color="orange" />{" "}
+              <div className="flex flex-col gap-1 items-center justify-self-start md:justify-center text-xs w-full ">
+                <MdOutlineWatchLater color="orange" />
                 {calculateDeadline(debt.dueDate)}
               </div>
               <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
                 <div className="flex items-center justify-between w-full py-2">
                   <span aria-label={`Debt company: `}>{debt.company}</span>
-                  <span aria-label={`Debt due date: `}>{debt.dueDate}</span>
+                  <span aria-label={`Debt due date: `}>
+                    {prettifyDate(debt.dueDate)}
+                  </span>
                 </div>
                 <div className="relative w-full ">
                   <p className="flex justify-between px-2 border border-orange-700 py-1 rounded-2xl w-full text-sm z-10 relative">

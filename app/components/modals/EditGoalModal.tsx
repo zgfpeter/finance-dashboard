@@ -15,6 +15,11 @@ interface Props {
   onClose: () => void;
 }
 
+//   title: string;
+//   currentPaid: number | string;
+//   totalAmount: number | string;
+//   dueDate: string;
+
 export default function EditGoalModal({ data, onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
@@ -22,8 +27,10 @@ export default function EditGoalModal({ data, onClose }: Props) {
   const [title, setTitle] = useState(data?.title ?? "");
   const [currentAmount, setCurrentAmount] = useState(data?.currentAmount ?? "");
   const [targetAmount, setTargetAmount] = useState(data?.targetAmount ?? "");
-  const [targetDate, setTargetDate] = useState(data?.targetDate ?? "");
-
+  const [targetDate, setTargetDate] = useState(() => {
+    if (!data?.targetDate) return "";
+    return new Date(data?.targetDate).toISOString().slice(0, 10);
+  });
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
     id: "",
@@ -75,7 +82,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
     },
 
     // if request fails: restore the old value (from previous)
-    onError: (_err, _goal, context) => {
+    onError: (_err, _debt, context) => {
       console.log("An error has occured: ", _err);
       queryClient.setQueryData(["dashboardData"], context?.previous);
     },
@@ -128,14 +135,15 @@ export default function EditGoalModal({ data, onClose }: Props) {
     }
     if (!targetDate) {
       newErrors.date = "Date is required";
-    } else {
-      // to check if the entered date is not a future date:
-      const goalDate = new Date(targetDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (goalDate < today) {
-        newErrors.date = "Date cannot be in the past.";
-      }
+      // it's fine if date it's in the past, give users that option
+      // } else {
+      //   // to check if the entered date is not a future date:
+      //   const goalDate = new Date(targetDate);
+      //   const today = new Date();
+      //   today.setHours(0, 0, 0, 0);
+      //   if (goalDate < today) {
+      //     newErrors.date = "Date cannot be in the past.";
+      //   }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -183,7 +191,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
             />
           </div>
           <div className="flex flex-col p-3 gap-3 relative">
-            <label htmlFor="currentAmount">Saved</label>
+            <label htmlFor="currentAmount">Current Amount</label>
             {errors.currentAmount && (
               <span className="text-red-500 absolute right-5">
                 {errors.currentAmount}

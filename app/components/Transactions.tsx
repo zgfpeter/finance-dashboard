@@ -2,13 +2,14 @@ import { FaMoneyBillTransfer, FaPlus } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
+import { prettifyDate } from "@/lib/utils";
 export default function Transactions() {
   // get transaction data from the dashboard hook
   const TransactionsData = useDashboard().data?.transactions;
   const dispatch = useDispatch();
   const hasTransactions = TransactionsData && TransactionsData.length > 0; // if true, there are some transactions
   return (
-    <section className=" flex flex-col  rounded-xl gap-3 w-full h-full">
+    <section className=" flex flex-col  rounded-xl gap-3 w-full h-full min-h-50">
       <div className="flex items-center justify-between ">
         <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
           <FaMoneyBillTransfer /> Transactions
@@ -25,7 +26,7 @@ export default function Transactions() {
         </button>
       </div>
       {!hasTransactions ? (
-        <p className="text-gray-500 text-center text-sm">
+        <p className="text-gray-500 text-sm h-full flex items-center justify-center">
           No transactions yet. Add one to get started.
         </p>
       ) : (
@@ -56,13 +57,15 @@ export default function Transactions() {
                       {transaction.transactionType === "expense" ? (
                         <p className="text-red-500">- € {transaction.amount}</p>
                       ) : (
-                        <p className="text-green-500">
+                        <p className="text-green-500 p-2">
                           + € {transaction.amount}
                         </p>
                       )}
                     </div>
                     <div className="flex flex-col text-sm items-center  rounded gap-3">
-                      <span className="text-xs">{transaction.date}</span>
+                      <span className="text-xs">
+                        {prettifyDate(transaction.date)}
+                      </span>
                     </div>
                   </div>
                 </li>

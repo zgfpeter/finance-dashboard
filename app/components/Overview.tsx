@@ -8,18 +8,31 @@ import {
   IoMdTrendingUp,
 } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
+import { useMemo } from "react";
 export default function Overview() {
   const dispatch = useDispatch();
   const dashboardData = useDashboard().data?.overview;
   const nrOfTransactions = useDashboard().data?.transactions;
-  const accounts = useDashboard().data?.accounts || [];
+  // because of || [], this would create a brand new array on every render, so the dependency accounts changed again, so useMemo is pointless.
+  const dashboard = useDashboard().data;
+  const accounts = useMemo(() => {
+    return dashboard?.accounts ?? [];
+  }, [dashboard?.accounts]);
+
+  // #!! used when i want a clean yes/no answer. not anything else, ex. 0, "", 3 etc. items.length can be 0 or 5 for example, not true or false
+  // #!! means turn value into a true or false, && ensures dashboardData exists, || checks if any meaningful data exists.
+  const totalBalance = useMemo(() => {
+    // with useMemo, totalBalance is only recalculated if the accounts change
+    return accounts.reduce((sum, account) => {
+      return sum + account.balance;
+    }, 0);
+  }, [accounts]);
 
   const hasData =
-    dashboardData &&
-    dashboardData.monthlyChange > 0 &&
-    dashboardData.totalBalance > 0 &&
-    nrOfTransactions &&
-    nrOfTransactions.length > 0;
+    !!dashboardData &&
+    (dashboardData.monthlyChange > 0 ||
+      dashboardData.totalBalance > 0 ||
+      (nrOfTransactions && nrOfTransactions.length > 0));
 
   return (
     <section className="flex flex-col gap-2 h-full overflow-y-auto justify-evenly py-2">
@@ -32,7 +45,7 @@ export default function Overview() {
               dispatch(
                 openModal({
                   type: "editOverview",
-                  data: { totalBalance: dashboardData?.totalBalance, accounts },
+                  data: { totalBalance: totalBalance, accounts },
                 })
               )
             }
@@ -49,8 +62,7 @@ export default function Overview() {
         <div className="flex flex-col gap-2">
           {/* total balance-current net worth across accounts */}
           <p className="text-2xl text-(--limegreen) bg-(--primary-blue) rounded-xl p-2 flex justify-between ">
-            <span>Total balance: </span>{" "}
-            {`$ ${Number(dashboardData?.totalBalance).toFixed(2)}`}
+            <span>Total balance: </span> €{totalBalance}
           </p>
           <h2 className="pl-2">Accounts summary</h2>
           <ul className="flex flex-col gap-2 ">
