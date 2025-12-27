@@ -1,6 +1,6 @@
 "use client";
 import { LuBellRing } from "react-icons/lu";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaClock } from "react-icons/fa6";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
 import { useDashboard } from "../hooks/useDashboard";
@@ -99,7 +99,7 @@ export default function UpcomingCharges() {
 
       <div className="flex items-center justify-between ">
         <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
-          Upcoming Charges
+          <FaClock /> Upcoming Charges
         </h2>
 
         <div className="flex gap-5">

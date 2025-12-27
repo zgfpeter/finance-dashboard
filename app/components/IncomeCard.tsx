@@ -41,7 +41,7 @@ export default function IncomeCard() {
             This month:{" "}
             <span className="text-green-500"> € {totalIncome?.toFixed(2)}</span>
           </p>
-          <p>Last month: € 0</p>
+          <p className="text-sm">Last month: € 0</p>
           <motion.span
             aria-hidden="true"
             className="h-0.5 w-5 bg-[#025207] self-end my-1"
@@ -49,7 +49,7 @@ export default function IncomeCard() {
             animate={{ width: "100%" }}
             transition={{ duration: 2 }}
           ></motion.span>
-          <p>
+          <p className="text-sm">
             {/* {thisMonth > lastMonth
             ? `+ ${difference} more compared to last month`
             : thisMonth < lastMonth

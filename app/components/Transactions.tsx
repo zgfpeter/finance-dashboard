@@ -57,12 +57,12 @@ export default function Transactions() {
                       {transaction.transactionType === "expense" ? (
                         <p className="text-red-500">- € {transaction.amount}</p>
                       ) : (
-                        <p className="text-green-500 p-2">
+                        <p className="text-green-500 py-2">
                           + € {transaction.amount}
                         </p>
                       )}
                     </div>
-                    <div className="flex flex-col text-sm items-center  rounded gap-3">
+                    <div className="flex flex-col text-sm items-center  rounded gap-3 mr-1">
                       <span className="text-xs">
                         {prettifyDate(transaction.date)}
                       </span>

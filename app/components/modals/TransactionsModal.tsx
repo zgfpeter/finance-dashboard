@@ -139,13 +139,13 @@ export default function TransactionsModal({ onClose }: Props) {
         className="w-full p-5 mb-2 rounded-xl"
         onChange={(e) => setSearch(e.target.value)}
       />
-      <ul className="w-full flex flex-col gap-2  overflow-y-auto grow ">
+      <ul className="w-full flex flex-col gap-1 overflow-y-auto grow">
         {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
         {filteredTransactions?.map((transaction) => {
           return (
             <li
               key={transaction._id}
-              className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center p-3 bg-(--border-blue) rounded-xl relative "
+              className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center p-3 bg-(--border-blue) rounded-xl relative text-sm "
             >
               <div className="flex flex-col gap-3 justify-self-start">
                 <span>{transaction.company}</span>
@@ -162,10 +162,10 @@ export default function TransactionsModal({ onClose }: Props) {
                 <p className="text-green-500">+ € {transaction.amount}</p>
               )}
 
-              <p className="justify-self-end">
+              <p className="text-xs text-center">
                 {prettifyDate(transaction.date)}
               </p>
-              <div className="flex items-center gap-3 justify-self-end mr-3">
+              <div className="flex items-center gap-2 justify-self-end mr-1">
                 <button
                   onClick={() =>
                     dispatch(

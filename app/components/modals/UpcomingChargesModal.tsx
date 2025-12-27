@@ -94,7 +94,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <ul className="w-full flex flex-col gap-2 overflow-y-auto grow">
+      <ul className="w-full flex flex-col gap-1 overflow-y-auto grow">
         {filteredCharges.map((charge) => (
           <li
             key={charge._id}
@@ -110,9 +110,10 @@ export default function UpcomingChargesModal({ onClose }: Props) {
             </div>
 
             <p className="text-yellow-500">- € {charge.amount}</p>
-            <p className="">{prettifyDate(charge.date)}</p>
+            <p className="text-xs text-center">{prettifyDate(charge.date)}</p>
+
             {/* <p className="justify-self-end">Monthly</p> */}
-            <div className="flex items-center gap-3 justify-self-end mr-3">
+            <div className="flex items-center gap-2 justify-self-end mr-1">
               {/* Edit button now dispatches Redux action */}
               <button
                 onClick={() =>

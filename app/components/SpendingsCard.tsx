@@ -23,7 +23,7 @@ export default function SpendingsCard() {
             This month:{" "}
             <span className="text-red-500">€ {getSpendings?.toFixed(2)}</span>
           </p>
-          <p>Last month: € 0.00</p>
+          <p className="text-sm">Last month: € 0.00</p>
           <motion.span
             aria-hidden="true"
             className="h-0.5 w-5 bg-[#580f0f] my-1 "
@@ -31,7 +31,9 @@ export default function SpendingsCard() {
             animate={{ width: "100%" }}
             transition={{ duration: 2 }}
           ></motion.span>
-          <p>- € {getSpendings?.toFixed(2)} less than last month</p>
+          <p className="text-sm">
+            - € {getSpendings?.toFixed(2)} less than last month
+          </p>
         </div>
       )}
     </section>

@@ -7,7 +7,7 @@ import {
 } from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaLink } from "react-icons/fa6";
 
 export default function Debts() {
   // debts data
@@ -22,7 +22,7 @@ export default function Debts() {
     >
       <div className="flex items-center justify-between ">
         <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
-          Debts
+          <FaLink /> Debts
         </h2>
         <button
           className="text-xl flex items-center"

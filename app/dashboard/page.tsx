@@ -147,7 +147,7 @@ export default function DashboardPage() {
             <span className="text-(--text-light)">
               Total:{" "}
               <span className="text-red-500">
-                € {getTotalSpendings(transactions || [])}
+                € {getTotalSpendings(transactions || []).toFixed(2)}
               </span>
             </span>
           </h2>

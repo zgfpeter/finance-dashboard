@@ -7,7 +7,7 @@ export default function Footer() {
         Created by <span className="font-semibold">zgfpeter</span>
       </p>
       <Link
-        href={""}
+        href={"https://github.com/zgfpeter/finance-dashboard"}
         className="flex items-center gap-1 underline"
         target="_blank"
       >

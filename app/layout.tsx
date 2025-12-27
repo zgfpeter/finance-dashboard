@@ -30,7 +30,7 @@ export const metadata = {
     title: "Pocket Memory",
     description:
       "A one-page personal finance dashboard built with Next.js, React, and TailwindCSS.",
-    url: "finance-dashboard-git-main-zgfpeters-projects.vercel.app", // Live demo URL
+    url: "https://finance-dashboard-gules-omega.vercel.app/dashboard", // Live demo URL
     siteName: "Pocket Memory",
     locale: "en_US",
     type: "website",

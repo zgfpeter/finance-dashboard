@@ -2,16 +2,19 @@
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useState } from "react";
 import Image from "next/image";
-
+import { useSession } from "next-auth/react";
 interface Props {
   onClose: () => void;
 }
 
 export default function SettingsModal({ onClose }: Props) {
+  const user = useSession().data?.user;
+
   const [changeAvatar, setChangeAvatar] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] =
     useState<boolean>(false);
   function handleDelete() {}
+
   return (
     <div
       className=" h-full flex items-center flex-col justify-between relative"
@@ -30,11 +33,11 @@ export default function SettingsModal({ onClose }: Props) {
       <div className="w-full flex justify-around items-center h-full">
         <div className="flex flex-col h-full justify-evenly relative">
           <h3 className="flex  justify-between items-center">
-            <span>joedoghnut</span>
+            <span>{user?.username}</span>
           </h3>
 
           <div className="flex items-center gap-1">
-            <p>joedoenut@example.com</p>
+            <p>{user?.email}</p>
           </div>
 
           <div className="flex items-center gap-3 relative ">

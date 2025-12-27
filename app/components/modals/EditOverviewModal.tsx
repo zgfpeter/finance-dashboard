@@ -242,10 +242,10 @@ export default function EditOverviewModal({ data, onClose }: Props) {
               {accountsState.map((account, index) => (
                 <div
                   key={index}
-                  className="flex w-full justify-between items-center py-2 rounded"
+                  className="flex w-full justify-between items-center p-2 gap-2 rounded"
                 >
                   <select
-                    className="border border-(--secondary-blue) rounded p-2.5 focus:outline-none focus:border-cyan-500 w-40"
+                    className="border border-(--secondary-blue) rounded p-2.5 focus:outline-none focus:border-cyan-500 w-full"
                     value={account.type}
                     onChange={(e) =>
                       setAccountsState((prev) =>
@@ -270,7 +270,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                   </select>
 
                   <input
-                    className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 w-40"
+                    className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 w-full"
                     type="text"
                     value={account.balance}
                     onChange={(e) =>

@@ -7,7 +7,7 @@ import {
 } from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaBullseye } from "react-icons/fa6";
 export default function Goals() {
   const goals = useDashboard().data?.goals;
   const hasgoals = goals && goals.length > 0;
@@ -19,8 +19,8 @@ export default function Goals() {
     >
       <div className="flex items-center justify-between ">
         <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
-          Goals
-        </h2>{" "}
+          <FaBullseye /> Goals
+        </h2>
         <button
           className="text-xl flex items-center"
           onClick={() => dispatch(openModal({ type: "addGoal", data: null }))}
