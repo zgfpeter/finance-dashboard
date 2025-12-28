@@ -145,7 +145,7 @@ export default function TransactionsModal({ onClose }: Props) {
           return (
             <li
               key={transaction._id}
-              className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center p-3 bg-(--border-blue) rounded-xl relative"
+              className="grid pt-10 md:pt-0 grid-cols-[2fr_1fr_2fr] md:grid-cols-[2fr_1fr_1fr_1fr] items-center bg-(--border-blue) p-3 rounded-xl relative"
             >
               <div className="flex flex-col justify-self-start">
                 <span>{transaction.company}</span>
@@ -162,10 +162,10 @@ export default function TransactionsModal({ onClose }: Props) {
                 <p className="text-green-500">+ € {transaction.amount}</p>
               )}
 
-              <p className="text-xs text-center">
+              <p className="text-xs text-center justify-self-end md:justify-self-start">
                 {prettifyDate(transaction.date)}
               </p>
-              <div className="flex items-center gap-2 justify-self-end mr-1">
+              <div className="absolute top-2 right-2 md:relative flex items-center gap-2 justify-self-end mr-1">
                 <button
                   onClick={() =>
                     dispatch(

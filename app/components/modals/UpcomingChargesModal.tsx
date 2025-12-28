@@ -98,8 +98,9 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         {filteredCharges.map((charge) => (
           <li
             key={charge._id}
-            className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center bg-(--border-blue) p-3 rounded-xl relative"
+            className="grid pt-10 md:pt-0 grid-cols-[2fr_1fr_2fr] md:grid-cols-[2fr_1fr_1fr_1fr] items-center bg-(--border-blue) p-3 rounded-xl relative"
           >
+            {/* company and category */}
             <div className="flex flex-col justify-self-start">
               <span>{charge.company}</span>
               {charge.category && (
@@ -109,11 +110,15 @@ export default function UpcomingChargesModal({ onClose }: Props) {
               )}
             </div>
 
+            {/* amount */}
             <p className="text-yellow-500">- € {charge.amount}</p>
-            <p className="text-xs text-center">{prettifyDate(charge.date)}</p>
+            {/* date */}
+            <p className="text-xs text-center justify-self-end md:justify-self-start">
+              {prettifyDate(charge.date)}
+            </p>
 
-            {/* <p className="justify-self-end">Monthly</p> */}
-            <div className="flex items-center gap-2 justify-self-end mr-1">
+            {/* edit and delete buttons */}
+            <div className="absolute top-2 right-2 md:relative flex items-center gap-2 justify-self-end mr-1">
               {/* Edit button now dispatches Redux action */}
               <button
                 onClick={() =>
