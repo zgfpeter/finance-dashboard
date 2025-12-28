@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useEffect } from "react";
 import axiosAuth from "@/lib/axios";
 
@@ -26,10 +26,24 @@ const useAxiosAuth = () => {
       },
       (error) => Promise.reject(error)
     );
+    // by using this flag, it avoids multiple redirects if severel requests fail at once
+    let isLoggingOut = false;
+    // handle expired sessions.
+    const responseIntercept = axiosAuth.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401 && !isLoggingOut) {
+          isLoggingOut = true;
+          signOut({ callbackUrl: "/login" });
+        }
+        return Promise.reject(error);
+      }
+    );
     //cleanup: remove interceptop when the component unmounts
     // to prevent memory leaks or duplicate interceptors
     return () => {
       axiosAuth.interceptors.request.eject(requestIntercept);
+      axiosAuth.interceptors.response.eject(responseIntercept);
     };
   }, [session]); // runs whenever session changes
   return axiosAuth;
