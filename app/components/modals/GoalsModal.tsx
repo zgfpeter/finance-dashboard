@@ -143,12 +143,18 @@ export default function GoalsModal({ onClose }: Props) {
       <ul className="w-full flex flex-col gap-2  overflow-y-auto grow ">
         {/* each goal goal li is a grid with 2 columns, one for company+date and one for amount */}
         {filteredgoals?.map((goal) => {
+          const isFullySaved =
+            Number(goal.currentAmount) >= Number(goal.targetAmount);
           return (
+            // <li
+            //   key={goal._id}
+            //   className="bg-(--border-blue) p-2 rounded-xl gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
+            // >
             <li
               key={goal._id}
               className="bg-(--border-blue) p-2 rounded-xl gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
             >
-              <div className="flex flex-col gap-1 items-center justify-self-start md:justify-center text-xs w-full ">
+              <div className="flex gap-1  items-center md:justify-center text-xs w-fit ">
                 <MdOutlineWatchLater color="orange" />
                 {calculateDeadline(goal.targetDate)}
               </div>
@@ -156,7 +162,10 @@ export default function GoalsModal({ onClose }: Props) {
               <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
                 <div className="flex items-center justify-between w-full py-2">
                   <span aria-label="Goal title">{goal.title}</span>
-                  <span aria-label={`Goal date: ${goal.targetDate}`}>
+                  <span
+                    aria-label={`Goal date: ${goal.targetDate}`}
+                    className="text-xs"
+                  >
                     {prettifyDate(goal.targetDate)}
                   </span>
                 </div>
@@ -175,7 +184,9 @@ export default function GoalsModal({ onClose }: Props) {
 
                   <motion.span
                     // z indes smaller than price <p> so that it sits below the text
-                    className="absolute left-0 top-0 h-full bg-teal-600 rounded-2xl z-0"
+                    className={`absolute left-0 top-0 h-full ${
+                      isFullySaved ? "bg-teal-900" : "bg-teal-600"
+                    } rounded-2xl z-0`}
                     initial={{ width: 0 }}
                     role="progressbar"
                     aria-valuenow={Number(goal.currentAmount)}
@@ -194,7 +205,7 @@ export default function GoalsModal({ onClose }: Props) {
                   ></motion.span>
                 </div>
               </div>
-              <div className="flex items-center justify-self-end md:justify-center gap-3 col-start-2 row-start-1 md:col-start-auto md:row-start-auto">
+              <div className="flex items-center justify-self-end md:justify-center gap-2 col-start-2 row-start-1 md:col-start-auto md:row-start-auto">
                 <button
                   onClick={() =>
                     dispatch(

@@ -1,12 +1,7 @@
 import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import {
-  IoMdArrowDropup,
-  IoMdTrendingDown,
-  IoIosTrendingDown,
-  IoMdTrendingUp,
-} from "react-icons/io";
+import { IoMdTrendingUp } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useMemo } from "react";
 export default function Overview() {
@@ -28,6 +23,7 @@ export default function Overview() {
     }, 0);
   }, [accounts]);
 
+  // check if there is any useful data to display
   const hasData =
     !!dashboardData &&
     (dashboardData.monthlyChange > 0 ||
@@ -35,36 +31,35 @@ export default function Overview() {
       (nrOfTransactions && nrOfTransactions.length > 0));
 
   return (
-    <section className="flex flex-col gap-2 h-full overflow-y-auto justify-evenly py-2">
-      <div className="flex items-center justify-between ">
-        <h1 className="text-4xl">Overview</h1>
-        <div className="flex gap-5">
-          <button
-            className="text-xl flex items-center"
-            onClick={() =>
-              dispatch(
-                openModal({
-                  type: "editOverview",
-                  data: { totalBalance: totalBalance, accounts },
-                })
-              )
-            }
-          >
-            <span className="text-yellow-500">
-              <MdEdit />
-            </span>
-          </button>
-        </div>
+    <section className="flex flex-col gap-3 h-full overflow-y-auto justify-evenly">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl">Overview</h1>
+        <button
+          className="text-xl flex items-center p-1"
+          onClick={() =>
+            dispatch(
+              openModal({
+                type: "editOverview",
+                data: { totalBalance: totalBalance, accounts },
+              })
+            )
+          }
+        >
+          <span className="text-yellow-500">
+            <MdEdit />
+          </span>
+        </button>
       </div>
       {!hasData ? (
         <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {/* total balance-current net worth across accounts */}
-          <p className="text-2xl text-(--limegreen) bg-(--primary-blue) rounded-xl p-2 flex justify-between ">
+          <p className="text-xl text-(--limegreen) bg-(--primary-blue) flex justify-between ">
             <span>Total balance: </span> €{totalBalance}
           </p>
-          <h2 className="pl-2">Accounts summary</h2>
+          <span className="w-full h-1 rounded-xl bg-cyan-900 "></span>
+          <h2>Accounts summary</h2>
           <ul className="flex flex-col gap-2 ">
             {accounts.map((account) => (
               <li
@@ -78,7 +73,7 @@ export default function Overview() {
               </li>
             ))}
           </ul>
-          <div className="flex items-center my-2 gap-3 ">
+          <div className="flex items-center gap-3 py-2 ">
             <span className="w-full h-1 rounded-xl bg-cyan-900 "></span>
             <span className="text-emerald-600 ">
               <IoMdTrendingUp />
@@ -88,12 +83,6 @@ export default function Overview() {
           <p className="text-emerald-600 flex items-center bg-(--border-blue) rounded-xl px-2 py-3 justify-center">
             {`$ ${dashboardData?.monthlyChange} more compared to last month.`}
           </p>
-          {/* <p className="bg-(--border-blue) rounded-xl p-2">
-            Total transactions this month:
-            <span className="text-emerald-500 mx-2">
-              {nrOfTransactions?.length}
-            </span>
-          </p> */}
         </div>
       )}
     </section>

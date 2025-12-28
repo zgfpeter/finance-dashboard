@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
-import LoadingSpinner from "./LoadingSpinner";
 
 export default function SpendingsCard() {
   const transactions = useDashboard().data?.transactions;
@@ -11,8 +10,8 @@ export default function SpendingsCard() {
   const hasSpendings = getSpendings && getSpendings > 0;
 
   return (
-    <section className="bg-(--border-blue)  rounded-xl h-1/2 w-full flex justify-between p-3 md:flex-col md:px-2">
-      <h2 className="flex items-center justify-between gap-2 p-2 rounded-xl text-xl mb-2">
+    <section className="bg-(--border-blue) rounded-xl h-1/2 w-full flex justify-between md:flex-col p-2">
+      <h2 className="flex items-center gap-3 rounded-xl text-xl">
         Expenses <FaArrowRightLong color="red" />
       </h2>
       {!hasSpendings ? (

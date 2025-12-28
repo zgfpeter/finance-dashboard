@@ -224,11 +224,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
               />
             </div>
           </div>
-          <div
-            className={`flex items-center justify-between p-3 ${
-              transactionType === "expense" ? "w-full" : "w-fit"
-            }`}
-          >
+          <div className="flex items-center justify-between p-3 w-fit">
             <div className="flex flex-col gap-3">
               {errors.date && (
                 <span className="text-red-500 flex items-center absolute">
@@ -261,7 +257,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                 }
                 name="transactionTypes"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-11 flex"
+                className="border border-(--secondary-blue) px-2 rounded h-11"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -283,7 +279,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                     setCategory(e.target.value as ExpenseCategory)
                   }
                   name="category"
-                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full md:w-42"
+                  className="border border-(--secondary-blue) px-2 rounded h-11"
                 >
                   <option value="subscription">Subscription</option>
                   <option value="bill">Bill</option>

@@ -140,19 +140,21 @@ export default function DebtsModal({ onClose }: Props) {
       <ul className="w-full flex flex-col gap-2  overflow-y-auto grow ">
         {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
         {filteredDebts?.map((debt) => {
+          const isFullyPaid =
+            Number(debt.currentPaid) >= Number(debt.totalAmount);
           return (
             <li
               key={debt._id}
               className="bg-(--border-blue) p-2 rounded-xl gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
             >
-              <div className="flex flex-col gap-1 items-center justify-self-start md:justify-center text-xs w-full ">
+              <div className="flex gap-1  items-center md:justify-center text-xs w-fit ">
                 <MdOutlineWatchLater color="orange" />
                 {calculateDeadline(debt.dueDate)}
               </div>
               <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
                 <div className="flex items-center justify-between w-full py-2">
                   <span aria-label={`Debt company: `}>{debt.company}</span>
-                  <span aria-label={`Debt due date: `}>
+                  <span aria-label={`Debt due date: `} className="text-xs">
                     {prettifyDate(debt.dueDate)}
                   </span>
                 </div>
@@ -170,7 +172,9 @@ export default function DebtsModal({ onClose }: Props) {
                   <motion.span
                     aria-hidden="true"
                     // z indes smaller than price <p> so that it sits below the text
-                    className="absolute left-0 top-0 h-full bg-orange-700 rounded-2xl z-0"
+                    className={`absolute left-0 top-0 h-full rounded-2xl z-0 ${
+                      isFullyPaid ? "bg-orange-900" : "bg-orange-700"
+                    }`}
                     role="progressbar"
                     aria-valuenow={Number(debt.currentPaid)}
                     aria-valuemin={0}

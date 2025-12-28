@@ -145,9 +145,9 @@ export default function TransactionsModal({ onClose }: Props) {
           return (
             <li
               key={transaction._id}
-              className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center p-3 bg-(--border-blue) rounded-xl relative text-sm "
+              className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center p-3 bg-(--border-blue) rounded-xl relative"
             >
-              <div className="flex flex-col gap-3 justify-self-start">
+              <div className="flex flex-col justify-self-start">
                 <span>{transaction.company}</span>
                 {transaction.category && (
                   <span className="text-xs text-yellow-500">

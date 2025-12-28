@@ -102,7 +102,7 @@ export default function UpcomingCharges() {
           <FaClock /> Upcoming Charges
         </h2>
 
-        <div className="flex gap-5">
+        <div className="flex gap-3">
           <button
             className="p-1"
             onClick={handleNotifications}
@@ -134,7 +134,7 @@ export default function UpcomingCharges() {
               return (
                 <li
                   key={charge._id}
-                  className="grid grid-cols-2 justify-items-stretch items-center bg-(--border-blue) p-3 gap-2 rounded-xl relative"
+                  className="grid grid-cols-2 bg-(--border-blue) p-3 gap-2 rounded-xl "
                 >
                   <div className="flex items-center gap-2">
                     {/* <FaPlus color="green" /> */}
@@ -149,7 +149,7 @@ export default function UpcomingCharges() {
                     </div>
                   </div>
                   <div className="grid grid-cols-[2fr_1fr] items-center">
-                    <div className="text-yellow-500 ">- € {charge.amount}</div>
+                    <div className="text-yellow-500">- € {charge.amount}</div>
                     <div className="flex flex-col text-center text-sm rounded gap-3">
                       <div className="text-xs">
                         {calculateDeadline(charge.date)}
@@ -165,7 +165,7 @@ export default function UpcomingCharges() {
           </ul>
 
           <button
-            className="underline p-2 w-fit self-center rounded-xl mt-auto"
+            className="underline p-2 self-center rounded-xl mt-auto"
             onClick={handleSeeAll}
             aria-label="See All"
           >

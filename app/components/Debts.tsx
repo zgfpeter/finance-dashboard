@@ -17,7 +17,7 @@ export default function Debts() {
 
   return (
     <section
-      className=" flex flex-col rounded-xl gap-3 w-full h-full min-h-50"
+      className=" flex flex-col rounded-xl gap-3 w-full h-full min-h-50 "
       aria-labelledby="debts-heading"
     >
       <div className="flex items-center justify-between ">

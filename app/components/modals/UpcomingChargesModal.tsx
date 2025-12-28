@@ -98,9 +98,9 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         {filteredCharges.map((charge) => (
           <li
             key={charge._id}
-            className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center bg-(--border-blue) p-3 rounded-xl relative text-sm"
+            className="grid grid-cols-[2fr_1fr_1fr_1fr] items-center bg-(--border-blue) p-3 rounded-xl relative"
           >
-            <div className="flex flex-col gap-3 justify-self-start">
+            <div className="flex flex-col justify-self-start">
               <span>{charge.company}</span>
               {charge.category && (
                 <span className="text-xs text-yellow-500">

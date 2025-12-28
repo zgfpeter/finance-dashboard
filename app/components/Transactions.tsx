@@ -9,7 +9,7 @@ export default function Transactions() {
   const dispatch = useDispatch();
   const hasTransactions = TransactionsData && TransactionsData.length > 0; // if true, there are some transactions
   return (
-    <section className=" flex flex-col  rounded-xl gap-3 w-full h-full min-h-50">
+    <section className="flex flex-col  rounded-xl gap-3 w-full h-full min-h-50">
       <div className="flex items-center justify-between ">
         <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
           <FaMoneyBillTransfer /> Transactions
@@ -31,14 +31,13 @@ export default function Transactions() {
         </p>
       ) : (
         <>
-          <ul className="flex flex-col gap-2 h-109 overflow-y-auto ">
-            {" "}
+          <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
             {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
             {TransactionsData?.map((transaction) => {
               return (
                 <li
                   key={transaction._id}
-                  className="grid grid-cols-2 items-center bg-(--border-blue) p-2 rounded-xl relative pr-4"
+                  className="grid grid-cols-2 items-center bg-(--border-blue) p-3 gap-2 rounded-xl"
                 >
                   <div className="flex items-center gap-2">
                     <div className="flex flex-col">
@@ -52,8 +51,8 @@ export default function Transactions() {
                   </div>
 
                   {/* coloc-coded amount base on transaction type */}
-                  <div className="flex justify-between items-center">
-                    <div className="text-yellow-500 ">
+                  <div className="grid grid-cols-[2fr_1fr] items-center">
+                    <div>
                       {transaction.transactionType === "expense" ? (
                         <p className="text-red-500">- € {transaction.amount}</p>
                       ) : (
@@ -62,7 +61,7 @@ export default function Transactions() {
                         </p>
                       )}
                     </div>
-                    <div className="flex flex-col text-sm items-center  rounded gap-3 mr-1">
+                    <div className="flex flex-col text-sm items-center  rounded gap-3">
                       <span className="text-xs">
                         {prettifyDate(transaction.date)}
                       </span>

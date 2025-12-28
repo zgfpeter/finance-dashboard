@@ -234,7 +234,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
                 onChange={(e) => setDueDate(e.target.value)}
                 name="dueDate"
                 id="dueDate"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11  w-40"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>
