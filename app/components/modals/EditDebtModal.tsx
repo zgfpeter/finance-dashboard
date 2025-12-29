@@ -185,6 +185,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
               type="text"
               value={company}
               required
+              maxLength={40}
               onChange={(e) => setCompany(e.target.value)}
               name="company"
               id="company"
@@ -201,6 +202,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
             <input
               type="number"
               value={currentPaid}
+              inputMode="decimal"
               onChange={(e) => setCurrentPaid(e.target.value)}
               name="currentPaid"
               id="currentPaid"
@@ -218,6 +220,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
               type="number"
               value={totalAmount}
               onChange={(e) => setTotalAmount(e.target.value)}
+              inputMode="decimal"
               name="totalAmount"
               id="totalAmount"
               className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"

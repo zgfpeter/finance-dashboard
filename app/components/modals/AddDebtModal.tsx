@@ -144,6 +144,7 @@ export default function AddDebtModal({ onClose }: Props) {
               type="text"
               value={data.company}
               required
+              maxLength={40}
               onChange={handleChange}
               name="company"
               id="company"
@@ -162,6 +163,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 type="number"
                 value={data.currentPaid}
                 onChange={handleChange}
+                inputMode="decimal"
                 name="currentPaid"
                 id="currentPaid"
                 className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
@@ -178,6 +180,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 type="number"
                 value={data.totalAmount}
                 onChange={handleChange}
+                inputMode="decimal"
                 name="totalAmount"
                 id="totalAmount"
                 className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500"

@@ -212,7 +212,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col justify-between">
-          <div className="flex flex-col p-3 gap-3 relative">
+          <div className="flex flex-col gap-3 px-1 relative">
             <div className="flex items-center gap-3">
               <label htmlFor="totalBalance">Total Balance: $</label>
               {errors.totalBalance && (
@@ -242,10 +242,10 @@ export default function EditOverviewModal({ data, onClose }: Props) {
               {accountsState.map((account, index) => (
                 <div
                   key={index}
-                  className="flex w-full justify-between items-center p-2 gap-2 rounded"
+                  className="flex w-full justify-between items-center gap-2 rounded"
                 >
                   <select
-                    className="border border-(--secondary-blue) rounded p-2.5 focus:outline-none focus:border-cyan-500 w-full"
+                    className=" appearance-none border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 w-full"
                     value={account.type}
                     onChange={(e) =>
                       setAccountsState((prev) =>
@@ -258,13 +258,14 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                     }
                   >
                     <option value="">--- Select ---</option>
-
+                    {/* only account types that aren't already displayed are in the options dropdown */}
                     {getAvailableAccountTypes(index)
                       .concat(account.type ? [account.type] : [])
                       .filter((v, i, arr) => arr.indexOf(v) === i)
                       .map((t) => (
                         <option key={t} value={t}>
-                          {t}
+                          {/* TODO find a better way to capitalize */}
+                          {t[0].toUpperCase() + t.slice(1)}
                         </option>
                       ))}
                   </select>

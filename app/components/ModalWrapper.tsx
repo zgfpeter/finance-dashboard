@@ -56,7 +56,7 @@ export default function ModalWrapper({
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       <div
         ref={panelRef}
-        className={`relative z-10 ${widthClass} bg-(--primary-blue) rounded-xl shadow-xl p-1 h-150 border-2 border-teal-500 flex flex-col overflow-hidden`}
+        className={`relative z-10 ${widthClass} py-3 bg-(--primary-blue) rounded-xl shadow-xl p-1 h-150 border-2 border-teal-500 flex flex-col overflow-hidden`}
         onMouseDown={(e) => e.stopPropagation()} // avoid closing when clicking inside
       >
         {children}

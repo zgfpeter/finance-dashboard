@@ -184,6 +184,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
               type="text"
               value={title}
               required
+              maxLength={40}
               onChange={(e) => setTitle(e.target.value)}
               name="title"
               id="title"
@@ -200,6 +201,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
             <input
               type="number"
               value={currentAmount}
+              inputMode="decimal"
               onChange={(e) => setCurrentAmount(e.target.value)}
               name="currentAmount"
               id="currentAmount"
@@ -216,6 +218,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
             <input
               type="number"
               value={targetAmount}
+              inputMode="decimal"
               onChange={(e) => setTargetAmount(e.target.value)}
               name="targetAmount"
               id="targetAmount"

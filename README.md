@@ -1,5 +1,5 @@
 # Personal Finance Dashboard
-A one-page personal finance dashboard.
+A fully responsive, one-page personal finance dashboard that allows users to track and manage every cent of their finances.
 ---
 ---
 To test the application, you can use the demo account, which contains some dashboard information for testing purposes.
@@ -8,7 +8,7 @@ DEMO ACCOUNT
 ---
 email: testuser@example.com password: Abc12345
 ---
-*Note: Due to Render's free tier, the website might take a moment to load.*
+*Note: Due to Vercel's free tier, the website might take a moment to load.*
 
 [LIVE DEMO](https://finance-dashboard-gules-omega.vercel.app/dashboard)
 ---
@@ -21,16 +21,18 @@ email: testuser@example.com password: Abc12345
 * **Node.js** 
 * **Express.js** 
 * **MongoDB** 
+* **JWT**
 
 ### Features
 The dashboard contains features such as: 
--Sign up and log in, with authorization handled with NextAuth.
--Overview of financial assets.
--Search for Transactions and Upcoming Charges.
--Debts and Savings visualization.
--Spendings graphs.
+-User authentication: Sign Up and Login, with authorization handled with JWT on the backend and NextAuth.
+-Financial Overview: View a summary of assets, debts, savings, upcoming charges and transactions.
+-CRUD Operations: Add, edit, delete upcoming charges, transactions, goals and debts.
+-Search: Quickly locate any data you need. 
+-Data Visualization: Graphs showing spending trends.
+-Mobile Friendly and Accessible: Fully responsive design with semantic HTML, ARIA labels, accessibility best practices.
+-One-Page Experience: Each feature opens in a modal to maintain a seamless single-page interface.
 
-#### Details
-The application is fully responsive and follows accessibility best practices (semantic HTML and aria-labels).
+
 ---
 Create by zgfpeter

@@ -182,6 +182,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               type="text"
               value={company}
               required
+              maxLength={40}
               onChange={(e) => setCompany(e.target.value)}
               name="company"
               id="company"
@@ -198,6 +199,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
             <input
               type="number"
               value={amount}
+              inputMode="decimal"
               onChange={(e) => setAmount(e.target.value)}
               name="amount"
               id="amount"

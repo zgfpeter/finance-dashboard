@@ -142,6 +142,7 @@ export default function AddGoalModal({ onClose }: Props) {
               type="text"
               value={data.title}
               required
+              maxLength={40}
               onChange={handleChange}
               name="title"
               id="title"
@@ -159,6 +160,7 @@ export default function AddGoalModal({ onClose }: Props) {
               <input
                 type="number"
                 value={data.currentAmount}
+                inputMode="decimal"
                 onChange={handleChange}
                 name="currentAmount"
                 id="currentAmount"
@@ -176,6 +178,7 @@ export default function AddGoalModal({ onClose }: Props) {
                 type="number"
                 value={data.targetAmount}
                 onChange={handleChange}
+                inputMode="decimal"
                 name="targetAmount"
                 id="targetAmount"
                 className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500"

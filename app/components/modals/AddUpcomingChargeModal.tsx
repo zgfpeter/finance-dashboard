@@ -141,6 +141,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 type="text"
                 value={data.company}
                 required
+                maxLength={40}
                 onChange={handleChange}
                 name="company"
                 id="company"
@@ -158,6 +159,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 type="number"
                 value={data.amount}
                 onChange={handleChange}
+                inputMode="decimal"
                 name="amount"
                 id="amount"
                 className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
