@@ -207,8 +207,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 Repeats <MdEventRepeat />
               </label>
               {/* {errors.type && (
-                            <span className="text-red-500">{errors.type}</span>
-                          )} */}
+                <span className="text-red-500">{errors.type}</span>
+              )} */}
               <select
                 id="repeating"
                 onChange={handleChange}
@@ -216,6 +216,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 required
                 className="border border-(--secondary-blue) px-1 rounded h-11 flex"
               >
+                {/* TODO implement repeating charge functionality */}
                 {/* weekly: lessons, allowances, memberships */}
                 {/* bi-weekly: salaries, some subscriptions */}
                 {/* monthly: subscriptions, rent, utilities */}

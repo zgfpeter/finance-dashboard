@@ -142,6 +142,7 @@ export default function DebtsModal({ onClose }: Props) {
         {filteredDebts?.map((debt) => {
           const isFullyPaid =
             Number(debt.currentPaid) >= Number(debt.totalAmount);
+          const deadline = calculateDeadline(debt.dueDate);
           return (
             <li
               key={debt._id}
@@ -149,7 +150,17 @@ export default function DebtsModal({ onClose }: Props) {
             >
               <div className="flex gap-1  items-center md:justify-center text-xs w-fit ">
                 <MdOutlineWatchLater color="orange" />
-                {calculateDeadline(debt.dueDate)}
+                <span
+                  className={
+                    deadline.status === "upcoming"
+                      ? "text-green-500"
+                      : deadline.status === "soon"
+                      ? "text-yellow-500"
+                      : "text-red-500"
+                  }
+                >
+                  {deadline.text}
+                </span>
               </div>
               <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
                 <div className="flex items-center justify-between w-full py-2">

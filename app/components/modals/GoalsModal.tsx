@@ -145,6 +145,7 @@ export default function GoalsModal({ onClose }: Props) {
         {filteredgoals?.map((goal) => {
           const isFullySaved =
             Number(goal.currentAmount) >= Number(goal.targetAmount);
+          const deadline = calculateDeadline(goal.targetDate);
           return (
             // <li
             //   key={goal._id}
@@ -156,7 +157,17 @@ export default function GoalsModal({ onClose }: Props) {
             >
               <div className="flex gap-1  items-center md:justify-center text-xs w-fit ">
                 <MdOutlineWatchLater color="orange" />
-                {calculateDeadline(goal.targetDate)}
+                <span
+                  className={
+                    deadline.status === "upcoming"
+                      ? "text-green-500"
+                      : deadline.status === "soon"
+                      ? "text-yellow-500"
+                      : "text-red-500"
+                  }
+                >
+                  {deadline.text}
+                </span>
               </div>
 
               <div className="flex flex-col gap-1 col-span-2 md:col-span-1">

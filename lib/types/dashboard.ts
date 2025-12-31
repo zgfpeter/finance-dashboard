@@ -7,6 +7,13 @@ export interface EditOverview {
   accounts: Account[];
 }
 
+export const currencies = {
+  EUR: { symbol: "€", label: "Euro" },
+  USD: { symbol: "$", label: "US Dollar" },
+  GBP: { symbol: "£", label: "British Pound" },
+} as const;
+export type CurrencyCode = keyof typeof currencies;
+
 export type AccountType = "checking" | "savings" | "credit" | "cash";
 export interface Account {
   _id?: string;

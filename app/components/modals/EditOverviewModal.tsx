@@ -213,23 +213,9 @@ export default function EditOverviewModal({ data, onClose }: Props) {
       >
         <div className="w-full flex flex-col justify-between">
           <div className="flex flex-col gap-3 px-1 relative">
-            <div className="flex items-center gap-3">
-              <label htmlFor="totalBalance">Total Balance: $</label>
-              {errors.totalBalance && (
-                <span className="text-red-500 absolute right-5">
-                  {errors.totalBalance}
-                </span>
-              )}
-              <input
-                type="text"
-                value={totalBalance}
-                required
-                onChange={(e) => setTotalBalance(e.target.value)}
-                name="totalBalance"
-                id="totalBalance"
-                className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 w-40"
-              />
-            </div>
+            {/* Total balance is based on accounts balance */}
+            <p className="">Total Balance: $ {totalBalance}</p>
+
             <span className="w-full h-1 bg-(--secondary-blue) rounded my-2"></span>
 
             <div className="flex flex-col rounded gap-3 items-center">

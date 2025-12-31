@@ -3,12 +3,15 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 interface Props {
   onClose: () => void;
 }
 
 export default function SettingsModal({ onClose }: Props) {
   const user = useSession().data?.user;
+  // default currency is euro
+  const [currency, setCurrency] = useState<CurrencyCode>("EUR");
 
   const [changeAvatar, setChangeAvatar] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] =
@@ -47,15 +50,18 @@ export default function SettingsModal({ onClose }: Props) {
                           )} */}
             <select
               id="currencies"
-              // value={data.category}
-              // onChange={handleChange}
+              value={currency}
+              // TODO send user preferences ( settings ) to backend
+              onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
               name="currencies"
               required
               className="border border-(--secondary-blue) px-2 rounded h-11 flex w-15"
             >
-              <option value="eur">€</option>
-              <option value="usd">$</option>
-              <option value="gbp">£</option>
+              {Object.entries(currencies).map(([code, data]) => (
+                <option key={code} value={code}>
+                  {data.symbol}
+                </option>
+              ))}
             </select>
           </div>
         </div>

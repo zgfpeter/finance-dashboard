@@ -16,11 +16,14 @@ export function calcProgressPercent(current: number, total: number): number {
 }
 
 // calculate the deadline for an upcoming charge or goal or debt
-export function calculateDeadline(date: string) {
+type DeadlineStatus = "overdue" | "upcoming" | "soon";
+export function calculateDeadline(date: string): {
+  text: string;
+  status: DeadlineStatus;
+} {
   const now = new Date();
   const dueDate = new Date(date);
 
-  // get the difference in dates
   const differenceInMs = dueDate.getTime() - now.getTime();
 
   if (differenceInMs > 0) {
@@ -30,33 +33,29 @@ export function calculateDeadline(date: string) {
     );
 
     if (differenceInDays > 0) {
-      return `In ${differenceInDays} day${differenceInDays > 1 ? "s" : ""}`;
-    } else if (differenceInHours > 0) {
-      return `In ${differenceInHours} day${differenceInHours > 1 ? "s" : ""}`;
-    } else {
-      return "Due soon";
+      return {
+        text: `In ${differenceInDays} day${differenceInDays > 1 ? "s" : ""}`,
+        status: "upcoming",
+      };
     }
-  } else {
-    const overdueMs = Math.abs(differenceInMs);
-    const overdueDays = Math.floor(overdueMs / (1000 * 60 * 60 * 24));
-    const overdueHours = Math.floor(
-      (overdueMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    // if (overdueDays > 0) {
-    //   return `Overdue by ${overdueDays} day${overdueDays > 1 ? "s" : ""}`;
-    // } else if (overdueHours > 0) {
-    //   return `Overdue by ${overdueHours} hour${overdueHours > 1 ? "s" : ""}`;
-    // } else {
-    //   return "Overdue";
-    // }
-    if (overdueDays > 0) {
-      return `Overdue`;
-    } else if (overdueHours > 0) {
-      return `Overdue`;
-    } else {
-      return "Overdue";
+
+    if (differenceInHours > 0) {
+      return {
+        text: `In ${differenceInHours} hour${differenceInHours > 1 ? "s" : ""}`,
+        status: "soon",
+      };
     }
+
+    return {
+      text: "Due soon",
+      status: "soon",
+    };
   }
+
+  return {
+    text: "Overdue",
+    status: "overdue",
+  };
 }
 
 // calculate the total amount spend this year ( or in a year )

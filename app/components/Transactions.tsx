@@ -43,11 +43,11 @@ export default function Transactions() {
                     {transaction.company}
                   </div>
                   {transaction.category ? (
-                    <div className="text-xs md:text-sm text-yellow-500 p-1 ">
+                    <div className="text-xs text-yellow-500 p-1 ">
                       {transaction.category}
                     </div>
                   ) : (
-                    <div className="text-xs md:text-sm text-emerald-500 p-1 flex gap-1 items-center">
+                    <div className="text-xs text-emerald-500 p-1 flex gap-1 items-center">
                       +<FaMoneyBillTransfer />
                     </div>
                   )}

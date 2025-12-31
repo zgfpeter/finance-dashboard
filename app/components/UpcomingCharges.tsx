@@ -131,6 +131,7 @@ export default function UpcomingCharges() {
           {/* total balance-current net worth across accounts */}
           <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
             {UCData?.map((charge) => {
+              const deadline = calculateDeadline(charge.date);
               return (
                 <li
                   key={charge._id}
@@ -139,7 +140,7 @@ export default function UpcomingCharges() {
                   {/* <FaPlus color="green" /> */}
 
                   {charge.category && (
-                    <div className="text-xs md:text-sm text-yellow-500 p-1">
+                    <div className="text-xs  text-yellow-500 p-1">
                       {charge.category}
                     </div>
                   )}
@@ -152,11 +153,19 @@ export default function UpcomingCharges() {
                   </p>
 
                   <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">
-                    {calculateDeadline(charge.date)}
+                    <span
+                      className={
+                        deadline.status === "upcoming"
+                          ? "text-green-500"
+                          : deadline.status === "soon"
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                      }
+                    >
+                      {deadline.text}
+                    </span>
 
-                    <p className="text-xs row-start-2 col-start-3">
-                      {prettifyDate(charge.date)}
-                    </p>
+                    <p className="text-xs">{prettifyDate(charge.date)}</p>
                   </div>
                 </li>
               );

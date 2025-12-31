@@ -56,7 +56,7 @@ export default function Overview() {
         <div className="flex flex-col gap-3">
           {/* total balance-current net worth across accounts */}
           <p className="text-xl text-(--limegreen) bg-(--primary-blue) flex justify-between ">
-            <span>Total balance: </span> €{totalBalance}
+            <span>Total balance: </span> € {totalBalance}
           </p>
           <span className="w-full h-1 rounded-xl bg-cyan-900 "></span>
           <h2>Accounts summary</h2>
