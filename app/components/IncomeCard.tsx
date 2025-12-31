@@ -40,7 +40,7 @@ export default function IncomeCard() {
           <p className="text-sm">Last month: € 0</p>
           <motion.span
             aria-hidden="true"
-            className="h-0.5 w-5 bg-[#025207] self-end my-1"
+            className="h-0.5 w-5 bg-green-800 self-end my-1"
             initial={{ width: "0" }}
             animate={{ width: "100%" }}
             transition={{ duration: 2 }}

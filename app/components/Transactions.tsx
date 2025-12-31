@@ -37,35 +37,36 @@ export default function Transactions() {
               return (
                 <li
                   key={transaction._id}
-                  className="grid grid-cols-2 items-center bg-(--border-blue) p-3 gap-2 rounded-xl"
+                  className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="flex flex-col">
-                      <span>{transaction.company}</span>
-                      {transaction.category && (
-                        <div className="text-xs text-yellow-500">
-                          {transaction.category}
-                        </div>
-                      )}
-                    </div>
+                  <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
+                    {transaction.company}
                   </div>
+                  {transaction.category ? (
+                    <div className="text-xs md:text-sm text-yellow-500 p-1 ">
+                      {transaction.category}
+                    </div>
+                  ) : (
+                    <div className="text-xs md:text-sm text-emerald-500 p-1 flex gap-1 items-center">
+                      +<FaMoneyBillTransfer />
+                    </div>
+                  )}
 
                   {/* coloc-coded amount base on transaction type */}
-                  <div className="grid grid-cols-[2fr_1fr] items-center">
-                    <div>
-                      {transaction.transactionType === "expense" ? (
-                        <p className="text-red-500">- € {transaction.amount}</p>
-                      ) : (
-                        <p className="text-green-500 py-2">
-                          + € {transaction.amount}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex flex-col text-sm items-center  rounded gap-3">
-                      <span className="text-xs">
-                        {prettifyDate(transaction.date)}
-                      </span>
-                    </div>
+
+                  <div className="row-start-2">
+                    {transaction.transactionType === "expense" ? (
+                      <p className="text-red-500">- € {transaction.amount}</p>
+                    ) : (
+                      <p className="text-green-500 py-2">
+                        + € {transaction.amount}
+                      </p>
+                    )}
+                  </div>
+                  <div className="row-start-2 col-start-3">
+                    <span className="text-xs">
+                      {prettifyDate(transaction.date)}
+                    </span>
                   </div>
                 </li>
               );

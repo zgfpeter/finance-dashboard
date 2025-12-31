@@ -134,30 +134,29 @@ export default function UpcomingCharges() {
               return (
                 <li
                   key={charge._id}
-                  className="grid grid-cols-2 bg-(--border-blue) p-3 gap-2 rounded-xl "
+                  className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
                 >
-                  <div className="flex items-center gap-2">
-                    {/* <FaPlus color="green" /> */}
+                  {/* <FaPlus color="green" /> */}
 
-                    <div className="flex flex-col gap-3">
-                      <span>{charge.company}</span>
-                      {charge.category && (
-                        <div className="text-xs text-yellow-500">
-                          {charge.category}
-                        </div>
-                      )}
+                  {charge.category && (
+                    <div className="text-xs md:text-sm text-yellow-500 p-1">
+                      {charge.category}
                     </div>
+                  )}
+                  <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
+                    {charge.company}
                   </div>
-                  <div className="grid grid-cols-[2fr_1fr] items-center">
-                    <div className="text-yellow-500">- € {charge.amount}</div>
-                    <div className="flex flex-col text-center text-sm rounded gap-3">
-                      <div className="text-xs">
-                        {calculateDeadline(charge.date)}
-                      </div>
-                      <span className="text-xs">
-                        {prettifyDate(charge.date)}
-                      </span>
-                    </div>
+
+                  <p className=" text-yellow-500  p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2">
+                    - € {charge.amount}
+                  </p>
+
+                  <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">
+                    {calculateDeadline(charge.date)}
+
+                    <p className="text-xs row-start-2 col-start-3">
+                      {prettifyDate(charge.date)}
+                    </p>
                   </div>
                 </li>
               );

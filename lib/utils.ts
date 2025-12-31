@@ -6,6 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// calculate progress percentage ( for loans, debts )
 export function calcProgressPercent(current: number, total: number): number {
   if (total <= 0) return 0;
 
@@ -33,7 +34,7 @@ export function calculateDeadline(date: string) {
     } else if (differenceInHours > 0) {
       return `In ${differenceInHours} day${differenceInHours > 1 ? "s" : ""}`;
     } else {
-      return "Due very soon";
+      return "Due soon";
     }
   } else {
     const overdueMs = Math.abs(differenceInMs);
@@ -41,10 +42,17 @@ export function calculateDeadline(date: string) {
     const overdueHours = Math.floor(
       (overdueMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     );
+    // if (overdueDays > 0) {
+    //   return `Overdue by ${overdueDays} day${overdueDays > 1 ? "s" : ""}`;
+    // } else if (overdueHours > 0) {
+    //   return `Overdue by ${overdueHours} hour${overdueHours > 1 ? "s" : ""}`;
+    // } else {
+    //   return "Overdue";
+    // }
     if (overdueDays > 0) {
-      return `Overdue by ${overdueDays} day${overdueDays > 1 ? "s" : ""}`;
+      return `Overdue`;
     } else if (overdueHours > 0) {
-      return `Overdue by ${overdueHours} hour${overdueHours > 1 ? "s" : ""}`;
+      return `Overdue`;
     } else {
       return "Overdue";
     }
@@ -81,6 +89,8 @@ const months = [
   "Nov",
   "Dec",
 ];
+
+// get the total monthly spendings
 export function getMonthlySpendingsData(
   transactions: Transaction[]
 ): MonthlySpending[] {
@@ -153,6 +163,7 @@ export function calculateIncomeSummary(income: Income[] | undefined): {
   };
 }
 
+// display date in a nice format
 export function prettifyDate(date: string) {
   return new Date(date).toLocaleDateString("en-GB", {
     day: "2-digit",

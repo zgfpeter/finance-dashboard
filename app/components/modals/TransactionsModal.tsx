@@ -145,27 +145,31 @@ export default function TransactionsModal({ onClose }: Props) {
           return (
             <li
               key={transaction._id}
-              className="grid pt-10 md:pt-0 grid-cols-[2fr_1fr_2fr] md:grid-cols-[2fr_1fr_1fr_1fr] items-center bg-(--border-blue) p-3 rounded-xl relative"
+              className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
             >
-              <div className="flex flex-col justify-self-start">
-                <span>{transaction.company}</span>
-                {transaction.category && (
-                  <span className="text-xs text-yellow-500">
-                    {transaction.category}
-                  </span>
-                )}
+              {transaction.category && (
+                <div className="text-xs md:text-sm text-yellow-500 p-1">
+                  {transaction.category}
+                </div>
+              )}
+              <div className="row-start-2 col-start-1 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+                {transaction.company}
               </div>
 
               {transaction.transactionType === "expense" ? (
-                <p className="text-red-500">- € {transaction.amount}</p>
+                <p className="text-red-500 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+                  - € {transaction.amount}
+                </p>
               ) : (
-                <p className="text-green-500">+ € {transaction.amount}</p>
+                <p className="text-green-500 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+                  + € {transaction.amount}
+                </p>
               )}
 
-              <p className="text-xs text-center justify-self-end md:justify-self-start">
+              <p className="text-xs md:text-sm row-start-2 col-start-3 justify-self-end pr-3 p-1">
                 {prettifyDate(transaction.date)}
               </p>
-              <div className="absolute top-2 right-2 md:relative flex items-center gap-2 justify-self-end mr-1">
+              <div className="row-start-1 col-start-3 p-1 justify-self-end pr-5">
                 <button
                   onClick={() =>
                     dispatch(
