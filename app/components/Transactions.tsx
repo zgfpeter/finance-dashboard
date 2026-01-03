@@ -15,19 +15,6 @@ export default function Transactions() {
   const hasTransactions = transactions.length > 0; // if true, there are some transactions
   const showEmptyState = !isLoading && !hasTransactions;
 
-  if (isLoading) {
-    return <TransactionsSkeleton />;
-  }
-  if (showEmptyState) {
-    return (
-      <EmptyState message="No transactions yet. Add one to get started." />
-    );
-  }
-
-  if (isError) {
-    return <ErrorState message="Could not load transactions." />;
-  }
-
   return (
     <section className="flex flex-col  rounded-xl gap-3 w-full h-full min-h-50">
       <div className="flex items-center justify-between ">
@@ -46,59 +33,67 @@ export default function Transactions() {
         </button>
       </div>
 
-      <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
-        {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
-        {transactions?.map((transaction) => {
-          return (
-            <li
-              key={transaction._id}
-              className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
-            >
-              <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
-                {transaction.company}
-              </div>
-              {transaction.category ? (
-                <div className="text-xs text-yellow-500 p-1 ">
-                  {transaction.category}
+      {isLoading || !data ? (
+        <TransactionsSkeleton />
+      ) : isError ? (
+        <ErrorState message="Could not load transactions." />
+      ) : hasTransactions ? (
+        <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
+          {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
+          {transactions?.map((transaction) => {
+            return (
+              <li
+                key={transaction._id}
+                className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+              >
+                <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
+                  {transaction.company}
                 </div>
-              ) : (
-                <div className="text-xs text-emerald-500 p-1 flex gap-1 items-center">
-                  +<FaMoneyBillTransfer />
-                </div>
-              )}
-
-              {/* coloc-coded amount base on transaction type */}
-
-              <div className="row-start-2">
-                {transaction.transactionType === "expense" ? (
-                  <p className="text-red-500">- € {transaction.amount}</p>
+                {transaction.category ? (
+                  <div className="text-xs text-yellow-500 p-1 ">
+                    {transaction.category}
+                  </div>
                 ) : (
-                  <p className="text-green-500 py-2">
-                    + € {transaction.amount}
-                  </p>
+                  <div className="text-xs text-emerald-500 p-1 flex gap-1 items-center">
+                    +<FaMoneyBillTransfer />
+                  </div>
                 )}
-              </div>
-              <div className="row-start-2 col-start-3">
-                <span className="text-xs">
-                  {prettifyDate(transaction.date)}
-                </span>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
 
+                {/* coloc-coded amount base on transaction type */}
+
+                <div className="row-start-2">
+                  {transaction.transactionType === "expense" ? (
+                    <p className="text-red-500">- € {transaction.amount}</p>
+                  ) : (
+                    <p className="text-green-500 py-2">
+                      + € {transaction.amount}
+                    </p>
+                  )}
+                </div>
+                <div className="row-start-2 col-start-3">
+                  <span className="text-xs">
+                    {prettifyDate(transaction.date)}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <EmptyState message="No transactions. Add one to get started." />
+      )}
       {/* scrollable list of all transactions*/}
 
       {/* shows full modal with all transactions, and options like edit and delete */}
       <button
         className="underline p-2 w-fit self-center rounded-xl  mt-auto"
+        disabled={!hasTransactions}
         onClick={() =>
           dispatch(openModal({ type: "transactions", data: null }))
         }
         aria-label="See All"
       >
-        See All
+        {!hasTransactions ? "" : <span> See All</span>}
       </button>
     </section>
   );

@@ -20,7 +20,7 @@ export default function SpendingsCard() {
   }
   // empty state
   if (showEmptyState) {
-    return <EmptyState message="No spendings yet." />;
+    return <EmptyState message="No spendings data yet." />;
   }
 
   // error state

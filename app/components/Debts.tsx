@@ -22,16 +22,6 @@ export default function Debts() {
   const showEmptyState = !isLoading && !hasDebts;
   const showDebts = !isLoading && hasDebts;
 
-  if (isLoading) {
-    return <DebtsSkeleton />;
-  }
-
-  if (showEmptyState) {
-    return <EmptyState message="No debts data yet." />;
-  }
-  if (isError) {
-    return <ErrorState message="Could not load debts data." />;
-  }
   return (
     <section
       className=" flex flex-col rounded-xl gap-3 w-full h-full min-h-50 "
@@ -54,71 +44,80 @@ export default function Debts() {
       {/* total balance-current net worth across accounts */}
 
       <>
-        <ul className="flex flex-col gap-2 h-109 overflow-y-auto ">
-          {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
-          {debts?.map((debt) => {
-            const isFullyPaid =
-              Number(debt.currentPaid) >= Number(debt.totalAmount);
+        {isLoading || !data ? (
+          <DebtsSkeleton />
+        ) : isError ? (
+          <ErrorState message="Could not load debts." />
+        ) : hasDebts ? (
+          <ul className="flex flex-col gap-2 h-109 overflow-y-auto ">
+            {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
+            {debts?.map((debt) => {
+              const isFullyPaid =
+                Number(debt.currentPaid) >= Number(debt.totalAmount);
 
-            return (
-              <li
-                key={debt._id}
-                className="items-center bg-(--border-blue) p-2 px-4 rounded-xl flex flex-col gap-2 relative z-20"
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span aria-label={`Debt company: `}>{debt.company}</span>
-                  <span aria-label={`Debt due date: `} className="text-xs">
-                    {prettifyDate(debt.dueDate)}
-                  </span>
-                </div>
-                <div className="relative w-full">
-                  <p
-                    className={`flex justify-between px-2 border  py-1 ${
-                      isFullyPaid ? "border-orange-900" : "border-orange-700"
-                    } rounded-2xl w-full text-sm z-10 relative`}
-                  >
-                    <span aria-label={`Amount paid for ${debt.company}  `}>
-                      {debt.currentPaid}
+              return (
+                <li
+                  key={debt._id}
+                  className="items-center bg-(--border-blue) p-2 px-4 rounded-xl flex flex-col gap-2 relative z-20"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span aria-label={`Debt company: `}>{debt.company}</span>
+                    <span aria-label={`Debt due date: `} className="text-xs">
+                      {prettifyDate(debt.dueDate)}
                     </span>
-                    <span>/</span>
-                    <span aria-label={`Total amount for ${debt.company}  `}>
-                      {debt.totalAmount}
-                    </span>
-                  </p>
+                  </div>
+                  <div className="relative w-full">
+                    <p
+                      className={`flex justify-between px-2 border  py-1 ${
+                        isFullyPaid ? "border-orange-900" : "border-orange-700"
+                      } rounded-2xl w-full text-sm z-10 relative`}
+                    >
+                      <span aria-label={`Amount paid for ${debt.company}  `}>
+                        {debt.currentPaid}
+                      </span>
+                      <span>/</span>
+                      <span aria-label={`Total amount for ${debt.company}  `}>
+                        {debt.totalAmount}
+                      </span>
+                    </p>
 
-                  <motion.span
-                    aria-hidden="true"
-                    // z indes smaller than price <p> so that it sits below the text
-                    className={`absolute left-0 top-0 h-full rounded-2xl z-0 ${
-                      isFullyPaid ? "bg-orange-900" : "bg-orange-700"
-                    }`}
-                    role="progressbar"
-                    aria-valuenow={Number(debt.currentPaid)}
-                    aria-valuemin={0}
-                    aria-valuemax={Number(debt.totalAmount)}
-                    aria-label={`Amount paid for ${debt.company}`}
-                    initial={{ width: 0 }}
-                    animate={{
-                      width: `${calcAnimationWidth(
-                        Number(debt.currentPaid),
-                        Number(debt.totalAmount)
-                      )}%`,
-                    }}
-                    transition={{
-                      duration: 1.8,
-                    }}
-                  ></motion.span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+                    <motion.span
+                      aria-hidden="true"
+                      // z indes smaller than price <p> so that it sits below the text
+                      className={`absolute left-0 top-0 h-full rounded-2xl z-0 ${
+                        isFullyPaid ? "bg-orange-900" : "bg-orange-700"
+                      }`}
+                      role="progressbar"
+                      aria-valuenow={Number(debt.currentPaid)}
+                      aria-valuemin={0}
+                      aria-valuemax={Number(debt.totalAmount)}
+                      aria-label={`Amount paid for ${debt.company}`}
+                      initial={{ width: 0 }}
+                      animate={{
+                        width: `${calcAnimationWidth(
+                          Number(debt.currentPaid),
+                          Number(debt.totalAmount)
+                        )}%`,
+                      }}
+                      transition={{
+                        duration: 1.8,
+                      }}
+                    ></motion.span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <EmptyState message="No debts. Add one to get started." />
+        )}
         <button
           className="underline p-2 w-fit self-center rounded-xl"
           aria-label="Open debts modal"
+          disabled={!hasDebts}
           onClick={() => dispatch(openModal({ type: "debts", data: null }))}
         >
-          More
+          {!hasDebts ? "" : <span> See all</span>}
         </button>
       </>
     </section>

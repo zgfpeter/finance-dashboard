@@ -54,20 +54,6 @@ export default function UpcomingCharges() {
     setNotificationsModalOpen(false);
   }
 
-  if (isLoading || !data) {
-    return <UpcomingChargesSkeleton />;
-  }
-
-  if (isError) {
-    return <ErrorState message="Could not load upcoming charges." />;
-  }
-
-  if (!hasUpcomingCharges) {
-    return (
-      <EmptyState message="No upcoming charges. Add one to get started." />
-    );
-  }
-
   return (
     <section className="row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col  rounded-xl gap-3 h-full min-h-50 w-full relative">
       {/* backdrop for the notifications modal */}
@@ -147,56 +133,63 @@ export default function UpcomingCharges() {
         </div>
       </div>
 
-      {/* total balance-current net worth across accounts */}
-      <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
-        {UCData.map((charge) => {
-          const deadline = calculateDeadline(charge.date);
-          return (
-            <li
-              key={charge._id}
-              className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
-            >
-              {/* <FaPlus color="green" /> */}
+      {isLoading || !data ? (
+        <UpcomingChargesSkeleton />
+      ) : isError ? (
+        <ErrorState message="Could not load upcoming charges." />
+      ) : hasUpcomingCharges ? (
+        <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
+          {UCData.map((charge) => {
+            const deadline = calculateDeadline(charge.date);
+            return (
+              <li
+                key={charge._id}
+                className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+              >
+                {/* <FaPlus color="green" /> */}
 
-              {charge.category && (
-                <div className="text-xs  text-yellow-500 p-1">
-                  {charge.category}
+                {charge.category && (
+                  <div className="text-xs  text-yellow-500 p-1">
+                    {charge.category}
+                  </div>
+                )}
+                <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
+                  {charge.company}
                 </div>
-              )}
-              <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
-                {charge.company}
-              </div>
 
-              <p className=" text-yellow-500  p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2">
-                - € {charge.amount}
-              </p>
+                <p className=" text-yellow-500  p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2">
+                  - € {charge.amount}
+                </p>
 
-              <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">
-                <span
-                  className={
-                    deadline.status === "upcoming"
-                      ? "text-green-500"
-                      : deadline.status === "soon"
-                      ? "text-yellow-500"
-                      : "text-red-500"
-                  }
-                >
-                  {deadline.text}
-                </span>
+                <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">
+                  <span
+                    className={
+                      deadline.status === "upcoming"
+                        ? "text-green-500"
+                        : deadline.status === "soon"
+                        ? "text-yellow-500"
+                        : "text-red-500"
+                    }
+                  >
+                    {deadline.text}
+                  </span>
 
-                <p className="text-xs">{prettifyDate(charge.date)}</p>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-
+                  <p className="text-xs">{prettifyDate(charge.date)}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <EmptyState message="No upcoming charges. Add one to get started." />
+      )}
       <button
         className="underline p-2 self-center rounded-xl mt-auto"
         onClick={handleSeeAll}
         aria-label="See All"
+        disabled={!hasUpcomingCharges}
       >
-        See All
+        {!hasUpcomingCharges ? "" : <span> See All</span>}
       </button>
     </section>
   );
