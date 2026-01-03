@@ -4,7 +4,6 @@
 import React, { useState } from "react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import {
   DashboardData,
   UpcomingCharge,
@@ -12,6 +11,8 @@ import {
 } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import ErrorState from "../ui/ErrorState";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 // -- end imports --
 // the props the component takes
@@ -94,7 +95,10 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     },
   });
 
-  if (!data) return null;
+  if (!data) return <ErrorState message="No data" />;
+
+  // get the states from the updateMutation
+  const { isPending, isError } = updateMutation;
 
   // handle the user SAVE
   const handleSubmit = (e: React.FormEvent) => {
@@ -148,6 +152,8 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     // if there are no errors in the form, this will return true
     // if there's at least one error, then it will return false
   }
+
+  if (isError) <ErrorState message="An error has occured" />;
 
   return (
     <section
@@ -251,14 +257,17 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
             <button
               className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
               aria-label="Cancel changes"
+              disabled={isPending}
+              onClick={onClose}
             >
               <MdClose size={20} />
             </button>
             <button
               className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
               aria-label="Save changes"
+              disabled={isPending}
             >
-              <MdCheck size={20} />
+              {isPending ? <LoadingSpinner /> : <MdCheck size={20} />}
             </button>
           </div>
         </div>

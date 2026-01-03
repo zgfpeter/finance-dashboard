@@ -2,8 +2,12 @@
 import { motion } from "framer-motion";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
+import LoadingState from "./ui/LoadingState";
+import EmptyState from "./ui/EmptyState";
+import ErrorState from "./ui/ErrorState";
 export default function IncomeCard() {
-  const transactions = useDashboard().data?.transactions;
+  const { data, isLoading, isError } = useDashboard();
+  const transactions = data?.transactions || [];
 
   const totalIncome = transactions
     ?.filter((t) => t.transactionType === "income")
@@ -13,6 +17,20 @@ export default function IncomeCard() {
   // TODO : find a better way to get the income, maybe user can manually add another amount or source
 
   // the ?? 0 is a fallback, if data isn't loaded, it will be 0
+
+  const showEmptyState = !isLoading && !hasIncome;
+  const showIncome = !isLoading && hasIncome;
+
+  if (isLoading) {
+    return <LoadingState message="Loading income data..." />;
+  }
+
+  if (showEmptyState) {
+    return <EmptyState message="No income data yet." />;
+  }
+  if (isError) {
+    return <ErrorState message="Could not load income data." />;
+  }
 
   return (
     <section
@@ -25,31 +43,24 @@ export default function IncomeCard() {
       >
         Income <FaArrowLeftLong color="green" aria-hidden="true" />
       </h2>
-      {!hasIncome ? (
-        <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
-      ) : (
-        <div className="flex flex-col justify-center gap-2 bg-(--primary-bg) p-3 w-2/3 md:w-full rounded-xl ">
-          <p
-            aria-label={`This month's income is ${totalIncome?.toFixed(
-              2
-            )} euros`}
-          >
-            This month:
-            <span className="text-green-500"> € {totalIncome?.toFixed(2)}</span>
-          </p>
-          <p className="text-sm">Last month: € 0</p>
-          <motion.span
-            aria-hidden="true"
-            className="h-0.5 w-5 bg-green-800 self-end my-1"
-            initial={{ width: "0" }}
-            animate={{ width: "100%" }}
-            transition={{ duration: 2 }}
-          ></motion.span>
-          <p className="text-sm">
-            + € {totalIncome} more compared to last month
-          </p>
-        </div>
-      )}
+
+      <div className="flex flex-col justify-center gap-2 bg-(--primary-bg) p-3 w-2/3 md:w-full rounded-xl ">
+        <p
+          aria-label={`This month's income is ${totalIncome?.toFixed(2)} euros`}
+        >
+          This month:
+          <span className="text-green-500"> € {totalIncome?.toFixed(2)}</span>
+        </p>
+        <p className="text-sm">Last month: € 0</p>
+        <motion.span
+          aria-hidden="true"
+          className="h-0.5 w-5 bg-green-800 self-end my-1"
+          initial={{ width: "0" }}
+          animate={{ width: "100%" }}
+          transition={{ duration: 2 }}
+        ></motion.span>
+        <p className="text-sm">+ € {totalIncome} more compared to last month</p>
+      </div>
     </section>
   );
 }

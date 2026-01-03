@@ -9,6 +9,9 @@ import { openModal } from "@/app/store/modalSlice";
 import { MdEdit, MdDelete } from "react-icons/md";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { prettifyDate } from "@/lib/utils";
+import EmptyState from "../ui/EmptyState";
+import ErrorState from "../ui/ErrorState";
+import LoadingState from "../ui/LoadingState";
 
 interface Props {
   onClose: () => void;
@@ -20,10 +23,12 @@ export default function UpcomingChargesModal({ onClose }: Props) {
 
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const { data } = useDashboard();
+  const { data, isLoading, isError } = useDashboard();
 
   // Charges from the dashboard
   const charges = useMemo(() => data?.upcomingCharges ?? [], [data]);
+  const hasUpcomingCharges = charges.length > 0; // if true, there are some transactions
+  const showEmptyState = !isLoading && !hasUpcomingCharges;
 
   const [search, setSearch] = useState("");
   const [deleteId, setDeleteId] = useState<string | null | undefined>(null);
@@ -69,6 +74,16 @@ export default function UpcomingChargesModal({ onClose }: Props) {
     },
   });
 
+  if (isLoading) {
+    return <LoadingState message="Loading upcoming charges data..." />;
+  }
+
+  if (showEmptyState) {
+    return <EmptyState message="No upcoming charges data yet." />;
+  }
+  if (isError) {
+    return <ErrorState message="Could not load upcoming charges data." />;
+  }
   return (
     <div
       className=" h-full flex items-center flex-col justify-evenly relative"
@@ -121,7 +136,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
             </p>
 
             {/* edit and delete buttons */}
-            <div className="row-start-1 col-start-3 p-1 justify-self-end pr-5">
+            <div className="row-start-1 col-start-3 p-1 justify-self-end pr-5 flex gap-1">
               {/* Edit button now dispatches Redux action */}
               <button
                 onClick={() =>

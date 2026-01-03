@@ -1,16 +1,16 @@
 "use client";
 import Overview from "../components/Overview";
 import Transactions from "../components/Transactions";
-import SpendingChart from "../components/SpendingChart";
+import SpendingChart from "../components/charts/SpendingChart";
 import IncomeCard from "../components/IncomeCard";
 import SpendingsCard from "../components/SpendingsCard";
-import MonthlySpendingChart from "../components/MonthlySpendingChart";
+import MonthlySpendingChart from "../components/charts/MonthlySpendingChart";
 import UpcomingCharges from "../components/UpcomingCharges";
 import Debts from "../components/Debts";
 import Goals from "../components/Goals";
 import { useDashboard } from "../hooks/useDashboard";
 import { getTotalSpendings } from "@/lib/utils";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { MdError } from "react-icons/md";
 import CalSpedingCategoriesPercentages from "@/lib/CalculatePiePercentages";
 import { getMonthlySpendingsData } from "@/lib/utils";
@@ -24,8 +24,10 @@ export default function DashboardPage() {
   const spendingsPieData = CalSpedingCategoriesPercentages();
   if (isLoading)
     return (
-      <div className="flex h-screen items-center p-5 text-(--text-light) justify-center relative z-100">
-        <LoadingSpinner /> Loading...
+      <div className=" flex items-center justify-center h-screen">
+        <div className="w-20 h-20 flex items-center justify-center">
+          <LoadingSpinner />
+        </div>
       </div>
     );
   if (isError)

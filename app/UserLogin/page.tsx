@@ -5,7 +5,7 @@ import { MdEmail, MdInfoOutline, MdKey } from "react-icons/md";
 import { SignInType } from "@/lib/types/FormData";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useRouter } from "next/navigation";
 
 export default function UserLogin() {

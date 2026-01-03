@@ -4,6 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Debt } from "@/lib/types/dashboard";
 
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import ErrorState from "../ui/ErrorState";
+import LoadingSpinner from "../ui/LoadingSpinner";
 interface Props {
   onClose: () => void;
 }
@@ -82,6 +84,11 @@ export default function AddDebtModal({ onClose }: Props) {
     },
   });
 
+  if (!data) return <ErrorState message="No data" />;
+
+  // get the states from the updateMutation
+  const { isPending, isError } = addMutation;
+
   // handle the submit: check if form is valid, then call the mutate method that makes the POST request
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -106,6 +113,8 @@ export default function AddDebtModal({ onClose }: Props) {
     // closes the modal
     onClose();
   }
+
+  if (isError) <ErrorState message="An error has occured" />;
 
   return (
     <div
@@ -216,7 +225,7 @@ export default function AddDebtModal({ onClose }: Props) {
               Success
             </div>
           )}
-          <span>Add New Debt</span>
+          {isPending ? <LoadingSpinner /> : <span>Add New Debt</span>}
         </button>
       </form>
     </div>

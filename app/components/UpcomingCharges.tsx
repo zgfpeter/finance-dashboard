@@ -7,14 +7,23 @@ import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { calculateDeadline, prettifyDate } from "@/lib/utils";
+import LoadingSpinner from "./ui/LoadingSpinner";
+import EmptyState from "./ui/EmptyState";
+import LoadingState from "./ui/LoadingState";
+import ErrorState from "./ui/ErrorState";
 export default function UpcomingCharges() {
-  const UCData = useDashboard().data?.upcomingCharges;
+  const { data, isLoading, isError } = useDashboard();
+
+  const UCData = data?.upcomingCharges || [];
   // console.log(UCData);
   // const { openModal } = useModal();
   const [notificationsModalOpen, setNotificationsModalOpen] =
     useState<boolean>(false);
   const dispatch = useDispatch();
-  const hasUpcomingCharges = UCData && UCData.length > 0; // if true, there are some transactions
+
+  const hasUpcomingCharges = UCData.length > 0; // if true, there are some transactions
+  const showEmptyState = !isLoading && !hasUpcomingCharges;
+  const showUpcomingCharges = !isLoading && hasUpcomingCharges;
 
   // the modals are controlled by redux now, so dispatch opens the appropriate modal.
   // without redux, i'd have to lift state up to pass the charge
@@ -42,6 +51,20 @@ export default function UpcomingCharges() {
   function handleDontNotify() {
     setTempNotify(notify); // change to original value, if user doesn't save
     setNotificationsModalOpen(false);
+  }
+
+  if (isLoading) {
+    return <LoadingState message="Loading upcoming charges..." />;
+  }
+
+  if (isError) {
+    return <ErrorState message="Could not load upcoming charges." />;
+  }
+
+  if (!hasUpcomingCharges) {
+    return (
+      <EmptyState message="No upcoming charges. Add one to get started." />
+    );
   }
 
   return (
@@ -122,65 +145,58 @@ export default function UpcomingCharges() {
           </button>
         </div>
       </div>
-      {!hasUpcomingCharges ? (
-        <p className="text-gray-500 text-sm h-full flex items-center justify-center">
-          No upcoming charges yet. Add one to get started.
-        </p>
-      ) : (
-        <>
-          {/* total balance-current net worth across accounts */}
-          <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
-            {UCData?.map((charge) => {
-              const deadline = calculateDeadline(charge.date);
-              return (
-                <li
-                  key={charge._id}
-                  className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+
+      {/* total balance-current net worth across accounts */}
+      <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
+        {UCData.map((charge) => {
+          const deadline = calculateDeadline(charge.date);
+          return (
+            <li
+              key={charge._id}
+              className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+            >
+              {/* <FaPlus color="green" /> */}
+
+              {charge.category && (
+                <div className="text-xs  text-yellow-500 p-1">
+                  {charge.category}
+                </div>
+              )}
+              <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
+                {charge.company}
+              </div>
+
+              <p className=" text-yellow-500  p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2">
+                - € {charge.amount}
+              </p>
+
+              <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">
+                <span
+                  className={
+                    deadline.status === "upcoming"
+                      ? "text-green-500"
+                      : deadline.status === "soon"
+                      ? "text-yellow-500"
+                      : "text-red-500"
+                  }
                 >
-                  {/* <FaPlus color="green" /> */}
+                  {deadline.text}
+                </span>
 
-                  {charge.category && (
-                    <div className="text-xs  text-yellow-500 p-1">
-                      {charge.category}
-                    </div>
-                  )}
-                  <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
-                    {charge.company}
-                  </div>
+                <p className="text-xs">{prettifyDate(charge.date)}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
 
-                  <p className=" text-yellow-500  p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2">
-                    - € {charge.amount}
-                  </p>
-
-                  <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">
-                    <span
-                      className={
-                        deadline.status === "upcoming"
-                          ? "text-green-500"
-                          : deadline.status === "soon"
-                          ? "text-yellow-500"
-                          : "text-red-500"
-                      }
-                    >
-                      {deadline.text}
-                    </span>
-
-                    <p className="text-xs">{prettifyDate(charge.date)}</p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-
-          <button
-            className="underline p-2 self-center rounded-xl mt-auto"
-            onClick={handleSeeAll}
-            aria-label="See All"
-          >
-            See All
-          </button>
-        </>
-      )}
+      <button
+        className="underline p-2 self-center rounded-xl mt-auto"
+        onClick={handleSeeAll}
+        aria-label="See All"
+      >
+        See All
+      </button>
     </section>
   );
 }

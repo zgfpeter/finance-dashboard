@@ -20,6 +20,9 @@ import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { calculateDeadline, prettifyDate } from "@/lib/utils";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import LoadingState from "../ui/LoadingState";
+import EmptyState from "../ui/EmptyState";
+import ErrorState from "../ui/ErrorState";
 // -- end imports --
 
 export default function GoalsModal({ onClose }: Props) {
@@ -34,11 +37,13 @@ export default function GoalsModal({ onClose }: Props) {
 
   // call my custom useDashboard hook, and destructure only data (instead of useDashboard.data that i had before)
   // dashboardData = {transactions:[...],upcomingCharges:[...]} etc, so data is this object
-  const { data } = useDashboard();
+  const { data, isLoading, isError } = useDashboard();
+  const goals = useMemo(() => data?.goals ?? [], [data]);
+  const hasGoals = goals && goals.length > 0;
+  const showEmptyState = !isLoading && !hasGoals;
   // if data exists and data.transactions exists, use it, otherwise fall bcak to an empty array
 
   // /?? is called the nullish coalescing operator, it returns the right side only if the left side is null or undefined.
-  const goals = useMemo(() => data?.goals ?? [], [data]);
 
   // state for deleting
   // delete: track which item is to be deleted and show the delete confirmation modal
@@ -115,6 +120,17 @@ export default function GoalsModal({ onClose }: Props) {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
     },
   });
+
+  if (isLoading) {
+    return <LoadingState message="Loading goals data..." />;
+  }
+
+  if (showEmptyState) {
+    return <EmptyState message="No goals data yet." />;
+  }
+  if (isError) {
+    return <ErrorState message="Could not load goals data." />;
+  }
 
   // TODO fix goals and goals, use one term only consistently
   return (
@@ -216,7 +232,7 @@ export default function GoalsModal({ onClose }: Props) {
                   ></motion.span>
                 </div>
               </div>
-              <div className="flex items-center justify-self-end md:justify-center gap-2 col-start-2 row-start-1 md:col-start-auto md:row-start-auto">
+              <div className="flex items-center justify-self-end md:justify-center gap-1 col-start-2 row-start-1 md:col-start-auto md:row-start-auto">
                 <button
                   onClick={() =>
                     dispatch(

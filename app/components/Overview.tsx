@@ -4,15 +4,28 @@ import { openModal } from "@/app/store/modalSlice";
 import { IoMdTrendingUp } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useMemo } from "react";
+import SeparatorLine from "./ui/SeparatorLine";
+import LoadingState from "./ui/LoadingState";
+import EmptyState from "./ui/EmptyState";
+import ErrorState from "./ui/ErrorState";
 export default function Overview() {
   const dispatch = useDispatch();
-  const dashboardData = useDashboard().data?.overview;
-  const nrOfTransactions = useDashboard().data?.transactions;
+  const { data, isLoading, isError } = useDashboard();
+  const transactions = data?.transactions || [];
+  const monthlyChange = data?.overview.monthlyChange;
   // because of || [], this would create a brand new array on every render, so the dependency accounts changed again, so useMemo is pointless.
-  const dashboard = useDashboard().data;
+
   const accounts = useMemo(() => {
-    return dashboard?.accounts ?? [];
-  }, [dashboard?.accounts]);
+    return data?.accounts ?? [];
+  }, [data?.accounts]);
+
+  // check if there is any useful data to display
+  const hasData =
+    !!data &&
+    (accounts.length > 0 || monthlyChange !== 0 || transactions.length > 0);
+
+  const showEmptyState = !isLoading && !hasData;
+  const showOverview = !isLoading && hasData;
 
   // #!! used when i want a clean yes/no answer. not anything else, ex. 0, "", 3 etc. items.length can be 0 or 5 for example, not true or false
   // #!! means turn value into a true or false, && ensures dashboardData exists, || checks if any meaningful data exists.
@@ -23,12 +36,20 @@ export default function Overview() {
     }, 0);
   }, [accounts]);
 
-  // check if there is any useful data to display
-  const hasData =
-    !!dashboardData &&
-    (dashboardData.monthlyChange > 0 ||
-      dashboardData.totalBalance > 0 ||
-      (nrOfTransactions && nrOfTransactions.length > 0));
+  // loading state
+  if (isLoading) {
+    return <LoadingState message="Loading overview..." />;
+  }
+
+  // error state
+  if (isError) {
+    return <ErrorState message="Could not load overview." />;
+  }
+
+  // empty state
+  if (!hasData) {
+    return <EmptyState message="No overview data." />;
+  }
 
   return (
     <section className="flex flex-col gap-3 h-full overflow-y-auto justify-evenly">
@@ -50,15 +71,14 @@ export default function Overview() {
           </span>
         </button>
       </div>
-      {!hasData ? (
-        <p className="text-gray-500 text-center text-sm p-3">Nothing here.</p>
-      ) : (
+
+      {showOverview && (
         <div className="flex flex-col gap-3">
           {/* total balance-current net worth across accounts */}
           <p className="text-xl text-(--limegreen) bg-(--primary-blue) flex justify-between ">
             <span>Total balance: </span> € {totalBalance}
           </p>
-          <span className="w-full h-1 rounded-xl bg-cyan-900 "></span>
+          <SeparatorLine />
           <h2>Accounts summary</h2>
           <ul className="flex flex-col gap-2 ">
             {accounts.map((account) => (
@@ -81,7 +101,7 @@ export default function Overview() {
             <span className="w-full h-1 rounded-xl bg-cyan-900 "></span>
           </div>
           <p className="text-emerald-600 flex items-center bg-(--border-blue) rounded-xl px-2 py-3 justify-center">
-            {`$ ${dashboardData?.monthlyChange} more compared to last month.`}
+            {`€ ${monthlyChange} more compared to last month.`}
           </p>
         </div>
       )}

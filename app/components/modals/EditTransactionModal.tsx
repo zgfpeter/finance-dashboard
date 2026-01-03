@@ -11,6 +11,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardData } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import LoadingSpinner from "../ui/LoadingSpinner";
+import ErrorState from "../ui/ErrorState";
 // -- end imports --
 // the props the component takes
 interface Props {
@@ -103,6 +105,9 @@ export default function EditTransactionModal({ data, onClose }: Props) {
 
   if (!data) return null;
 
+  // get the states from the updateMutation
+  const { isPending, isError, error } = updateMutation;
+
   // handle the user SAVE
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,6 +166,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     // if there's at least one error, then it will return false
   }
 
+  if (isError) <ErrorState message="An error has occured" />;
   return (
     <div
       className=" h-full flex items-center flex-col justify-evenly"
@@ -298,6 +304,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
         <div className="flex justify-evenly items-center self-center p-3 w-full mt-5">
           <button
             className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
+            disabled={isPending}
             aria-label="Cancel changes"
           >
             <MdClose size={20} />
@@ -305,9 +312,10 @@ export default function EditTransactionModal({ data, onClose }: Props) {
           <button
             className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
             aria-label="Save changes"
+            disabled={isPending}
             type="submit"
           >
-            <MdCheck size={20} />
+            {isPending ? <LoadingSpinner /> : <MdCheck size={20} />}
           </button>
         </div>
       </form>

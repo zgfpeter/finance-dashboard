@@ -17,6 +17,10 @@ import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { prettifyDate } from "@/lib/utils";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import LoadingState from "../ui/LoadingState";
+import EmptyState from "../ui/EmptyState";
+import ErrorState from "../ui/ErrorState";
 // -- end imports --
 
 export default function TransactionsModal({ onClose }: Props) {
@@ -31,12 +35,14 @@ export default function TransactionsModal({ onClose }: Props) {
 
   // call my custom useDashboard hook, and destructure only data (instead of useDashboard.data that i had before)
   // dashboardData = {transactions:[...],upcomingCharges:[...]} etc, so data is this object
-  const { data } = useDashboard();
+  const { data, isLoading, isError } = useDashboard();
   // if data exists and data.transactions exists, use it, otherwise fall bcak to an empty array
 
   // /?? is called the nullish coalescing operator, it returns the right side only if the left side is null or undefined.
   const transactions = useMemo(() => data?.transactions ?? [], [data]);
 
+  const hasTransactions = transactions.length > 0; // if true, there are some transactions
+  const showEmptyState = !isLoading && !hasTransactions;
   // state for deleting
   // delete: track which item is to be deleted and show the delete confirmation modal
   // union type string | null | undefined because _id is a string, and i also want to have no selection
@@ -117,6 +123,16 @@ export default function TransactionsModal({ onClose }: Props) {
     },
   });
 
+  if (isLoading) {
+    return <LoadingState message="Loading transactions data..." />;
+  }
+
+  if (showEmptyState) {
+    return <EmptyState message="No transactions data yet." />;
+  }
+  if (isError) {
+    return <ErrorState message="Could not load transactions data." />;
+  }
   return (
     <div
       className="h-full w-full flex items-center flex-col justify-evenly"
@@ -147,11 +163,16 @@ export default function TransactionsModal({ onClose }: Props) {
               key={transaction._id}
               className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
             >
-              {transaction.category && (
-                <div className="text-xs md:text-sm text-yellow-500 p-1">
+              {transaction.category ? (
+                <div className="text-xs text-yellow-500 p-1 ">
                   {transaction.category}
                 </div>
+              ) : (
+                <div className="text-xs text-emerald-500 p-1 flex gap-1 items-center">
+                  +<FaMoneyBillTransfer />
+                </div>
               )}
+
               <div className="row-start-2 col-start-1 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
                 {transaction.company}
               </div>
@@ -169,7 +190,7 @@ export default function TransactionsModal({ onClose }: Props) {
               <p className="text-xs md:text-sm row-start-2 col-start-3 justify-self-end pr-3 p-1">
                 {prettifyDate(transaction.date)}
               </p>
-              <div className="row-start-1 col-start-3 p-1 justify-self-end pr-5">
+              <div className="row-start-1 col-start-3 p-1 justify-self-end pr-5 flex gap-1">
                 <button
                   onClick={() =>
                     dispatch(

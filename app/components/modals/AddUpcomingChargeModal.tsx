@@ -5,6 +5,8 @@ import { UpcomingCharge } from "@/lib/types/dashboard";
 import { MdEventRepeat } from "react-icons/md";
 
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import ErrorState from "../ui/ErrorState";
+import LoadingSpinner from "../ui/LoadingSpinner";
 interface Props {
   onClose: () => void;
 }
@@ -80,6 +82,11 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
     },
   });
 
+  if (!data) return <ErrorState message="No data" />;
+
+  // get the states from the updateMutation
+  const { isPending, isError } = addMutation;
+
   // handle the submit: check if form is valid, then call the mutate method that makes the POST request
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -102,6 +109,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
     // closes the modal
     onClose();
   }
+
+  if (isError) <ErrorState message="An error has occured" />;
 
   return (
     <div
@@ -241,13 +250,14 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
           type="submit"
           className="border p-3 rounded w-50 relative z-0  hover:border-teal-500"
           aria-label="Add new charge"
+          disabled={isPending}
         >
           {chargeAdded && (
             <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
               Success
             </div>
           )}
-          <span>Add New Charge</span>
+          {isPending ? <LoadingSpinner /> : <span>Add New Charge</span>}
         </button>
       </form>
     </div>

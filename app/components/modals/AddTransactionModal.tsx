@@ -4,6 +4,8 @@ import { ExpenseCategory, Transaction } from "@/lib/types/dashboard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { useDashboard } from "@/app/hooks/useDashboard";
+import ErrorState from "../ui/ErrorState";
+import LoadingSpinner from "../ui/LoadingSpinner";
 interface Props {
   onClose: () => void;
 }
@@ -84,6 +86,11 @@ export default function AddTransactionModal({ onClose }: Props) {
     },
   });
 
+  if (!data) return <ErrorState message="No data" />;
+
+  // get the states from the updateMutation
+  const { isPending, isError } = addMutation;
+
   // handles the submit, checks if form is valid, then calls mutation
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -106,6 +113,8 @@ export default function AddTransactionModal({ onClose }: Props) {
     // closes the modal
     onClose();
   }
+
+  if (isError) <ErrorState message="An error has occured" />;
 
   return (
     <div
@@ -254,13 +263,14 @@ export default function AddTransactionModal({ onClose }: Props) {
             type="submit"
             className="border p-3 rounded w-50 relative z-0  hover:border-teal-500 self-center"
             aria-label="Add transaction"
+            disabled={isPending}
           >
             {transactionAdded && (
               <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
                 Success
               </div>
             )}
-            <span>Add Transaction</span>
+            {isPending ? <LoadingSpinner /> : <span>Add Transaction</span>}
           </button>
         </div>
       </form>

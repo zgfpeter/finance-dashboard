@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/layout/Navbar";
 export default async function DashboardLayout({
   children,
 }: {

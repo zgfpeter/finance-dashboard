@@ -5,6 +5,9 @@ import { useState } from "react";
 import { MdClose, MdCheck, MdAdd, MdDelete } from "react-icons/md";
 import { AccountType, DashboardData } from "@/lib/types/dashboard";
 import { filterGraphicalNotStackedItems } from "recharts/types/state/selectors/axisSelectors";
+import SeparatorLine from "../ui/SeparatorLine";
+import ErrorState from "../ui/ErrorState";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 interface Props {
   data: EditOverview | null;
@@ -187,6 +190,9 @@ export default function EditOverviewModal({ data, onClose }: Props) {
     },
   });
 
+  const { isPending, isError, error } = updateOverviewMutation;
+
+  if (isError) <ErrorState message="An error has occured" />;
   return (
     <div
       className="h-full flex items-center flex-col justify-evenly"
@@ -216,7 +222,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
             {/* Total balance is based on accounts balance */}
             <p className="">Total Balance: $ {totalBalance}</p>
 
-            <span className="w-full h-1 bg-(--secondary-blue) rounded my-2"></span>
+            <SeparatorLine />
 
             <div className="flex flex-col rounded gap-3 items-center">
               <p className="self-start">Your accounts</p>
@@ -297,6 +303,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
               type="button"
               className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
               aria-label="Cancel changes"
+              disabled={isPending}
               onClick={onClose}
             >
               <MdClose size={20} />
@@ -305,8 +312,9 @@ export default function EditOverviewModal({ data, onClose }: Props) {
               type="submit"
               className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
               aria-label="Save changes"
+              disabled={isPending}
             >
-              <MdCheck size={20} />
+              {isPending ? <LoadingSpinner /> : <MdCheck size={20} />}
             </button>
           </div>
         </div>
