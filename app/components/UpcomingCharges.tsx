@@ -11,6 +11,7 @@ import LoadingSpinner from "./ui/LoadingSpinner";
 import EmptyState from "./ui/EmptyState";
 import LoadingState from "./ui/LoadingState";
 import ErrorState from "./ui/ErrorState";
+import { UpcomingChargesSkeleton } from "./ui/skeletons/UpcomingChargesSkeleton";
 export default function UpcomingCharges() {
   const { data, isLoading, isError } = useDashboard();
 
@@ -53,8 +54,8 @@ export default function UpcomingCharges() {
     setNotificationsModalOpen(false);
   }
 
-  if (isLoading) {
-    return <LoadingState message="Loading upcoming charges..." />;
+  if (isLoading || !data) {
+    return <UpcomingChargesSkeleton />;
   }
 
   if (isError) {

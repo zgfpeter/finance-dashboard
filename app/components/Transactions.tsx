@@ -6,6 +6,7 @@ import { prettifyDate } from "@/lib/utils";
 import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
+import { TransactionsSkeleton } from "./ui/skeletons/TransactionsSkeleton";
 export default function Transactions() {
   // get transaction data from the dashboard hook
   const { data, isLoading, isError } = useDashboard();
@@ -15,7 +16,7 @@ export default function Transactions() {
   const showEmptyState = !isLoading && !hasTransactions;
 
   if (isLoading) {
-    return <LoadingState message="Loading overview..." />;
+    return <TransactionsSkeleton />;
   }
   if (showEmptyState) {
     return (

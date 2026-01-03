@@ -8,6 +8,7 @@ import SeparatorLine from "./ui/SeparatorLine";
 import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
+import { OverviewSkeleton } from "./ui/skeletons/OverviewSkeleton";
 export default function Overview() {
   const dispatch = useDispatch();
   const { data, isLoading, isError } = useDashboard();
@@ -22,7 +23,9 @@ export default function Overview() {
   // check if there is any useful data to display
   const hasData =
     !!data &&
-    (accounts.length > 0 || monthlyChange !== 0 || transactions.length > 0);
+    (accounts.length > 0 ||
+      transactions.length > 0 ||
+      typeof monthlyChange === "number");
 
   const showEmptyState = !isLoading && !hasData;
   const showOverview = !isLoading && hasData;
@@ -37,8 +40,8 @@ export default function Overview() {
   }, [accounts]);
 
   // loading state
-  if (isLoading) {
-    return <LoadingState message="Loading overview..." />;
+  if (isLoading || !data) {
+    return <OverviewSkeleton />;
   }
 
   // error state
@@ -94,11 +97,11 @@ export default function Overview() {
             ))}
           </ul>
           <div className="flex items-center gap-3 py-2 ">
-            <span className="w-full h-1 rounded-xl bg-cyan-900 "></span>
+            <SeparatorLine width="1/2" />
             <span className="text-emerald-600 ">
               <IoMdTrendingUp />
             </span>
-            <span className="w-full h-1 rounded-xl bg-cyan-900 "></span>
+            <SeparatorLine width="1/2" />
           </div>
           <p className="text-emerald-600 flex items-center bg-(--border-blue) rounded-xl px-2 py-3 justify-center">
             {`€ ${monthlyChange} more compared to last month.`}

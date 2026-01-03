@@ -1,5 +1,10 @@
-export default function SeparatorLine() {
+interface Props {
+  width?: string;
+}
+export default function SeparatorLine({ width = "full" }: Props) {
   return (
-    <span className="w-full h-1 bg-(--separator-primary) rounded my-2"></span>
+    <span
+      className={`w-${width} h-1 bg-(--separator-primary) rounded my-2`}
+    ></span>
   );
 }

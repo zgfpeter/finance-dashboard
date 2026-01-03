@@ -11,7 +11,7 @@ import { FaPlus, FaLink } from "react-icons/fa6";
 import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
-
+import { DebtsSkeleton } from "./ui/skeletons/DebtsSkeleton";
 export default function Debts() {
   const dispatch = useDispatch();
   // debts data
@@ -23,14 +23,14 @@ export default function Debts() {
   const showDebts = !isLoading && hasDebts;
 
   if (isLoading) {
-    return <LoadingState message="Loading goals data..." />;
+    return <DebtsSkeleton />;
   }
 
   if (showEmptyState) {
-    return <EmptyState message="No goals data yet." />;
+    return <EmptyState message="No debts data yet." />;
   }
   if (isError) {
-    return <ErrorState message="Could not load goals data." />;
+    return <ErrorState message="Could not load debts data." />;
   }
   return (
     <section

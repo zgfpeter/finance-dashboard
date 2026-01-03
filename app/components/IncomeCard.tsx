@@ -5,6 +5,7 @@ import { useDashboard } from "../hooks/useDashboard";
 import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
+import { IncomeSkeleton } from "./ui/skeletons/IncomeSkeleton";
 export default function IncomeCard() {
   const { data, isLoading, isError } = useDashboard();
   const transactions = data?.transactions || [];
@@ -22,7 +23,7 @@ export default function IncomeCard() {
   const showIncome = !isLoading && hasIncome;
 
   if (isLoading) {
-    return <LoadingState message="Loading income data..." />;
+    return <IncomeSkeleton />;
   }
 
   if (showEmptyState) {

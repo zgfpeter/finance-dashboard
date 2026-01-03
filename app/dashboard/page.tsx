@@ -12,22 +12,21 @@ import { useDashboard } from "../hooks/useDashboard";
 import { getTotalSpendings } from "@/lib/utils";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { MdError } from "react-icons/md";
-import CalSpedingCategoriesPercentages from "@/lib/CalculatePiePercentages";
+import calcSpendingsCategoriesPercentages from "@/lib/CalculatePiePercentages";
 import { getMonthlySpendingsData } from "@/lib/utils";
+import ChartContainer from "../components/charts/ChartContainer";
+import LoadingState from "../components/ui/LoadingState";
+import { ChartCardSkeleton } from "../components/ui/skeletons/ChartCardSkeleton";
 
 // TODO for my editUpcominCharge modal to work, i need to lift up the state. since it needs to be passed to the EditUpcomingChargeModal,
 
 export default function DashboardPage() {
-  const { isLoading, isError } = useDashboard();
-  const transactions = useDashboard().data?.transactions;
-  const spentThisYear = getTotalSpendings(transactions || []);
-  const spendingsPieData = CalSpedingCategoriesPercentages();
+  const { data, isLoading, isError, isFetching } = useDashboard();
+
   if (isLoading)
     return (
-      <div className=" flex items-center justify-center h-screen">
-        <div className="w-20 h-20 flex items-center justify-center">
-          <LoadingSpinner />
-        </div>
+      <div className="h-screen w-screen flex items-center justify-center">
+        <LoadingSpinner size="lg" />
       </div>
     );
   if (isError)
@@ -37,6 +36,11 @@ export default function DashboardPage() {
         An error as occured.
       </div>
     );
+
+  const transactions = data?.transactions ?? [];
+  const spentThisYear = getTotalSpendings(transactions);
+  const spendingsPieData = calcSpendingsCategoriesPercentages(transactions);
+  const monthlyData = getMonthlySpendingsData(transactions);
 
   return (
     <div className="flex justify-center">
@@ -131,10 +135,10 @@ export default function DashboardPage() {
 
         {/* Spendings this year */}
         <div
-          className="  bg-(--primary-bg)
+          className="bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-xl 
     flex flex-col gap-1 items-center justify-around
-    order-7 col-span-1 md:col-span-2 lg:col-span-3 relative
+    order-7 col-span-1 md:col-span-2 lg:col-span-3 relative min-h-100
   "
         >
           {/* div
@@ -146,19 +150,40 @@ export default function DashboardPage() {
         > */}
           <h2 className="text-(--text-light) text-lg flex justify-between w-full">
             <span>Spendings this year </span>
-            <span className="text-(--text-light)">
+            <span className="text-(--text-light) flex items-center">
               Total:{" "}
-              <span className="text-red-500">
-                € {getTotalSpendings(transactions || []).toFixed(2)}
-              </span>
+              {isLoading ? (
+                <LoadingState message="" />
+              ) : (
+                <span className="text-red-500">
+                  € {getTotalSpendings(transactions || []).toFixed(2)}
+                </span>
+              )}
             </span>
           </h2>
 
-          <SpendingChart pieData={spendingsPieData} />
-          <MonthlySpendingChart
-            data={getMonthlySpendingsData(transactions || [])}
-          />
-          <p className="text-center ">Spendings by month</p>
+          {/* Charts assume valid data, should not render with empty data */}
+          <ChartContainer
+            isLoading={isFetching}
+            hasData={spendingsPieData.length > 0}
+            height={200}
+          >
+            <SpendingChart pieData={spendingsPieData} />
+          </ChartContainer>
+
+          <ChartContainer
+            isLoading={isFetching}
+            hasData={monthlyData.length > 0}
+            height={120}
+          >
+            <MonthlySpendingChart data={monthlyData} />
+          </ChartContainer>
+
+          {isLoading ? (
+            <LoadingState message="Loading spendings by month..." />
+          ) : (
+            <p className="text-center ">Spendings by month</p>
+          )}
         </div>
       </main>
     </div>

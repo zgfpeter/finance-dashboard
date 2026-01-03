@@ -11,6 +11,7 @@ import { FaPlus, FaBullseye } from "react-icons/fa6";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import LoadingState from "./ui/LoadingState";
+import { GoalsSkeleton } from "./ui/skeletons/GoalsSkeleton";
 export default function Goals() {
   const dispatch = useDispatch();
   const { data, isLoading, isError } = useDashboard();
@@ -19,7 +20,7 @@ export default function Goals() {
   const showEmptyState = !isLoading && !hasGoals;
 
   if (isLoading) {
-    return <LoadingState message="Loading goals data..." />;
+    return <GoalsSkeleton />;
   }
 
   if (showEmptyState) {

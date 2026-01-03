@@ -4,7 +4,7 @@ import { useDashboard } from "../hooks/useDashboard";
 import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
-
+import { SpendingsSkeleton } from "./ui/skeletons/SpendingsSkeleton";
 export default function SpendingsCard() {
   const { data, isLoading, isError } = useDashboard();
   const transactions = data?.transactions || [];
@@ -16,7 +16,7 @@ export default function SpendingsCard() {
 
   // loading state
   if (isLoading) {
-    return <LoadingState message="Loading overview..." />;
+    return <SpendingsSkeleton />;
   }
   // empty state
   if (showEmptyState) {

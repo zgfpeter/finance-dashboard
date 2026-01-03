@@ -1,23 +1,24 @@
 "use client";
-import { useDashboard } from "@/app/hooks/useDashboard";
-export default function CalSpedingCategoriesPercentages() {
-  const transactions = useDashboard().data?.transactions;
+import { Transaction } from "./types/dashboard";
+export default function calcSpendingsCategoriesPercentages(
+  transactions: Transaction[]
+): { name: string; value: number }[] {
   const totals: Record<string, number> = {};
-  transactions?.forEach((transaction) => {
+
+  for (const transaction of transactions) {
     if (transaction.transactionType === "expense") {
       totals[transaction.category] =
-        (totals[transaction.category] || 0) + Number(transaction.amount);
+        (totals[transaction.category] ?? 0) + Number(transaction.amount);
     }
-  });
+  }
   // this calculates amount of category out of total, then rechards calculates the actual percentages
   // Object.entries(obj) turns the object into an array of key-value pairs like ["subscriptions",200]
   // now i have an array and i can iterate over it with map
   // after mapping, we return them as objects, so {name:"subscriptions",value:200}
   // need to do this because Recharts expects pie chart data as an array of objects
 
-  const pieData = Object.entries(totals).map(([name, value]) => ({
+  return Object.entries(totals).map(([name, value]) => ({
     name,
     value,
   }));
-  return pieData;
 }
