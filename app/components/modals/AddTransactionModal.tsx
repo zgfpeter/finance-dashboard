@@ -118,7 +118,7 @@ export default function AddTransactionModal({ onClose }: Props) {
 
   return (
     <div
-      className=" h-full flex items-center flex-col justify-evenly "
+      className=" h-full flex items-center flex-col justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -130,7 +130,10 @@ export default function AddTransactionModal({ onClose }: Props) {
       >
         ✕
       </button>
-      <h2 id="modal-title" className="text-xl font-semibold">
+      <h2
+        id="modal-title"
+        className="text-xl font-semibold max-w-4/5 md:max-w-full"
+      >
         Add a new transaction
       </h2>
 
@@ -139,11 +142,12 @@ export default function AddTransactionModal({ onClose }: Props) {
       )}
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly relative h-full"
+        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative "
         onSubmit={handleSubmit}
+        id="addTransaction"
       >
-        <div className="w-full flex flex-col  h-full justify-evenly ">
-          <div className="flex flex-col gap-3 relative">
+        <div className="w-full flex flex-col justify-between ">
+          <div className="flex flex-col p-3 gap-3 relative">
             <label htmlFor="company">Company</label>
             {/* A general error if the form validation fails */}
             {errors.company && (
@@ -166,29 +170,32 @@ export default function AddTransactionModal({ onClose }: Props) {
               aria-describedby="company-error"
             />
           </div>
-
-          <div className="flex flex-col gap-3 relative">
-            <label htmlFor="amount">Amount</label>
-            {errors.amount && (
-              <span id="amount-error" className="text-red-500 absolute right-5">
-                {errors.amount}
-              </span>
-            )}
-            <input
-              type="number"
-              value={data.amount}
-              onChange={handleChange}
-              inputMode="decimal"
-              name="amount"
-              id="amount"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
-              aria-describedby="amount-error"
-            />
-          </div>
           <div
-            className={`grid grid-cols-2 md:grid-cols-3 relative gap-3 items-center justify-between `}
+            className={`grid grid-cols-2 relative gap-3 items-center justify-between`}
           >
-            <div className="flex flex-col gap-3 relative">
+            <div className="flex flex-col gap-3 p-3 relative">
+              <label htmlFor="amount">Amount</label>
+              {errors.amount && (
+                <span
+                  id="amount-error"
+                  className="text-red-500 absolute right-5"
+                >
+                  {errors.amount}
+                </span>
+              )}
+              <input
+                type="number"
+                value={data.amount}
+                onChange={handleChange}
+                inputMode="decimal"
+                name="amount"
+                id="amount"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                aria-describedby="amount-error"
+              />
+            </div>
+
+            <div className="flex flex-col gap-3 p-3 relative">
               <label htmlFor="date">Date</label>
 
               <input
@@ -203,7 +210,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               />
             </div>
 
-            <div className=" flex flex-col gap-3 ">
+            <div className=" flex flex-col gap-3 p-3 pb-0 ">
               <label htmlFor="transactionType">Type</label>
               {/* {errors.type && (
                 <span className="text-red-500">{errors.type}</span>
@@ -221,7 +228,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               </select>
             </div>
             {data.transactionType === "expense" ? (
-              <div className="flex flex-col gap-3 relative">
+              <div className="flex flex-col gap-3 p-3 pb-0 relative">
                 <label htmlFor="transactionCategory">Category</label>
                 {/* {errors.type && (
                             <span className="text-red-500">{errors.type}</span>
@@ -258,22 +265,22 @@ export default function AddTransactionModal({ onClose }: Props) {
               </div>
             )}
           </div>
-
-          <button
-            type="submit"
-            className="border p-3 rounded w-50 relative z-0  hover:border-teal-500 self-center"
-            aria-label="Add transaction"
-            disabled={isPending}
-          >
-            {transactionAdded && (
-              <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
-                Success
-              </div>
-            )}
-            {isPending ? <LoadingSpinner /> : <span>Add Transaction</span>}
-          </button>
         </div>
       </form>
+      <button
+        type="submit"
+        form="addTransaction"
+        className="border p-3 rounded w-50 relative z-0  hover:border-teal-500 self-center"
+        aria-label="Add transaction"
+        disabled={isPending}
+      >
+        {transactionAdded && (
+          <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
+            Success
+          </div>
+        )}
+        {isPending ? <LoadingSpinner /> : <span>Add Transaction</span>}
+      </button>
     </div>
   );
 }

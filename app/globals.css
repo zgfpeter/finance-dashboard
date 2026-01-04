@@ -35,8 +35,6 @@
   /* calendar icon color */
   input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(80%) sepia(0%) saturate(0%) hue-rotate(180deg);
-    /*  make the clicking area bigger */
-    padding: 1em;
   }
   /* cursor pointer for button on hover */
   button:hover {

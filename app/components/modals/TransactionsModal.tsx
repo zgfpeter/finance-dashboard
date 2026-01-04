@@ -215,7 +215,7 @@ export default function TransactionsModal({ onClose }: Props) {
               </div>
 
               {deleteId === transaction._id && (
-                <div className="absolute inset-0 bg-(--primary-blue)  rounded-xl flex flex-col items-center gap-1 z-20">
+                <div className="absolute inset-0 bg-(--primary-blue)  rounded-xl flex flex-col items-center justify-center gap-1 z-20 ">
                   <p>Are you sure you want to delete this item?</p>
 
                   <div className="flex items-center ">
