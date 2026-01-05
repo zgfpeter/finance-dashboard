@@ -17,12 +17,17 @@ import { getMonthlySpendingsData } from "@/lib/utils";
 import ChartContainer from "../components/charts/ChartContainer";
 import LoadingState from "../components/ui/LoadingState";
 import { ChartCardSkeleton } from "../components/ui/skeletons/ChartCardSkeleton";
+import { useSession } from "next-auth/react";
+import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 
 // TODO for my editUpcominCharge modal to work, i need to lift up the state. since it needs to be passed to the EditUpcomingChargeModal,
 
 export default function DashboardPage() {
   const { data, isLoading, isError, isFetching } = useDashboard();
 
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   if (isLoading)
     return (
       <div className="h-screen w-screen flex items-center justify-center">
@@ -156,7 +161,8 @@ export default function DashboardPage() {
                 <LoadingState message="" />
               ) : (
                 <span className="text-red-500">
-                  € {getTotalSpendings(transactions || []).toFixed(2)}
+                  {currencySymbol}{" "}
+                  {getTotalSpendings(transactions || []).toFixed(2)}
                 </span>
               )}
             </span>

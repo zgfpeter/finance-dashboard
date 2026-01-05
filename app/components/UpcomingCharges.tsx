@@ -12,7 +12,12 @@ import EmptyState from "./ui/EmptyState";
 import LoadingState from "./ui/LoadingState";
 import ErrorState from "./ui/ErrorState";
 import { UpcomingChargesSkeleton } from "./ui/skeletons/UpcomingChargesSkeleton";
+import { useSession } from "next-auth/react";
+import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 export default function UpcomingCharges() {
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   const { data, isLoading, isError } = useDashboard();
 
   const UCData = data?.upcomingCharges || [];
@@ -158,7 +163,7 @@ export default function UpcomingCharges() {
                 </div>
 
                 <p className=" text-yellow-500  p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2">
-                  - € {charge.amount}
+                  - {currencySymbol} {charge.amount}
                 </p>
 
                 <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">

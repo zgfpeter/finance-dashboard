@@ -6,10 +6,14 @@ import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { IncomeSkeleton } from "./ui/skeletons/IncomeSkeleton";
+import { useSession } from "next-auth/react";
+import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 export default function IncomeCard() {
   const { data, isLoading, isError } = useDashboard();
   const transactions = data?.transactions || [];
-
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   const totalIncome = transactions
     ?.filter((t) => t.transactionType === "income")
     .reduce((sum, t) => sum + Number(t.amount), 0);
@@ -47,9 +51,12 @@ export default function IncomeCard() {
           aria-label={`This month's income is ${totalIncome?.toFixed(2)} euros`}
         >
           This month:
-          <span className="text-green-500"> € {totalIncome?.toFixed(2)}</span>
+          <span className="text-green-500">
+            {" "}
+            {currencySymbol} {totalIncome?.toFixed(2)}
+          </span>
         </p>
-        <p className="text-sm">Last month: € 0</p>
+        <p className="text-sm">Last month: {currencySymbol} 0</p>
         <motion.div
           aria-hidden="true"
           className="h-0.5 w-5 bg-green-800 self-end my-1"
@@ -57,7 +64,9 @@ export default function IncomeCard() {
           animate={{ width: "100%" }}
           transition={{ duration: 2 }}
         ></motion.div>
-        <p className="text-sm">+ € {totalIncome} more compared to last month</p>
+        <p className="text-sm">
+          + {currencySymbol} {totalIncome} more compared to last month
+        </p>
       </div>
     </section>
   );

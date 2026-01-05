@@ -9,8 +9,18 @@ import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { OverviewSkeleton } from "./ui/skeletons/OverviewSkeleton";
+import { useSession } from "next-auth/react";
+import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 export default function Overview() {
   const dispatch = useDispatch();
+
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
+
+  // {user?.currency &&
+  // currencies[user.currency as CurrencyCode]?.symbol}
+
   const { data, isLoading, isError } = useDashboard();
   const transactions = data?.transactions || [];
   const monthlyChange = data?.overview.monthlyChange;
@@ -79,7 +89,7 @@ export default function Overview() {
         <div className="flex flex-col gap-3">
           {/* total balance-current net worth across accounts */}
           <p className="text-xl text-(--limegreen) bg-(--primary-blue) flex justify-between ">
-            <span>Total balance: </span> € {totalBalance}
+            <span>Total balance: </span> {currencySymbol} {totalBalance}
           </p>
           <SeparatorLine />
           <h2>Accounts summary</h2>
@@ -91,7 +101,10 @@ export default function Overview() {
               >
                 <p className="grid grid-cols-2">
                   {account.type.charAt(0).toUpperCase() + account.type.slice(1)}{" "}
-                  :<span>€ {account.balance} </span>{" "}
+                  :
+                  <span>
+                    {currencySymbol} {account.balance}{" "}
+                  </span>{" "}
                 </p>
               </li>
             ))}
@@ -104,7 +117,7 @@ export default function Overview() {
             <SeparatorLine width="1/2" />
           </div>
           <p className="text-emerald-600 flex items-center bg-(--border-blue) rounded-xl px-2 py-3 justify-center">
-            {`€ ${monthlyChange} more compared to last month.`}
+            {`${currencySymbol} ${monthlyChange} more compared to last month.`}
           </p>
         </div>
       )}

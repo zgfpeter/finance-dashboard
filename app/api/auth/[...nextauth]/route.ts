@@ -51,7 +51,7 @@ export const authOptions: AuthOptions = {
     // stores the user info inside
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         // Cast to my custom User, override the default nextauth user
         const u = user as User;
@@ -65,8 +65,21 @@ export const authOptions: AuthOptions = {
         token.currency = u.currency ?? "EUR";
         token.avatarUrl = u.avatarUrl;
       }
+
+      // this means: useSession().update(payload), trigger === update, so payload is merged into JWT, cookie is rewritten.
+      // THIS IS HOW JWT sessions are meant to be updated.
+
+      // when update via useSession().update(sessionPayload) is called
+
+      if (trigger === "update" && session) {
+        if ("username" in session) token.username = session.username;
+        if ("currency" in session) token.currency = session.currency;
+        if ("avatarUrl" in session) token.avatarUrl = session.avatarUrl;
+      }
       return token;
     },
+
+    // update session to include currency,avatar url
     async session({ session, token }) {
       session.user.id = token.id as string;
       session.user.email = token.email as string;

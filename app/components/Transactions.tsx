@@ -7,6 +7,8 @@ import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { TransactionsSkeleton } from "./ui/skeletons/TransactionsSkeleton";
+import { useSession } from "next-auth/react";
+import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 export default function Transactions() {
   // get transaction data from the dashboard hook
   const { data, isLoading, isError } = useDashboard();
@@ -14,7 +16,9 @@ export default function Transactions() {
   const dispatch = useDispatch();
   const hasTransactions = transactions.length > 0; // if true, there are some transactions
   const showEmptyState = !isLoading && !hasTransactions;
-
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   return (
     <section className="flex flex-col  rounded-xl gap-3 w-full h-full min-h-50">
       <div className="flex items-center justify-between ">
@@ -63,10 +67,12 @@ export default function Transactions() {
 
                 <div className="row-start-2">
                   {transaction.transactionType === "expense" ? (
-                    <p className="text-red-500">- € {transaction.amount}</p>
+                    <p className="text-red-500">
+                      - {currencySymbol} {transaction.amount}
+                    </p>
                   ) : (
                     <p className="text-green-500 py-2">
-                      + € {transaction.amount}
+                      + {currencySymbol} {transaction.amount}
                     </p>
                   )}
                 </div>

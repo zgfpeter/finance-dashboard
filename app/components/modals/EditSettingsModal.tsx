@@ -46,18 +46,15 @@ export default function EditSettingsModal({ data, onClose }: Props) {
         avatar,
       },
       {
-        onSuccess: (res) => {
-          if (session) {
-            updateSession({
-              ...session,
-              user: {
-                ...session.user,
-                username: res.user.username,
-                currency: res.user.currency,
-                avatarUrl: res.user.avatar,
-              },
-            });
-          }
+        onSuccess: async (res) => {
+          // update the session after user changed their settings
+          // these are the settings the user can change, username, currency and avatar url
+          await updateSession({
+            username: res.user.username,
+            currency: res.user.currency,
+            avatarUrl: res.user.avatar,
+          });
+
           onClose();
         },
       }

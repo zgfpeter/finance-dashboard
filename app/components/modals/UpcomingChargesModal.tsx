@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData } from "@/lib/types/dashboard";
+import { currencies, CurrencyCode, DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { MdEdit, MdDelete } from "react-icons/md";
@@ -12,6 +12,7 @@ import { prettifyDate } from "@/lib/utils";
 import EmptyState from "../ui/EmptyState";
 import ErrorState from "../ui/ErrorState";
 import LoadingState from "../ui/LoadingState";
+import { useSession } from "next-auth/react";
 
 interface Props {
   onClose: () => void;
@@ -24,6 +25,11 @@ export default function UpcomingChargesModal({ onClose }: Props) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { data, isLoading, isError } = useDashboard();
+
+  //
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
 
   // Charges from the dashboard
   const charges = useMemo(() => data?.upcomingCharges ?? [], [data]);
@@ -128,7 +134,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
 
             {/* amount */}
             <p className=" text-yellow-500  row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
-              - € {charge.amount}
+              - {currencySymbol} {charge.amount}
             </p>
             {/* date */}
             <p className="text-xs md:text-sm row-start-2 col-start-3 justify-self-end pr-3 p-1">

@@ -12,7 +12,7 @@ import { MdEdit, MdDelete } from "react-icons/md";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData } from "@/lib/types/dashboard";
+import { currencies, DashboardData, CurrencyCode } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
@@ -21,9 +21,13 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import LoadingState from "../ui/LoadingState";
 import EmptyState from "../ui/EmptyState";
 import ErrorState from "../ui/ErrorState";
+import { useSession } from "next-auth/react";
 // -- end imports --
 
 export default function TransactionsModal({ onClose }: Props) {
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
 
@@ -179,11 +183,11 @@ export default function TransactionsModal({ onClose }: Props) {
 
               {transaction.transactionType === "expense" ? (
                 <p className="text-red-500 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
-                  - € {transaction.amount}
+                  - {currencySymbol} {transaction.amount}
                 </p>
               ) : (
                 <p className="text-green-500 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
-                  + € {transaction.amount}
+                  + {currencySymbol} {transaction.amount}
                 </p>
               )}
 
