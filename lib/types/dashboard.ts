@@ -109,6 +109,7 @@ export type ModalType =
   | "addUpcomingCharge"
   | "editUpcomingCharge"
   | "settings"
+  | "editSettings"
   | "editOverview"
   | "goals"
   | "addGoal"

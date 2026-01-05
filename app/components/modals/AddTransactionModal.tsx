@@ -205,7 +205,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor w-full"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
                 aria-describedby="date-error"
               />
             </div>
@@ -250,7 +250,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 </select>
               </div>
             ) : (
-              <div className="flex flex-col gap-3 relative">
+              <div className="flex flex-col gap-3 p-3 pb-0 relative">
                 <label htmlFor="accountType">Select Account</label>
                 <select
                   id="accountType"

@@ -38,10 +38,7 @@ export default function IncomeCard() {
       className="bg-(--border-blue) rounded-xl h-1/2 w-full flex justify-between md:flex-col p-2"
       aria-describedby="income-heading"
     >
-      <h2
-        id="income-heading"
-        className="flex items-center gap-3 rounded-xl text-xl"
-      >
+      <h2 id="income-heading" className="flex items-center gap-3 rounded-xl">
         Income <FaArrowLeftLong color="green" aria-hidden="true" />
       </h2>
 
@@ -53,13 +50,13 @@ export default function IncomeCard() {
           <span className="text-green-500"> € {totalIncome?.toFixed(2)}</span>
         </p>
         <p className="text-sm">Last month: € 0</p>
-        <motion.span
+        <motion.div
           aria-hidden="true"
           className="h-0.5 w-5 bg-green-800 self-end my-1"
           initial={{ width: "0" }}
           animate={{ width: "100%" }}
           transition={{ duration: 2 }}
-        ></motion.span>
+        ></motion.div>
         <p className="text-sm">+ € {totalIncome} more compared to last month</p>
       </div>
     </section>

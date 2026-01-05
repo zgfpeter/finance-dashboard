@@ -4,6 +4,7 @@ import { type AuthOptions } from "next-auth";
 import customAxios from "@/lib/axios";
 import { User } from "@/lib/types/User";
 import { isAxiosError } from "axios";
+import { CurrencyCode } from "@/lib/types/dashboard";
 
 export const authOptions: AuthOptions = {
   // because my backend is in a different project folder, i need to make an axios request
@@ -58,8 +59,11 @@ export const authOptions: AuthOptions = {
         token.id = u.id;
         token.email = u.email;
         token.username = u.username;
+
         // save token to jwt
         token.accessToken = u.accessToken ?? "";
+        token.currency = u.currency ?? "EUR";
+        token.avatarUrl = u.avatarUrl;
       }
       return token;
     },
@@ -68,6 +72,8 @@ export const authOptions: AuthOptions = {
       session.user.email = token.email as string;
       session.user.username = token.username as string;
       session.user.accessToken = token.accessToken as string;
+      session.user.currency = token.currency as CurrencyCode;
+      session.user.avatarUrl = token.avatarUrl as string;
       return session;
     },
   },

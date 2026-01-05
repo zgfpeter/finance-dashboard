@@ -4,23 +4,32 @@ import { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { currencies, CurrencyCode } from "@/lib/types/dashboard";
+import { useUpdateUserDetails } from "@/app/hooks/useUpdateUser";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/app/store/modalSlice";
+
 interface Props {
   onClose: () => void;
 }
 
 export default function SettingsModal({ onClose }: Props) {
-  const user = useSession().data?.user;
-  // default currency is euro
-  const [currency, setCurrency] = useState<CurrencyCode>("EUR");
+  const { data: session } = useSession();
+  const user = session?.user;
+  console.log(user);
+  const username = user?.username || "";
+  const currency = user?.currency || "EUR";
+  const avatarUrl = user?.avatarUrl || "";
+  const dispatch = useDispatch();
 
-  const [changeAvatar, setChangeAvatar] = useState(false);
   const [openConfirmationModal, setOpenConfirmationModal] =
     useState<boolean>(false);
+
   function handleDelete() {}
 
   return (
     <div
-      className=" h-full flex items-center flex-col justify-between relative"
+      className=" flex flex-col  h-full items-center py-10
+      "
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -34,7 +43,7 @@ export default function SettingsModal({ onClose }: Props) {
       </button>
       <h2 className="text-xl font-semibold mb-4">Settings</h2>
       <div className="w-full flex justify-around items-center h-full">
-        <div className="flex flex-col h-full justify-evenly relative">
+        <div className="flex flex-col h-full justify-center gap-5 relative">
           <h3 className="flex  justify-between items-center">
             <span>{user?.username}</span>
           </h3>
@@ -44,33 +53,17 @@ export default function SettingsModal({ onClose }: Props) {
           </div>
 
           <div className="flex items-center gap-3 relative ">
-            <label htmlFor="currencies">Currency</label>
-            {/* {errors.type && (
-                            <span className="text-red-500">{errors.type}</span>
-                          )} */}
-            <select
-              id="currencies"
-              value={currency}
-              // TODO send user preferences ( settings ) to backend
-              onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
-              name="currencies"
-              required
-              className="border border-(--secondary-blue) px-2 rounded h-11 flex w-15"
-            >
-              {Object.entries(currencies).map(([code, data]) => (
-                <option key={code} value={code}>
-                  {data.symbol}
-                </option>
-              ))}
-            </select>
+            <p>
+              Currency:{" "}
+              <span>
+                {user?.currency &&
+                  currencies[user.currency as CurrencyCode]?.symbol}
+              </span>
+            </p>
           </div>
         </div>
 
-        <div
-          className="flex flex-col items-center gap-1 relative hover:cursor-pointer h-50 w-50"
-          onMouseEnter={() => setChangeAvatar(true)}
-          onMouseLeave={() => setChangeAvatar(false)}
-        >
+        <div className="flex flex-col items-center gap-1 relative hover:cursor-pointer h-50 w-50">
           <Image
             src="/userProfile.jpg"
             alt="user profile photo"
@@ -78,25 +71,32 @@ export default function SettingsModal({ onClose }: Props) {
             className="border border-(--primary-orange) rounded-full object-cover"
             // object-cover so that the image keeps it's aspect ratio
           ></Image>
-          {changeAvatar && (
+          {/* {changeAvatar && (
             <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-full absolute">
               Change
             </button>
-          )}
+          )} */}
         </div>
       </div>
       <div className="flex gap-10">
         <button
-          className="flex items-center justify-center p-3 gap-1 border rounded  hover:border-orange-500 w-40"
-          onClick={() => setOpenConfirmationModal(true)}
+          className="flex items-center p-3 gap-1 hover:text-orange-400 "
+          onClick={() =>
+            dispatch(
+              openModal({
+                type: "editSettings",
+                data: { username, currency, avatarUrl },
+              })
+            )
+          }
         >
           <MdEdit className="pt-px" color="orange" /> Edit Details
         </button>
         <button
-          className="flex items-center justify-center p-3 gap-1 border rounded  hover:border-red-500 w-40"
+          className="flex items-center p-3 gap-1 hover:text-red-500"
           onClick={() => setOpenConfirmationModal(true)}
         >
-          <MdDelete className="pt-px" color="red" /> Delete Account
+          <MdDelete className="pt-px " color="red" /> Delete Account
         </button>
       </div>
       {/* position:fixed, doesn't move when scrolling */}
@@ -115,18 +115,19 @@ export default function SettingsModal({ onClose }: Props) {
           <h2 className="text-lg font-semibold ">
             Are you sure you want to delete your account?
           </h2>
-          <p className="text-stone-400 ">
-            Please note that this is permanent and all your data will be erased.
+          <p className="text-stone-400 flex flex-col ">
+            <span className="font-semibold text-red-500">Warning! </span>
+            <span>This cannot be undone. All your data will be erased.</span>
           </p>
 
-          <div className="flex justify-around w-full ">
+          <div className=" flex items-center justify-evenly ">
             <button
-              className="flex items-center justify-evenly p-3 gap-1 border rounded  hover:border-cyan-500 w-40"
+              className="hover:text-emerald-600 flex items-center justify-center border-emerald-500 border-l border-r px-3 rounded-full h-10"
               onClick={() => setOpenConfirmationModal(false)}
             >
               Cancel
             </button>
-            <button className="flex items-center justify-center p-3 gap-1 border rounded bg-red-800  hover:text-red-500 w-40">
+            <button className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r px-3 rounded-full h-10">
               Delete
             </button>
           </div>

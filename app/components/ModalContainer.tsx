@@ -9,6 +9,7 @@ import ModalWrapper from "./ModalWrapper";
 import TransactionsModal from "./modals/TransactionsModal";
 import UpcomingChargesModal from "./modals/UpcomingChargesModal";
 import SettingsModal from "./modals/SettingsModal";
+import EditSettingsModal from "./modals/EditSettingsModal";
 import AddTransactionModal from "./modals/AddTransactionModal";
 import AddUpcomingChargeModal from "./modals/AddUpcomingChargeModal";
 import EditUpcomingChargeModal from "./modals/EditUpcomingChargeModal"; // your edit modal
@@ -64,6 +65,16 @@ export default function ModalContainer() {
           ariaLabel="Settings"
         >
           <SettingsModal onClose={handleClose} />
+        </ModalWrapper>
+      );
+    case "editSettings":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Edit Settings"
+        >
+          <EditSettingsModal data={modalData} onClose={handleClose} />
         </ModalWrapper>
       );
     case "addTransaction":
