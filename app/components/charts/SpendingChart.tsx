@@ -8,7 +8,7 @@ const COLORS = [
   "#c88f14ea",
   "#db5411ea",
   "#049537ea",
-  "#4b494dea",
+  "#828080ea",
 ];
 
 const renderCustomizedLabel = ({
@@ -54,7 +54,7 @@ export default function SpendingChart({
       style={{
         width: "100%",
         maxWidth: "500px",
-        maxHeight: "30vh",
+        maxHeight: "300px",
         aspectRatio: 1,
         pointerEvents: "none", // if enabled, shows some border when clicking on pie pieces
       }}

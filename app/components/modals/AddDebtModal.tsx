@@ -157,7 +157,7 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="flex">
@@ -175,7 +175,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="currentPaid"
                 id="currentPaid"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative w-1/2">
@@ -192,7 +192,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="totalAmount"
                 id="totalAmount"
-                className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500"
+                className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>

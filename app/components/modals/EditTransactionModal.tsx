@@ -211,7 +211,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                 onChange={(e) => setCompany(e.target.value)}
                 name="company"
                 id="company"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative">
@@ -228,7 +228,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                 onChange={(e) => setAmount(e.target.value)}
                 name="amount"
                 id="amount"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>

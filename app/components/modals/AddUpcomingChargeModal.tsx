@@ -154,7 +154,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="company"
                 id="company"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative">
@@ -171,7 +171,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="amount"
                 id="amount"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>

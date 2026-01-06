@@ -1,8 +1,11 @@
-import type { NextConfig } from "next";
-
 const nextConfig = {
   images: {
-    domains: ["images.unsplash.com"], // add all domains you use for avatars
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // allows any HTTPS domain for images
+      },
+    ],
   },
   experimental: {
     appDir: true,

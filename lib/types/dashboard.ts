@@ -45,6 +45,7 @@ export interface Transaction {
   amount: number | string; // negative = expense, positive = income
   transactionType: TransactionType;
   category: ExpenseCategory;
+  account: AccountType;
 }
 
 export interface UpcomingCharge {

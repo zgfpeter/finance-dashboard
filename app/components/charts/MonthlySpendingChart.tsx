@@ -30,7 +30,7 @@ const MonthlySpendingChart = ({ data }: Props) => {
         style={{
           width: "100%",
           maxWidth: "",
-          maxHeight: "100px", // sets the height
+          maxHeight: "200px", // sets the height
           aspectRatio: 1.618,
           pointerEvents: "none",
         }}

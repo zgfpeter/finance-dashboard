@@ -11,6 +11,7 @@ import ErrorState from "./ui/ErrorState";
 import { OverviewSkeleton } from "./ui/skeletons/OverviewSkeleton";
 import { useSession } from "next-auth/react";
 import { currencies, CurrencyCode } from "@/lib/types/dashboard";
+import { formatCurrency } from "@/lib/utils";
 export default function Overview() {
   const dispatch = useDispatch();
 
@@ -29,6 +30,7 @@ export default function Overview() {
   const accounts = useMemo(() => {
     return data?.accounts ?? [];
   }, [data?.accounts]);
+  console.log(accounts);
 
   // check if there is any useful data to display
   const hasData =
@@ -89,7 +91,8 @@ export default function Overview() {
         <div className="flex flex-col gap-3">
           {/* total balance-current net worth across accounts */}
           <p className="text-xl text-(--limegreen) bg-(--primary-blue) flex justify-between ">
-            <span>Total balance: </span> {currencySymbol} {totalBalance}
+            <span>Total balance: </span>{" "}
+            {formatCurrency(totalBalance, currencySymbol)}
           </p>
           <SeparatorLine />
           <h2>Accounts summary</h2>
@@ -102,23 +105,11 @@ export default function Overview() {
                 <p className="grid grid-cols-2">
                   {account.type.charAt(0).toUpperCase() + account.type.slice(1)}{" "}
                   :
-                  <span>
-                    {currencySymbol} {account.balance}{" "}
-                  </span>{" "}
+                  <span>{formatCurrency(account.balance, currencySymbol)}</span>{" "}
                 </p>
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-3 py-2 ">
-            <SeparatorLine width="1/2" />
-            <span className="text-emerald-600 ">
-              <IoMdTrendingUp />
-            </span>
-            <SeparatorLine width="1/2" />
-          </div>
-          <p className="text-emerald-600 flex items-center bg-(--border-blue) rounded-xl px-2 py-3 justify-center">
-            {`${currencySymbol} ${monthlyChange} more compared to last month.`}
-          </p>
         </div>
       )}
     </section>

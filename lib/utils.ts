@@ -1,6 +1,11 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Income, MonthlySpending, Transaction } from "./types/dashboard";
+import {
+  Income,
+  MonthlySpending,
+  Transaction,
+  TransactionType,
+} from "./types/dashboard";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -170,3 +175,69 @@ export function prettifyDate(date: string) {
     year: "numeric",
   });
 }
+
+// get the total amount for a given type ("income" or "expense" for a specific month and year)
+
+export function getTotalForMonth(
+  transactions: Transaction[],
+  type: TransactionType,
+  month: number,
+  year: number
+): number {
+  return transactions
+    .filter((t) => t.transactionType === type)
+    .filter((t) => {
+      const d = new Date(t.date);
+      return d.getMonth() === month && d.getFullYear() === year;
+    })
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+}
+
+// get the totals for this month and last month for a given transaction type (expense or income)
+export function getThisAndLastMonthTotals(
+  transactions: Transaction[],
+  type: TransactionType
+) {
+  // get current date
+  const now = new Date();
+  const thisMonth = now.getMonth();
+  const thisYear = now.getFullYear();
+
+  // get last month's date
+  const lastMonthDate = new Date(thisYear, thisMonth - 1);
+  const lastMonth = lastMonthDate.getMonth();
+  const lastMonthYear = lastMonthDate.getFullYear();
+
+  // calculate total for this month
+  const thisMonthTotal = getTotalForMonth(
+    transactions,
+    type,
+    thisMonth,
+    thisYear
+  );
+
+  // calculate total for last year
+  const lastMonthTotal = getTotalForMonth(
+    transactions,
+    type,
+    lastMonth,
+    lastMonthYear
+  );
+
+  // calculate the difference between this month and last month
+  const difference = thisMonthTotal - lastMonthTotal;
+
+  // return this month's total, last month's total, and the difference
+  return {
+    thisMonthTotal,
+    lastMonthTotal,
+    difference,
+  };
+}
+
+// format currency, more helpful for negative balanace
+// show - € 250 instead of €-250
+export const formatCurrency = (amount: number | undefined, symbol: string) => {
+  if (!amount) return `${symbol} 0`;
+  return amount < 0 ? `- ${symbol} ${Math.abs(amount)}` : `${symbol} ${amount}`;
+};

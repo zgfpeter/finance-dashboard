@@ -8,6 +8,8 @@ import ErrorState from "./ui/ErrorState";
 import { IncomeSkeleton } from "./ui/skeletons/IncomeSkeleton";
 import { useSession } from "next-auth/react";
 import { currencies, CurrencyCode } from "@/lib/types/dashboard";
+import { getThisAndLastMonthTotals } from "@/lib/utils";
+
 export default function IncomeCard() {
   const { data, isLoading, isError } = useDashboard();
   const transactions = data?.transactions || [];
@@ -37,6 +39,12 @@ export default function IncomeCard() {
     return <ErrorState message="Could not load income data." />;
   }
 
+  const { thisMonthTotal, lastMonthTotal, difference } =
+    getThisAndLastMonthTotals(transactions, "income");
+
+  const differenceSign = difference >= 0 ? "+" : "-";
+  const differenceAbs = Math.abs(difference);
+
   return (
     <section
       className="bg-(--border-blue) rounded-xl h-1/2 w-full flex justify-between md:flex-col p-2"
@@ -48,15 +56,22 @@ export default function IncomeCard() {
 
       <div className="flex flex-col justify-center gap-2 bg-(--primary-bg) p-3 w-2/3 md:w-full rounded-xl ">
         <p
-          aria-label={`This month's income is ${totalIncome?.toFixed(2)} euros`}
+          aria-label={`This month's income is ${
+            totalIncome?.toFixed(2) ?? 0
+          } euros`}
         >
           This month:
           <span className="text-green-500">
             {" "}
-            {currencySymbol} {totalIncome?.toFixed(2)}
+            {/* {currencySymbol} {totalIncome?.toFixed(2) ?? 0} */}
+            {currencySymbol} {thisMonthTotal.toFixed(2)}
           </span>
         </p>
-        <p className="text-sm">Last month: {currencySymbol} 0</p>
+        {/* <p className="text-sm">Last month: {currencySymbol} 0</p> */}
+        <p className="text-sm">
+          Last month: {currencySymbol} {lastMonthTotal.toFixed(2)}
+        </p>
+
         <motion.div
           aria-hidden="true"
           className="h-0.5 w-5 bg-green-800 self-end my-1"
@@ -65,8 +80,13 @@ export default function IncomeCard() {
           transition={{ duration: 2 }}
         ></motion.div>
         <p className="text-sm">
-          + {currencySymbol} {totalIncome} more compared to last month
+          {differenceSign} {currencySymbol} {differenceAbs.toFixed(2)} compared
+          to last month
         </p>
+
+        {/* <p className="text-sm">
+          + {currencySymbol} {totalIncome ?? 0} more compared to last month
+        </p> */}
       </div>
     </section>
   );

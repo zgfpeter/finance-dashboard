@@ -40,7 +40,7 @@ export default function Navbar() {
     <div className="relative z-50">
       {/* Sidebar */}
       <motion.nav
-        className={`fixed top-0 left-0 h-screen bg-(--primary-blue)  flex flex-col justify-between z-50 w-[350px]`}
+        className={`fixed top-0 left-0 h-screen bg-(--primary-blue)  flex flex-col justify-between z-50 w-[350px] max-w-[80%]`}
         initial={{ x: -sidebarWidth }}
         animate={{ x: menuOpen ? 0 : -sidebarWidth }}
         transition={{ type: "spring", stiffness: 300, damping: 32 }}

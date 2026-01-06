@@ -16,7 +16,6 @@ import calcSpendingsCategoriesPercentages from "@/lib/CalculatePiePercentages";
 import { getMonthlySpendingsData } from "@/lib/utils";
 import ChartContainer from "../components/charts/ChartContainer";
 import LoadingState from "../components/ui/LoadingState";
-import { ChartCardSkeleton } from "../components/ui/skeletons/ChartCardSkeleton";
 import { useSession } from "next-auth/react";
 import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 
@@ -153,16 +152,17 @@ export default function DashboardPage() {
     order-6 md:order-6 md:col-span-3 lg:col-span-1 relative
   "
         > */}
-          <h2 className="text-(--text-light) text-lg flex justify-between w-full">
+          <h2 className="text-(--text-light) text-lg flex justify-between w-full ">
             <span>Spendings this year </span>
             <span className="text-(--text-light) flex items-center">
               Total:{" "}
               {isLoading ? (
                 <LoadingState message="" />
               ) : (
-                <span className="text-red-500">
+                <span className="text-red-500 pl-1">
+                  {" "}
                   {currencySymbol}{" "}
-                  {getTotalSpendings(transactions || []).toFixed(2)}
+                  {getTotalSpendings(transactions || []).toFixed(2) ?? 0}
                 </span>
               )}
             </span>

@@ -6,13 +6,16 @@ import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
+
 interface Props {
   onClose: () => void;
 }
+
 export default function AddTransactionModal({ onClose }: Props) {
   const accounts = useDashboard().data?.accounts;
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
+
   // local state for creating a new transaction
   const [data, setData] = useState<Transaction>({
     date: "",
@@ -20,7 +23,9 @@ export default function AddTransactionModal({ onClose }: Props) {
     amount: "",
     transactionType: "expense",
     category: "other",
+    account: accounts?.[0]?.type || "cash", // dynamically pick first account
   });
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // holds validation error messages, ex. a required field is empty
     id: "",
@@ -29,6 +34,7 @@ export default function AddTransactionModal({ onClose }: Props) {
     amount: "",
     transactionType: "expense",
     category: "",
+    account: "",
     generalError: "",
   });
 
@@ -59,6 +65,9 @@ export default function AddTransactionModal({ onClose }: Props) {
     if (Number(data.amount) <= 0) {
       newErrors.amount = "Amount must be > 0";
     }
+    if (!data.account) {
+      newErrors.account = "An account is required.";
+    }
     if (!data.date) {
       newErrors.date = "Date is required";
     } else {
@@ -72,7 +81,7 @@ export default function AddTransactionModal({ onClose }: Props) {
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-    // if there are no errors in the for, this will return true
+    // if there are no errors in the form, this will return true
     // if there's at least one error, then it will return false
   }
 
@@ -96,10 +105,20 @@ export default function AddTransactionModal({ onClose }: Props) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    addMutation.mutate({
-      ...data,
-      amount: Number(data.amount), // change the amount to a number, as it can be string also
-    });
+    addMutation.mutate(
+      { ...data, amount: Number(data.amount) },
+      {
+        onSuccess: () => {
+          setTransactionAdded(true); // show success
+          queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
+          // optional: close modal after 1s
+          setTimeout(() => {
+            onClose();
+            setTransactionAdded(false);
+          }, 1000);
+        },
+      }
+    );
 
     // reset form data
     setData({
@@ -108,6 +127,8 @@ export default function AddTransactionModal({ onClose }: Props) {
       amount: "",
       transactionType: "expense",
       category: "other",
+      account: accounts?.[0]?.type || "cash", // reset to first account
+      // at least one account must exist
     });
 
     // closes the modal
@@ -166,7 +187,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
               aria-describedby="company-error"
             />
           </div>
@@ -190,7 +211,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="amount"
                 id="amount"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
                 aria-describedby="amount-error"
               />
             </div>
@@ -212,27 +233,23 @@ export default function AddTransactionModal({ onClose }: Props) {
 
             <div className=" flex flex-col gap-3 p-3 pb-0 ">
               <label htmlFor="transactionType">Type</label>
-              {/* {errors.type && (
-                <span className="text-red-500">{errors.type}</span>
-              )} */}
               <select
                 id="transactionType"
                 value={data.transactionType}
                 onChange={handleChange}
                 name="transactionType"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full"
+                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full "
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
               </select>
             </div>
-            {data.transactionType === "expense" ? (
+
+            {/* Expense category selector */}
+            {data.transactionType === "expense" && (
               <div className="flex flex-col gap-3 p-3 pb-0 relative">
                 <label htmlFor="transactionCategory">Category</label>
-                {/* {errors.type && (
-                            <span className="text-red-500">{errors.type}</span>
-                          )} */}
                 <select
                   id="transactionCategory"
                   value={data.category}
@@ -249,21 +266,26 @@ export default function AddTransactionModal({ onClose }: Props) {
                   <option value="other">Other</option>
                 </select>
               </div>
-            ) : (
-              <div className="flex flex-col gap-3 p-3 pb-0 relative">
-                <label htmlFor="accountType">Select Account</label>
-                <select
-                  id="accountType"
-                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full"
-                >
-                  {accounts?.map((account, index) => (
-                    <option value={account.type} key={index}>
-                      {account.type}
-                    </option>
-                  ))}
-                </select>
-              </div>
             )}
+
+            {/* Account selector for both income and expense */}
+            <div className="flex flex-col gap-3 p-3 pb-0 relative">
+              <label htmlFor="account">Select Account</label>
+              <select
+                id="account"
+                value={data.account}
+                onChange={handleChange}
+                name="account"
+                required
+                className="border border-(--secondary-blue) px-2 rounded h-11"
+              >
+                {accounts?.map((account, index) => (
+                  <option value={account.type} key={index}>
+                    {account.type}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </form>

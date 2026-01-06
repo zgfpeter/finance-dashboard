@@ -154,7 +154,7 @@ export default function UpcomingCharges() {
                 {/* <FaPlus color="green" /> */}
 
                 {charge.category && (
-                  <div className="text-xs  text-yellow-500 p-1">
+                  <div className="text-xs  text-yellow-500 px-1 w-fit">
                     {charge.category}
                   </div>
                 )}
@@ -194,7 +194,7 @@ export default function UpcomingCharges() {
         aria-label="See All"
         disabled={!hasUpcomingCharges}
       >
-        {!hasUpcomingCharges ? "" : <span> See All</span>}
+        {!hasUpcomingCharges ? "" : <span> See all</span>}
       </button>
     </section>
   );

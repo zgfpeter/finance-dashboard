@@ -115,7 +115,7 @@ export default function Goals() {
           disabled={!hasGoals}
           onClick={() => dispatch(openModal({ type: "goals", data: null }))}
         >
-          {!hasGoals ? "" : <span>More</span>}
+          {!hasGoals ? "" : <span>See all</span>}
         </button>
       </>
     </section>

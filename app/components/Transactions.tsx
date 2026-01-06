@@ -99,7 +99,7 @@ export default function Transactions() {
         }
         aria-label="See All"
       >
-        {!hasTransactions ? "" : <span> See All</span>}
+        {!hasTransactions ? "" : <span> See all</span>}
       </button>
     </section>
   );

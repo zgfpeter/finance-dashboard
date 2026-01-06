@@ -1,13 +1,19 @@
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
-import { EditOverview } from "@/lib/types/dashboard";
+import { currencies, EditOverview } from "@/lib/types/dashboard";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { MdClose, MdCheck, MdAdd, MdDelete } from "react-icons/md";
-import { AccountType, DashboardData } from "@/lib/types/dashboard";
+import {
+  AccountType,
+  DashboardData,
+  CurrencyCode,
+} from "@/lib/types/dashboard";
+import { formatCurrency } from "@/lib/utils";
 import { filterGraphicalNotStackedItems } from "recharts/types/state/selectors/axisSelectors";
 import SeparatorLine from "../ui/SeparatorLine";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import { useSession } from "next-auth/react";
 
 interface Props {
   data: EditOverview | null;
@@ -34,6 +40,10 @@ function isEmptyString(value: string) {
 export default function EditOverviewModal({ data, onClose }: Props) {
   const axiosAuth = useAxiosAuth();
   const queryClient = useQueryClient();
+
+  const { data: session } = useSession();
+  const currency = session?.user?.currency; // get currency
+  const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
 
   const [totalBalance, setTotalBalance] = useState<string>(
     data ? data.totalBalance.toString() : ""
@@ -220,7 +230,10 @@ export default function EditOverviewModal({ data, onClose }: Props) {
         <div className="w-full flex flex-col justify-between">
           <div className="flex flex-col gap-3 px-1 relative">
             {/* Total balance is based on accounts balance */}
-            <p className="">Total Balance: $ {totalBalance}</p>
+            <p className="">
+              Total Balance:{" "}
+              {formatCurrency(Number(totalBalance), currencySymbol)}
+            </p>
 
             <SeparatorLine />
 
