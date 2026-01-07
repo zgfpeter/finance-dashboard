@@ -28,7 +28,7 @@ export default function Debts() {
       aria-labelledby="debts-heading"
     >
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
+        <h2 className="flex items-center gap-2 p-2 rounded-xl text-lg">
           <FaLink /> Debts
         </h2>
         <button

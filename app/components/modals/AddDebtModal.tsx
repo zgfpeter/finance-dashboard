@@ -6,6 +6,8 @@ import { Debt } from "@/lib/types/dashboard";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import SeparatorLine from "../ui/SeparatorLine";
+import { MdCheck } from "react-icons/md";
 interface Props {
   onClose: () => void;
 }
@@ -157,7 +159,7 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
+              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
             />
           </div>
           <div className="flex">
@@ -175,7 +177,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="currentPaid"
                 id="currentPaid"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative w-1/2">
@@ -192,7 +194,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="totalAmount"
                 id="totalAmount"
-                className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 h-11"
+                className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 h-10"
               />
             </div>
           </div>
@@ -206,7 +208,7 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="dueDate"
               id="dueDate"
-              className="border border-(--secondary-blue) rounded  pl-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
+              className="border border-(--secondary-blue) rounded  pl-1 focus:outline-none focus:border-cyan-500 h-10 iconColor"
             />
           </div>
 
@@ -214,18 +216,39 @@ export default function AddDebtModal({ onClose }: Props) {
             <span className="text-red-500 pl-12">{errors.date}</span>
           )}
         </div>
-
+        <SeparatorLine width="3/4" />
         <button
           type="submit"
-          className="border p-3 rounded w-50 relative z-0  hover:border-teal-500"
+          className="  relative
+    border
+    rounded
+    px-6
+    py-3
+    min-w-[180px]
+    grid
+    place-items-center
+    hover:border-teal-500
+    disabled:opacity-70"
           aria-label="Add new charge"
         >
-          {debtAdded && (
-            <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
-              Success
+          <span
+            className={`transition-opacity ${
+              isPending ? "opacity-0" : "opacity-100"
+            }`}
+          >
+            Add New Charge
+          </span>
+          {isPending && (
+            <div className="absolute flex items-center justify-center bg-black inset-0  rounded">
+              <LoadingSpinner size="sm" />
             </div>
           )}
-          {isPending ? <LoadingSpinner /> : <span>Add New Debt</span>}
+          {/* Success overlay */}
+          {debtAdded && (
+            <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded text-white ">
+              Success <MdCheck />
+            </div>
+          )}
         </button>
       </form>
     </div>

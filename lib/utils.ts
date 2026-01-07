@@ -241,3 +241,85 @@ export const formatCurrency = (amount: number | undefined, symbol: string) => {
   if (!amount) return `${symbol} 0`;
   return amount < 0 ? `- ${symbol} ${Math.abs(amount)}` : `${symbol} ${amount}`;
 };
+
+// reccuring upcoming charge
+
+// utils/recurrence.ts
+function isoToDate(iso: string) {
+  // iso like "2025-01-06"
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d));
+}
+function dateToIso(date: Date) {
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(date.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+export function addInterval(dateIso: string, repeating: string, interval = 1) {
+  const d = isoToDate(dateIso);
+  let next: Date;
+  switch (repeating) {
+    case "Weekly":
+      next = new Date(d.getTime() + 7 * 24 * 60 * 60 * 1000 * interval);
+      break;
+    case "BiWeekly":
+      next = new Date(d.getTime() + 14 * 24 * 60 * 60 * 1000 * interval);
+      break;
+    case "Monthly": {
+      const year = d.getUTCFullYear();
+      const month = d.getUTCMonth();
+      const day = d.getUTCDate();
+      const targetMonth = month + interval;
+      // try to set same day in future month; if invalid (e.g., Feb 30), fallback to last day
+      const tentative = new Date(Date.UTC(year, targetMonth, day));
+      if (tentative.getUTCMonth() !== ((targetMonth % 12) + 12) % 12) {
+        // fallback: last day of target month
+        const lastDay = new Date(Date.UTC(year, targetMonth + 1, 0)); // day 0 -> last day prev month
+        next = new Date(
+          Date.UTC(
+            lastDay.getUTCFullYear(),
+            lastDay.getUTCMonth(),
+            lastDay.getUTCDate()
+          )
+        );
+      } else {
+        next = tentative;
+      }
+      break;
+    }
+    case "Yearly": {
+      next = new Date(
+        Date.UTC(d.getUTCFullYear() + interval, d.getUTCMonth(), d.getUTCDate())
+      );
+      break;
+    }
+    default:
+      throw new Error("Unknown repeating type");
+  }
+  return dateToIso(next);
+}
+
+export function generateOccurrences({
+  startDateIso,
+  repeating,
+  interval = 1,
+  maxCount = 12,
+  untilIso,
+}: {
+  startDateIso: string;
+  repeating: string;
+  interval?: number;
+  maxCount?: number;
+  untilIso?: string;
+}) {
+  const occurrences: string[] = [];
+  let cursor = startDateIso;
+  for (let i = 0; i < maxCount; i++) {
+    if (untilIso && cursor > untilIso) break;
+    occurrences.push(cursor);
+    cursor = addInterval(cursor, repeating, interval);
+  }
+  return occurrences;
+}

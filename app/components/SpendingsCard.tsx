@@ -46,7 +46,7 @@ export default function SpendingsCard() {
         Expenses <FaArrowRightLong color="red" />
       </h2>
 
-      <div className=" bg-(--primary-bg) rounded-xl flex flex-col justify-center gap-2 p-3 w-2/3 md:w-full">
+      <div className=" bg-(--primary-bg) rounded-xl flex flex-col justify-center gap-2 p-3 w-2/3  h-full md:w-full">
         <p>
           This month:
           <span className="text-red-500">

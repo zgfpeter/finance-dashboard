@@ -6,6 +6,8 @@ import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import SeparatorLine from "../ui/SeparatorLine";
+import { MdCheck } from "react-icons/md";
 
 interface Props {
   onClose: () => void;
@@ -187,7 +189,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
+              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
               aria-describedby="company-error"
             />
           </div>
@@ -211,7 +213,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="amount"
                 id="amount"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
                 aria-describedby="amount-error"
               />
             </div>
@@ -226,7 +228,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-11"
+                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
                 aria-describedby="date-error"
               />
             </div>
@@ -239,7 +241,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="transactionType"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full "
+                className="border border-(--secondary-blue) px-2 rounded h-10 flex w-full "
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -256,7 +258,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                   onChange={handleChange}
                   name="category"
                   required
-                  className="border border-(--secondary-blue) px-2 rounded h-11 flex w-full"
+                  className="border border-(--secondary-blue) px-2 rounded h-10 flex w-full"
                 >
                   <option value="subscription">Subscription</option>
                   <option value="bill">Bill</option>
@@ -277,7 +279,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="account"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-11"
+                className="border border-(--secondary-blue) px-2 rounded h-10"
               >
                 {accounts?.map((account, index) => (
                   <option value={account.type} key={index}>
@@ -289,19 +291,42 @@ export default function AddTransactionModal({ onClose }: Props) {
           </div>
         </div>
       </form>
+      <SeparatorLine width="3/4" />
       <button
         type="submit"
         form="addTransaction"
-        className="border p-3 rounded w-50 relative z-0  hover:border-teal-500 self-center"
+        className="
+    relative
+    border
+    rounded
+    px-6
+    py-3
+    min-w-[180px]
+    grid
+    place-items-center
+    hover:border-teal-500
+    disabled:opacity-70
+  "
         aria-label="Add transaction"
         disabled={isPending}
       >
-        {transactionAdded && (
-          <div className="border p-3 rounded w-50 absolute z-10 bg-emerald-900 top-0 left-0 ">
-            Success
+        <span
+          className={`transition-opacity ${
+            isPending ? "opacity-0" : "opacity-100"
+          }`}
+        >
+          Add New Transaction
+        </span>
+        {isPending && (
+          <div className="absolute flex items-center justify-center bg-black inset-0  rounded">
+            <LoadingSpinner size="sm" />
           </div>
         )}
-        {isPending ? <LoadingSpinner /> : <span>Add Transaction</span>}
+        {transactionAdded && (
+          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded text-white ">
+            Success <MdCheck />
+          </div>
+        )}
       </button>
     </div>
   );

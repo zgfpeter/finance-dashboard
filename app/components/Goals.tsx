@@ -25,7 +25,7 @@ export default function Goals() {
       aria-describedby="goals-heading"
     >
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
+        <h2 className="flex items-center gap-2 p-2 rounded-xl text-lg">
           <FaBullseye /> Goals
         </h2>
         <button

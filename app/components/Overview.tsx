@@ -69,7 +69,7 @@ export default function Overview() {
   return (
     <section className="flex flex-col gap-3 h-full overflow-y-auto justify-evenly">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl">Overview</h1>
+        <h1 className="text-2xl">Overview</h1>
         <button
           className="text-xl flex items-center p-1"
           onClick={() =>

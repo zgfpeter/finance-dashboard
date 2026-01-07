@@ -22,7 +22,7 @@ export default function Transactions() {
   return (
     <section className="flex flex-col  rounded-xl gap-3 w-full h-full min-h-50">
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-xl text-xl">
+        <h2 className="flex items-center gap-2 p-2 rounded-xl text-lg">
           <FaMoneyBillTransfer /> Transactions
         </h2>
         <button

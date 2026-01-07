@@ -55,6 +55,23 @@ export interface UpcomingCharge {
   amount: number | string; // negative number (-)
   category: ExpenseCategory;
   recurring?: boolean; // may use it later, for a recurring charge
+  parentRecurringId?: string; // a reference to recurringcharge _id when generated
+  repeating?: RepeatingUpcomingCharge; // optional copy of the rule
+}
+
+export interface RecurringCharge {
+  _id?: string;
+  startDate: string; // when the recurrence starts (first occurrence)
+  company: string;
+  amount: number;
+  category: ExpenseCategory;
+  repeating: RepeatingUpcomingCharge;
+  interval?: number; // e.g., every 1 month, every 2 weeks (default 1)
+  endDate?: string; // optional ISO date to stop creating occurrences
+  count?: number; // optional number of total occurrences
+  lastGenerated?: string; // ISO date of last-generated instance
+  userId?: string;
+  createdAt?: string;
 }
 
 export interface Debt {
