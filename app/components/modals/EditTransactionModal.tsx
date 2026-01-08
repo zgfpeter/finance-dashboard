@@ -211,7 +211,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                 onChange={(e) => setCompany(e.target.value)}
                 name="company"
                 id="company"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative">
@@ -228,7 +228,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                 onChange={(e) => setAmount(e.target.value)}
                 name="amount"
                 id="amount"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>
@@ -248,7 +248,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                 onChange={(e) => setDate(e.target.value)}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10 iconColor"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11 iconColor"
               />
             </div>
 
@@ -265,7 +265,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                 }
                 name="transactionTypes"
                 required
-                className="border border-(--secondary-blue) px-2 rounded-md h-10"
+                className="border border-(--secondary-blue) px-2 rounded-md h-11"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -287,7 +287,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
                     setCategory(e.target.value as ExpenseCategory)
                   }
                   name="category"
-                  className="border border-(--secondary-blue) px-2 rounded-md h-10"
+                  className="border border-(--secondary-blue) px-2 rounded-md h-11"
                 >
                   <option value="subscription">Subscription</option>
                   <option value="bill">Bill</option>

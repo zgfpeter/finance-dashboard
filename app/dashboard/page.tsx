@@ -142,7 +142,7 @@ export default function DashboardPage() {
           className="bg-(--primary-bg)
     border-2 border-(--border-blue) p-3 rounded-md 
     flex flex-col gap-1 items-center justify-around
-    order-7 col-span-1 md:col-span-2 lg:col-span-3 relative min-h-100
+    order-7 col-span-1 md:col-span-2 lg:col-span-3 relative min-h-110
   "
         >
           {/* div

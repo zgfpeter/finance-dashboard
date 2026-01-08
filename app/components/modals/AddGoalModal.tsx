@@ -154,7 +154,7 @@ export default function AddGoalModal({ onClose }: Props) {
               onChange={handleChange}
               name="title"
               id="title"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="flex">
@@ -172,7 +172,7 @@ export default function AddGoalModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="currentAmount"
                 id="currentAmount"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative w-1/2">
@@ -189,7 +189,7 @@ export default function AddGoalModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="targetAmount"
                 id="targetAmount"
-                className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>
@@ -203,7 +203,7 @@ export default function AddGoalModal({ onClose }: Props) {
               onChange={handleChange}
               name="targetDate"
               id="targetDate"
-              className="border border-(--secondary-blue) rounded-md  pl-1 focus:outline-none focus:border-cyan-500 h-10 iconColor"
+              className="border border-(--secondary-blue) rounded-md  pl-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
             />
           </div>
 

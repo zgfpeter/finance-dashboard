@@ -314,7 +314,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
           <div className="flex justify-evenly items-center self-center p-3 w-full">
             <button
               type="button"
-              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-md h-10"
+              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
               aria-label="Cancel changes"
               disabled={isPending}
               onClick={onClose}
@@ -323,7 +323,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
             </button>
             <button
               type="submit"
-              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-md h-10"
+              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
               aria-label="Save changes"
               disabled={isPending}
             >

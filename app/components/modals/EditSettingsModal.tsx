@@ -174,7 +174,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
                   onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
                   name="currencies"
                   required
-                  className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 w-fit"
+                  className="border border-(--secondary-blue) rounded-md px-3 py-2 focus:outline-none focus:border-cyan-500 w-fit"
                 >
                   {Object.entries(currencies).map(([code, data]) => (
                     <option key={code} value={code}>

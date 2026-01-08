@@ -21,14 +21,14 @@ export function OverviewSkeleton({ items = 4 }: { items?: number }) {
       <SeparatorLine />
       {Array.from({ length: items }).map((_, i) => (
         <div key={i} className="flex justify-between gap-3">
-          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-11 w-full" />
         </div>
       ))}
       <div className="flex justify-between gap-10">
         <SeparatorLine width="1/2" />
         <SeparatorLine width="1/2" />
       </div>
-      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-11 w-full" />
     </div>
   );
 }

@@ -122,12 +122,12 @@ export default function SettingsModal({ onClose }: Props) {
 
           <div className=" flex items-center justify-evenly ">
             <button
-              className="hover:text-emerald-600 flex items-center justify-center border-emerald-500 border-l border-r px-3 rounded-md h-10"
+              className="hover:text-emerald-600 flex items-center justify-center border-emerald-500 border-l border-r px-3 rounded-md h-11"
               onClick={() => setOpenConfirmationModal(false)}
             >
               Cancel
             </button>
-            <button className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r px-3 rounded-md h-10">
+            <button className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r px-3 rounded-md h-11">
               Delete
             </button>
           </div>

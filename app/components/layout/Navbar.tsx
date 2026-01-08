@@ -125,7 +125,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3 text-xs w-full justify-between rounded-md ">
             <button className=" hover:bg-(--hover-blue) hover:text-(--text-light) w-36 ">
               <div
-                className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-md-none transition-all duration-300 flex items-center justify-center gap-3 w-full "
+                className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 w-full "
                 aria-label="Import data"
               >
                 <span>IMPORT</span>
@@ -136,7 +136,7 @@ export default function Navbar() {
               className="hover:bg-(--hover-blue) hover:text-(--text-light) w-36"
               aria-label="Export data"
             >
-              <div className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-md-none transition-all duration-300 flex items-center justify-center gap-3 ">
+              <div className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 ">
                 <span>EXPORT</span>
                 <FaFileExport />
               </div>

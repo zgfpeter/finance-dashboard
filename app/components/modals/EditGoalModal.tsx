@@ -195,7 +195,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
               onChange={(e) => setTitle(e.target.value)}
               name="title"
               id="title"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="flex flex-col p-3 gap-3 relative">
@@ -212,7 +212,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
               onChange={(e) => setCurrentAmount(e.target.value)}
               name="currentAmount"
               id="currentAmount"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="flex flex-col p-3 gap-3 relative">
@@ -229,7 +229,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
               onChange={(e) => setTargetAmount(e.target.value)}
               name="targetAmount"
               id="targetAmount"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="flex relative justify-between">
@@ -243,7 +243,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
                 onChange={(e) => setTargetDate(e.target.value)}
                 name="targetDate"
                 id="targetDate"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>

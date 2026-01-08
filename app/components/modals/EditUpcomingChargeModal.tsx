@@ -192,7 +192,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               onChange={(e) => setCompany(e.target.value)}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="flex flex-col p-3 gap-3 relative">
@@ -209,7 +209,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               onChange={(e) => setAmount(e.target.value)}
               name="amount"
               id="amount"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="flex relative">
@@ -223,7 +223,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
                 onChange={(e) => setDate(e.target.value)}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10  w-40"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11  w-40"
               />
             </div>
             {/* TODO maybe add a recurring charge, or subscription */}
@@ -238,7 +238,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
                 onChange={(e) => setCategory(e.target.value as ExpenseCategory)}
                 name="transactionTypes"
                 required
-                className="border border-(--secondary-blue) px-2 rounded-md h-10 flex min-w-40"
+                className="border border-(--secondary-blue) px-2 rounded-md h-11 flex min-w-40"
               >
                 <option value="subscription">Subscription</option>
                 <option value="bill">Bill</option>

@@ -277,7 +277,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded-md p-2  h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  h-11"
             />
           </div>
 
@@ -298,7 +298,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               inputMode="decimal"
               name="amount"
               id="amount"
-              className="border border-(--secondary-blue) rounded-md p-2  h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  h-11"
             />
           </div>
         </div>
@@ -312,7 +312,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               onChange={handleChange}
               name="date"
               id="date"
-              className="border border-(--secondary-blue) rounded-md pl-1  h-10"
+              className="border border-(--secondary-blue) rounded-md pl-1  h-11"
             />
           </div>
           <div className=" flex flex-col gap-1">
@@ -323,7 +323,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               onChange={handleChange}
               name="category"
               required
-              className="border border-(--secondary-blue) px-1 rounded-md h-10"
+              className="border border-(--secondary-blue) px-1 rounded-md h-11"
             >
               <option value="subscription">Subscription</option>
               <option value="bill">Bill</option>
@@ -344,7 +344,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               name="repeating"
               value={data.repeating} // controlled
               onChange={handleChange}
-              className="border border-(--secondary-blue) px-1 rounded-md h-10"
+              className="border border-(--secondary-blue) px-1 rounded-md h-11"
             >
               <option value="noRepeat">No repeat</option>
               <option value="Weekly">Weekly</option>
@@ -374,7 +374,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                   value={data.interval}
                   min={1}
                   onChange={handleChange}
-                  className="border border-(--secondary-blue) rounded-md pl-2  h-10 w-20"
+                  className="border border-(--secondary-blue) rounded-md pl-2  h-11 w-20"
                 />
 
                 <span className="capitalize">
@@ -392,7 +392,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 name="endDate"
                 value={data.endDate}
                 onChange={handleChange}
-                className="border border-(--secondary-blue) rounded-md px-1  h-10 "
+                className="border border-(--secondary-blue) rounded-md px-1  h-11 "
               />
             </div>
           </div>
@@ -412,7 +412,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                   min={1}
                   value={data.count ?? ""}
                   onChange={handleChange}
-                  className="border rounded-md pl-1 focus:outline-none h-10"
+                  className="border rounded-md pl-1 focus:outline-none h-11"
                 />
               </div>  */}
 
