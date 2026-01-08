@@ -135,6 +135,7 @@ export type ModalType =
   | "debts"
   | "addDebt"
   | "editDebt"
+  | "contact"
   | "none";
 
 export type MonthlySpending = {

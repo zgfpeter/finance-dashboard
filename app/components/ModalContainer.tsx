@@ -21,6 +21,7 @@ import AddDebtModal from "./modals/AddDebtModal";
 import AddGoalModal from "./modals/AddGoalModal";
 import EditDebtModal from "./modals/EditDebtModal";
 import EditGoalModal from "./modals/EditGoalModal";
+import ContactModal from "./modals/ContactModal";
 
 export default function ModalContainer() {
   const dispatch = useDispatch();
@@ -188,6 +189,16 @@ export default function ModalContainer() {
           ariaLabel="Edit Goal"
         >
           <EditGoalModal data={modalData} onClose={handleClose} />
+        </ModalWrapper>
+      );
+    case "contact":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="Contact"
+        >
+          <ContactModal onClose={handleClose} />
         </ModalWrapper>
       );
 

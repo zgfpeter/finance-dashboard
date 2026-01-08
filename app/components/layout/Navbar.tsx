@@ -11,6 +11,7 @@ import {
   FaMoon,
   FaMailBulk,
   FaEnvelope,
+  FaRegEnvelope,
 } from "react-icons/fa";
 import { useTheme } from "next-themes";
 import { MdMenu, MdClose } from "react-icons/md";
@@ -66,7 +67,7 @@ export default function Navbar() {
           <div className="flex justify-between py-3 items-center">
             <div className="flex flex-col items-center justify-between gap-3">
               <button
-                className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2"
+                className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2 text-sm"
                 onClick={() =>
                   dispatch(openModal({ type: "settings", data: null }))
                 }
@@ -81,8 +82,11 @@ export default function Navbar() {
                 </span>
               </button>
               <button
-                className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2"
+                className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2 text-sm"
                 aria-label="contact"
+                onClick={() =>
+                  dispatch(openModal({ type: "contact", data: null }))
+                }
               >
                 <span className="flex items-center gap-2 relative">
                   <FaEnvelope /> CONTACT
