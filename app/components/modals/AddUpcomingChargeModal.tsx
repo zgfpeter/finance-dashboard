@@ -294,6 +294,9 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               type="number"
               value={data.amount}
               min="0.01" // FIX: better UX
+              // with step 0.01, means this accepts positive numbers with up to 2 decimals, which is what i want for money input
+              // 2.99 accepted, but 2.099 not accepted since it doesn't make sense
+              step="0.01"
               onChange={handleChange}
               inputMode="decimal"
               name="amount"

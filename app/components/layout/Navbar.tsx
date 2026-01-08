@@ -9,6 +9,8 @@ import {
   FaWrench,
   FaSun,
   FaMoon,
+  FaMailBulk,
+  FaEnvelope,
 } from "react-icons/fa";
 import { useTheme } from "next-themes";
 import { MdMenu, MdClose } from "react-icons/md";
@@ -16,6 +18,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { useSession } from "next-auth/react";
+import { FaMailchimp } from "react-icons/fa6";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const dispatch = useDispatch();
@@ -61,22 +64,35 @@ export default function Navbar() {
           </p>
 
           <div className="flex justify-between py-3 items-center">
-            <button
-              className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit"
-              onClick={() =>
-                dispatch(openModal({ type: "settings", data: null }))
-              }
-              aria-label="Settings"
-            >
-              <span className="flex items-center gap-2 relative">
-                <FaWrench /> SETTINGS
-                <span
-                  className="absolute -bottom-1 left-0 h-1 rounded-md bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
-                  aria-hidden="true"
-                ></span>
-              </span>
-            </button>
-
+            <div className="flex flex-col items-center justify-between gap-3">
+              <button
+                className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2"
+                onClick={() =>
+                  dispatch(openModal({ type: "settings", data: null }))
+                }
+                aria-label="Settings"
+              >
+                <span className="flex items-center gap-2 relative">
+                  <FaWrench /> SETTINGS
+                  <span
+                    className="absolute -bottom-1 left-0 h-1 rounded-md bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
+                    aria-hidden="true"
+                  ></span>
+                </span>
+              </button>
+              <button
+                className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2"
+                aria-label="contact"
+              >
+                <span className="flex items-center gap-2 relative">
+                  <FaEnvelope /> CONTACT
+                  <span
+                    className="absolute -bottom-1 left-0 h-1 rounded-md bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
+                    aria-hidden="true"
+                  ></span>
+                </span>
+              </button>
+            </div>
             {/* the light/dark toggle  */}
             {mounted && (
               <div
