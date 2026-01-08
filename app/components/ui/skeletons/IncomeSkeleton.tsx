@@ -5,7 +5,7 @@ export function IncomeSkeleton({ items = 3 }: { items?: number }) {
   return (
     <div
       className="
-        w-full rounded-xl border-2 border-(--border-blue)
+        w-full rounded-md border-2 border-(--border-blue)
         bg-(--primary-bg) p-3 flex flex-col gap-3
       "
     >
@@ -13,7 +13,7 @@ export function IncomeSkeleton({ items = 3 }: { items?: number }) {
         <div className="h-full w-1/3 flex items-center ">
           <h2
             id="income-heading"
-            className="flex items-center gap-3 rounded-xl text-xl"
+            className="flex items-center gap-3 rounded-md text-xl"
           >
             Income <FaArrowLeftLong color="green" aria-hidden="true" />
           </h2>

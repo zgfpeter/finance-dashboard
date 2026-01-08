@@ -140,6 +140,7 @@ export default function AddDebtModal({ onClose }: Props) {
 
       <form
         className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        id="addDebt"
         onSubmit={handleSubmit}
       >
         <div className="w-full flex flex-col justify-between  ">
@@ -159,7 +160,7 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
             />
           </div>
           <div className="flex">
@@ -177,7 +178,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="currentPaid"
                 id="currentPaid"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative w-1/2">
@@ -194,7 +195,7 @@ export default function AddDebtModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="totalAmount"
                 id="totalAmount"
-                className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-10"
               />
             </div>
           </div>
@@ -208,7 +209,7 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="dueDate"
               id="dueDate"
-              className="border border-(--secondary-blue) rounded  pl-1 focus:outline-none focus:border-cyan-500 h-10 iconColor"
+              className="border border-(--secondary-blue) rounded-md  pl-1 focus:outline-none focus:border-cyan-500 h-10 iconColor"
             />
           </div>
 
@@ -216,12 +217,13 @@ export default function AddDebtModal({ onClose }: Props) {
             <span className="text-red-500 pl-12">{errors.date}</span>
           )}
         </div>
-        <SeparatorLine width="3/4" />
-        <button
-          type="submit"
-          className="  relative
+      </form>
+      <SeparatorLine width="3/4" />
+      <button
+        type="submit"
+        className="  relative
     border
-    rounded
+    rounded-md
     px-6
     py-3
     min-w-[180px]
@@ -229,28 +231,27 @@ export default function AddDebtModal({ onClose }: Props) {
     place-items-center
     hover:border-teal-500
     disabled:opacity-70"
-          aria-label="Add new charge"
+        aria-label="Add new charge"
+      >
+        <span
+          className={`transition-opacity ${
+            isPending ? "opacity-0" : "opacity-100"
+          }`}
         >
-          <span
-            className={`transition-opacity ${
-              isPending ? "opacity-0" : "opacity-100"
-            }`}
-          >
-            Add New Charge
-          </span>
-          {isPending && (
-            <div className="absolute flex items-center justify-center bg-black inset-0  rounded">
-              <LoadingSpinner size="sm" />
-            </div>
-          )}
-          {/* Success overlay */}
-          {debtAdded && (
-            <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded text-white ">
-              Success <MdCheck />
-            </div>
-          )}
-        </button>
-      </form>
+          Add New Charge
+        </span>
+        {isPending && (
+          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
+            <LoadingSpinner size="sm" />
+          </div>
+        )}
+        {/* Success overlay */}
+        {debtAdded && (
+          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
+            Success <MdCheck />
+          </div>
+        )}
+      </button>
     </div>
   );
 }

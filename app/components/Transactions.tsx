@@ -20,9 +20,9 @@ export default function Transactions() {
   const currency = session?.user?.currency; // get currency
   const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   return (
-    <section className="flex flex-col  rounded-xl gap-3 w-full h-full min-h-50">
+    <section className="flex flex-col  rounded-md gap-3 w-full h-full min-h-50">
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-xl text-lg">
+        <h2 className="flex items-center gap-2 p-2 rounded-md text-lg">
           <FaMoneyBillTransfer /> Transactions
         </h2>
         <button
@@ -48,7 +48,7 @@ export default function Transactions() {
             return (
               <li
                 key={transaction._id}
-                className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+                className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
               >
                 <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
                   {transaction.company}
@@ -92,7 +92,7 @@ export default function Transactions() {
 
       {/* shows full modal with all transactions, and options like edit and delete */}
       <button
-        className="underline p-2 w-fit self-center rounded-xl  mt-auto"
+        className="underline p-2 w-fit self-center rounded-md  mt-auto"
         disabled={!hasTransactions}
         onClick={() =>
           dispatch(openModal({ type: "transactions", data: null }))

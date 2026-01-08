@@ -21,11 +21,11 @@ export default function Goals() {
 
   return (
     <section
-      className=" flex flex-col rounded-xl gap-3 w-full h-full min-h-50"
+      className=" flex flex-col rounded-md gap-3 w-full h-full min-h-50"
       aria-describedby="goals-heading"
     >
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-xl text-lg">
+        <h2 className="flex items-center gap-2 p-2 rounded-md text-lg">
           <FaBullseye /> Goals
         </h2>
         <button
@@ -52,7 +52,7 @@ export default function Goals() {
               return (
                 <li
                   key={goal._id}
-                  className="items-center bg-(--border-blue) p-2 rounded-xl flex flex-col gap-2 relative px-4"
+                  className="items-center bg-(--border-blue) p-2 rounded-md flex flex-col gap-2 relative px-4"
                 >
                   <div className="flex items-center justify-between w-full">
                     <span aria-label="Goal title">{goal.title}</span>
@@ -67,7 +67,7 @@ export default function Goals() {
                     <p
                       className={`flex justify-between px-2 border ${
                         isFullySaved ? "border-teal-900" : "border-teal-700"
-                      } py-1 rounded-2xl w-full text-sm z-10 relative`}
+                      } py-1 rounded-xl w-full text-sm z-10 relative`}
                     >
                       <span aria-label={`Goal ${goal.title} current amount`}>
                         {goal.currentAmount}
@@ -84,7 +84,7 @@ export default function Goals() {
                       // z indes smaller than price <p> so that it sits below the text
                       className={`absolute left-0 top-0 h-full ${
                         isFullySaved ? "bg-teal-900" : "bg-teal-600"
-                      } rounded-2xl z-0`}
+                      } rounded-xl z-0`}
                       initial={{ width: 0 }}
                       role="progressbar"
                       aria-valuenow={Number(goal.currentAmount)}
@@ -110,7 +110,7 @@ export default function Goals() {
           <EmptyState message="No goals. Add one to get started." />
         )}
         <button
-          className="underline p-2 w-fit self-center rounded-xl"
+          className="underline p-2 w-fit self-center rounded-md"
           aria-label="More goals"
           disabled={!hasGoals}
           onClick={() => dispatch(openModal({ type: "goals", data: null }))}

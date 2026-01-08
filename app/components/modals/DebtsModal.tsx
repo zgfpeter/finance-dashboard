@@ -151,7 +151,7 @@ export default function DebtsModal({ onClose }: Props) {
       <input
         type="text"
         placeholder="Search..."
-        className="w-full p-5 mb-2 rounded-xl"
+        className="w-full p-5 mb-2 rounded-md"
         onChange={(e) => setSearch(e.target.value)}
       />
 
@@ -164,7 +164,7 @@ export default function DebtsModal({ onClose }: Props) {
           return (
             <li
               key={debt._id}
-              className="bg-(--border-blue) p-2 rounded-xl gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
+              className="bg-(--border-blue) p-2 rounded-md gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
             >
               <div className="flex gap-1  items-center md:justify-center text-xs w-fit ">
                 <MdOutlineWatchLater color="orange" />
@@ -188,7 +188,7 @@ export default function DebtsModal({ onClose }: Props) {
                   </span>
                 </div>
                 <div className="relative w-full ">
-                  <p className="flex justify-between px-2 border border-orange-700 py-1 rounded-2xl w-full text-sm z-10 relative">
+                  <p className="flex justify-between px-2 border border-orange-700 py-1 rounded-xl w-full text-sm z-10 relative">
                     <span aria-label={`Amount paid for ${debt.company}  `}>
                       {debt.currentPaid}
                     </span>
@@ -201,7 +201,7 @@ export default function DebtsModal({ onClose }: Props) {
                   <motion.span
                     aria-hidden="true"
                     // z indes smaller than price <p> so that it sits below the text
-                    className={`absolute left-0 top-0 h-full rounded-2xl z-0 ${
+                    className={`absolute left-0 top-0 h-full rounded-xl z-0 ${
                       isFullyPaid ? "bg-orange-900" : "bg-orange-700"
                     }`}
                     role="progressbar"
@@ -246,7 +246,7 @@ export default function DebtsModal({ onClose }: Props) {
                 </button>
               </div>
               {deleteId === debt._id && (
-                <div className="absolute inset-0 bg-(--primary-bg)  rounded-xl flex flex-col items-center justify-center  gap-1 z-20">
+                <div className="absolute inset-0 bg-(--primary-bg)  rounded-md flex flex-col items-center justify-center  gap-1 z-20">
                   <p>Are you sure you want to delete this item?</p>
 
                   <div className="flex items-center ">

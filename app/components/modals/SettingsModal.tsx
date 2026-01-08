@@ -72,7 +72,7 @@ export default function SettingsModal({ onClose }: Props) {
             // object-cover so that the image keeps it's aspect ratio
           ></Image>
           {/* {changeAvatar && (
-            <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-full absolute">
+            <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-md absolute">
               Change
             </button>
           )} */}
@@ -109,7 +109,7 @@ export default function SettingsModal({ onClose }: Props) {
       )}
       {openConfirmationModal && (
         <div
-          className="fixed z-30 bg-(--primary-blue) p-5 rounded shadow-lg top-1/2 left-1/2
+          className="fixed z-30 bg-(--primary-blue) p-5 rounded-md shadow-lg top-1/2 left-1/2
                       -translate-x-1/2 -translate-y-1/2 w-9/10 max-w-xl h-75 text-center flex flex-col justify-evenly gap-5 border border-cyan-500 "
         >
           <h2 className="text-lg font-semibold ">
@@ -122,12 +122,12 @@ export default function SettingsModal({ onClose }: Props) {
 
           <div className=" flex items-center justify-evenly ">
             <button
-              className="hover:text-emerald-600 flex items-center justify-center border-emerald-500 border-l border-r px-3 rounded-full h-10"
+              className="hover:text-emerald-600 flex items-center justify-center border-emerald-500 border-l border-r px-3 rounded-md h-10"
               onClick={() => setOpenConfirmationModal(false)}
             >
               Cancel
             </button>
-            <button className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r px-3 rounded-full h-10">
+            <button className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r px-3 rounded-md h-10">
               Delete
             </button>
           </div>

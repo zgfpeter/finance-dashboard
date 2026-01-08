@@ -237,7 +237,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
 
             <SeparatorLine />
 
-            <div className="flex flex-col rounded gap-3 items-center">
+            <div className="flex flex-col rounded-md gap-3 items-center">
               <p className="self-start">Your accounts</p>
               {errors.atLeastOne && (
                 <span className="text-red-500 absolute right-5">
@@ -247,10 +247,10 @@ export default function EditOverviewModal({ data, onClose }: Props) {
               {accountsState.map((account, index) => (
                 <div
                   key={index}
-                  className="flex w-full justify-between items-center gap-2 rounded"
+                  className="flex w-full justify-between items-center gap-2 rounded-md"
                 >
                   <select
-                    className=" appearance-none border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 w-full"
+                    className=" appearance-none border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 w-full"
                     value={account.type}
                     onChange={(e) =>
                       setAccountsState((prev) =>
@@ -276,7 +276,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                   </select>
 
                   <input
-                    className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 w-full"
+                    className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 w-full"
                     type="text"
                     value={account.balance}
                     onChange={(e) =>
@@ -302,7 +302,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
 
               <button
                 type="button"
-                className="border border-emerald-600 rounded p-2 focus:outline-none focus:border-cyan-500 w-fit self-center disabled:opacity-50"
+                className="border border-emerald-600 rounded-md p-2 focus:outline-none focus:border-cyan-500 w-fit self-center disabled:opacity-50"
                 onClick={addAccount}
                 disabled={accountsState.length >= MAX_ACCOUNTS}
               >
@@ -314,7 +314,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
           <div className="flex justify-evenly items-center self-center p-3 w-full">
             <button
               type="button"
-              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
+              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-md h-10"
               aria-label="Cancel changes"
               disabled={isPending}
               onClick={onClose}
@@ -323,7 +323,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
             </button>
             <button
               type="submit"
-              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
+              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-md h-10"
               aria-label="Save changes"
               disabled={isPending}
             >

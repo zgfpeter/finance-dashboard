@@ -5,13 +5,13 @@ export function SpendingsSkeleton({ items = 3 }: { items?: number }) {
   return (
     <div
       className="
-        w-full rounded-xl border-2 border-(--border-blue)
+        w-full rounded-md border-2 border-(--border-blue)
         bg-(--primary-bg) p-3 flex flex-col gap-3
       "
     >
       <div className="flex gap-1 w-full ">
         <div className="h-full w-1/3 flex items-center ">
-          <h2 className="flex items-center gap-3 rounded-xl text-xl">
+          <h2 className="flex items-center gap-3 rounded-md text-xl">
             Expenses <FaArrowRightLong color="red" />
           </h2>
         </div>

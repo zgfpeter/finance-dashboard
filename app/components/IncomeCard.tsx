@@ -47,14 +47,14 @@ export default function IncomeCard() {
 
   return (
     <section
-      className="bg-(--border-blue) rounded-xl h-1/2 w-full flex justify-between md:flex-col p-2"
+      className="bg-(--border-blue) rounded-md h-1/2 w-full flex justify-between md:flex-col p-2"
       aria-describedby="income-heading"
     >
-      <h2 id="income-heading" className="flex items-center gap-3 rounded-xl">
+      <h2 id="income-heading" className="flex items-center gap-3 rounded-md">
         Income <FaArrowLeftLong color="green" aria-hidden="true" />
       </h2>
 
-      <div className="flex flex-col justify-center gap-2 bg-(--primary-bg) p-3 w-2/3 md:w-full rounded-xl ">
+      <div className="flex flex-col justify-center gap-2 bg-(--primary-bg) p-3 w-2/3 md:w-full rounded-md ">
         <p
           aria-label={`This month's income is ${
             totalIncome?.toFixed(2) ?? 0

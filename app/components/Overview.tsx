@@ -100,7 +100,7 @@ export default function Overview() {
             {accounts.map((account) => (
               <li
                 key={account._id}
-                className="items-center bg-(--border-blue) px-2 py-3 rounded-xl"
+                className="items-center bg-(--border-blue) px-2 py-3 rounded-md"
               >
                 <p className="grid grid-cols-2">
                   {account.type.charAt(0).toUpperCase() + account.type.slice(1)}{" "}

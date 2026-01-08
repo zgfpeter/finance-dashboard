@@ -60,7 +60,7 @@ export default function UpcomingCharges() {
   }
 
   return (
-    <section className="row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col  rounded-xl gap-3 h-full min-h-50 w-full relative">
+    <section className="row-span-1 row-start-1 col-span-1 col-stat-3 flex flex-col  rounded-md gap-3 h-full min-h-50 w-full relative">
       {/* backdrop for the notifications modal */}
       {notificationsModalOpen && (
         <div className="absolute h-full inset-0 bg-black/50 backdrop-blur-sm z-10 "></div>
@@ -68,7 +68,7 @@ export default function UpcomingCharges() {
       {/* notifications modal */}
       {notificationsModalOpen && (
         <section
-          className="absolute bg-(--primary-blue) h-full self-center w-full inset-0 flex flex-col items-center justify-center gap-5 z-10 rounded-xl "
+          className="absolute bg-(--primary-blue) h-full self-center w-full inset-0 flex flex-col items-center justify-center gap-5 z-10 rounded-md "
           role="dialog"
         >
           <button
@@ -88,7 +88,7 @@ export default function UpcomingCharges() {
             />
             <span>Notify me about upcoming charges:</span>
             <span
-              className="h-5 w-5 rounded border border-blue-600 peer-checked:bg-blue-600 peer-checked:border-blue-600
+              className="h-5 w-5 rounded-md border border-blue-600 peer-checked:bg-blue-600 peer-checked:border-blue-600
                 peer-checked:ring-2 peer-checked:ring-blue-600 
               "
             ></span>
@@ -113,7 +113,7 @@ export default function UpcomingCharges() {
       )}
 
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-xl text-lg">
+        <h2 className="flex items-center gap-2 p-2 rounded-md text-lg">
           <FaClock /> Upcoming Charges
         </h2>
 
@@ -149,7 +149,7 @@ export default function UpcomingCharges() {
             return (
               <li
                 key={charge._id}
-                className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+                className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
               >
                 {/* <FaPlus color="green" /> */}
 
@@ -189,7 +189,7 @@ export default function UpcomingCharges() {
         <EmptyState message="No upcoming charges. Add one to get started." />
       )}
       <button
-        className="underline p-2 self-center rounded-xl mt-auto"
+        className="underline p-2 self-center rounded-md mt-auto"
         onClick={handleSeeAll}
         aria-label="See All"
         disabled={!hasUpcomingCharges}

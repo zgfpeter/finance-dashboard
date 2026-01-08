@@ -256,8 +256,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
         onSubmit={handleSubmit}
         id="addCharge"
       >
-        <div className="flex gap-3 px-2 py-1">
-          <div className=" flex flex-col gap-1 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 px-2 py-1">
+          <div className=" flex flex-col gap-1 ">
             <label htmlFor="company" className="">
               Company
             </label>
@@ -277,11 +277,11 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border rounded p-2  h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  h-10"
             />
           </div>
 
-          <div className=" flex flex-col gap-1 w-full">
+          <div className=" flex flex-col gap-1">
             <label htmlFor="amount">Amount</label>
 
             {errors.amount && (
@@ -294,12 +294,11 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               type="number"
               value={data.amount}
               min="0.01" // FIX: better UX
-              step="0.01" // FIX
               onChange={handleChange}
               inputMode="decimal"
               name="amount"
               id="amount"
-              className="border rounded p-2  h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  h-10"
             />
           </div>
         </div>
@@ -313,7 +312,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               onChange={handleChange}
               name="date"
               id="date"
-              className="border rounded pl-1  h-10"
+              className="border border-(--secondary-blue) rounded-md pl-1  h-10"
             />
           </div>
           <div className=" flex flex-col gap-1">
@@ -324,7 +323,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               onChange={handleChange}
               name="category"
               required
-              className="border px-1 rounded h-10"
+              className="border border-(--secondary-blue) px-1 rounded-md h-10"
             >
               <option value="subscription">Subscription</option>
               <option value="bill">Bill</option>
@@ -345,7 +344,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               name="repeating"
               value={data.repeating} // controlled
               onChange={handleChange}
-              className="border px-1 rounded h-10"
+              className="border border-(--secondary-blue) px-1 rounded-md h-10"
             >
               <option value="noRepeat">No repeat</option>
               <option value="Weekly">Weekly</option>
@@ -375,7 +374,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                   value={data.interval}
                   min={1}
                   onChange={handleChange}
-                  className="border rounded pl-2  h-10 w-20"
+                  className="border border-(--secondary-blue) rounded-md pl-2  h-10 w-20"
                 />
 
                 <span className="capitalize">
@@ -393,7 +392,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                 name="endDate"
                 value={data.endDate}
                 onChange={handleChange}
-                className="border rounded px-1  h-10 "
+                className="border border-(--secondary-blue) rounded-md px-1  h-10 "
               />
             </div>
           </div>
@@ -413,7 +412,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                   min={1}
                   value={data.count ?? ""}
                   onChange={handleChange}
-                  className="border rounded pl-1 focus:outline-none h-10"
+                  className="border rounded-md pl-1 focus:outline-none h-10"
                 />
               </div>  */}
 
@@ -430,7 +429,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
         className="
     relative
     border
-    rounded
+    border-(--secondary-blue)
+    rounded-md
     px-6
     py-3
     min-w-[180px]
@@ -451,14 +451,14 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
         {/* Loading overlay */}
         {isPending && (
-          <div className="absolute flex items-center justify-center bg-black inset-0  rounded">
+          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
 
         {/* Success overlay */}
         {chargeAdded && (
-          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded text-white ">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
             Success <MdCheck />
           </div>
         )}

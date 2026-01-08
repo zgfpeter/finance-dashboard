@@ -6,7 +6,7 @@ interface Props {
 export default function Skeleton({ className = "" }: Props) {
   return (
     <div
-      className={`animate-pulse rounded bg-gray-600/30 ${className} rounded-xl`}
+      className={`animate-pulse rounded-md bg-gray-600/30 ${className} rounded-md`}
     />
   );
 }

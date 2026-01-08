@@ -156,7 +156,7 @@ export default function TransactionsModal({ onClose }: Props) {
       <input
         type="text"
         placeholder="Search..."
-        className="w-full p-5 mb-2 rounded-xl"
+        className="w-full p-5 mb-2 rounded-md"
         onChange={(e) => setSearch(e.target.value)}
       />
       <ul className="w-full flex flex-col gap-1 overflow-y-auto grow">
@@ -165,7 +165,7 @@ export default function TransactionsModal({ onClose }: Props) {
           return (
             <li
               key={transaction._id}
-              className="bg-(--border-blue) rounded-xl relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
+              className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
             >
               {transaction.category ? (
                 <div className="text-xs text-yellow-500 p-1 ">
@@ -219,7 +219,7 @@ export default function TransactionsModal({ onClose }: Props) {
               </div>
 
               {deleteId === transaction._id && (
-                <div className="absolute inset-0 bg-(--primary-blue)  rounded-xl flex flex-col items-center justify-center gap-1 z-20 ">
+                <div className="absolute inset-0 bg-(--primary-blue)  rounded-md flex flex-col items-center justify-center gap-1 z-20 ">
                   <p>Are you sure you want to delete this item?</p>
 
                   <div className="flex items-center ">

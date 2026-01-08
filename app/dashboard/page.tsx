@@ -68,7 +68,7 @@ export default function DashboardPage() {
         {/* Overview */}
         <div
           className="
-    border-2 border-(--border-blue) bg-(--primary-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) bg-(--primary-blue) p-3 rounded-md 
     order-1 md:order-1 lg:order-1
   "
         >
@@ -78,7 +78,7 @@ export default function DashboardPage() {
         {/* Income + Spendings */}
         <div
           className="bg-(--primary-bg)
-    border-2 border-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) p-3 rounded-md 
     order-2 md:order-2 lg:order-4 xl:order-3 overflow-hidden flex flex-col gap-1
   "
         >
@@ -89,7 +89,7 @@ export default function DashboardPage() {
         {/* Transactions */}
         <div
           className=" bg-(--primary-bg)
-    border-2 border-(--border-blue)  p-3 rounded-xl 
+    border-2 border-(--border-blue)  p-3 rounded-md 
     
     order-3 md:order-3 md:col-span-2 lg:order-3 lg:col-span-1 xl:order-4 overflow-hidden
   "
@@ -100,7 +100,7 @@ export default function DashboardPage() {
         {/* Upcoming Charges */}
         <div
           className=" bg-(--primary-bg)
-    border-2 border-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) p-3 rounded-md 
     flex items-center justify-center overflow-hidden
     order-2 md:order-2 md:col-span-2 lg:order-2 lg:col-span-1
   "
@@ -110,7 +110,7 @@ export default function DashboardPage() {
 
         {/* <div
           className="
-    border-2 border-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) p-3 rounded-md 
     flex items-center justify-center overflow-hidden
     order-2 md:order-2 lg:order-2
   "
@@ -120,7 +120,7 @@ export default function DashboardPage() {
         {/* Debts + Goals */}
         <div
           className="  bg-(--primary-bg)
-    border-2 border-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) p-3 rounded-md 
     flex flex-col gap-1
     order-5 md:order-5 md:col-span-2 lg:order-5 lg:col-span-1 relative z-0
   "
@@ -129,7 +129,7 @@ export default function DashboardPage() {
         </div>
         <div
           className="  bg-(--primary-bg)
-    border-2 border-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) p-3 rounded-md 
     flex flex-col gap-1
     order-5 md:order-5 md:col-span-2 lg:order-5 lg:col-span-1 relative z-0
   "
@@ -140,14 +140,14 @@ export default function DashboardPage() {
         {/* Spendings this year */}
         <div
           className="bg-(--primary-bg)
-    border-2 border-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) p-3 rounded-md 
     flex flex-col gap-1 items-center justify-around
     order-7 col-span-1 md:col-span-2 lg:col-span-3 relative min-h-100
   "
         >
           {/* div
           className="  bg-(--primary-bg)
-    border-2 border-(--border-blue) p-3 rounded-xl 
+    border-2 border-(--border-blue) p-3 rounded-md 
     flex flex-col gap-1 items-center justify-around
     order-6 md:order-6 md:col-span-3 lg:col-span-1 relative
   "

@@ -102,7 +102,7 @@ export default function SignUp() {
   return (
     <section className=" h-screen flex items-center justify-center text-(--text-light)  ">
       <form
-        className="flex flex-col items-center gap-3 justify-evenly py-10 rounded  w-full max-w-2xl border-none inset-ring-4 inset-ring-cyan-600 z-20 bg-black/50"
+        className="flex flex-col items-center gap-3 justify-evenly py-10 rounded-md  w-full max-w-2xl border-none inset-ring-4 inset-ring-cyan-600 z-20 bg-black/50"
         onSubmit={handleSubmit}
       >
         {registrationSuccess && (
@@ -125,7 +125,7 @@ export default function SignUp() {
             name="email"
             id="email"
             placeholder="example@gmail.com"
-            className="border rounded p-2 pl-10  focus:outline-none focus:border-cyan-500"
+            className="border rounded-md p-2 pl-10  focus:outline-none focus:border-cyan-500"
           />
         </div>
         <div className="flex flex-col w-2/3 p-3 gap-3 relative">
@@ -144,7 +144,7 @@ export default function SignUp() {
             id="username"
             value={formData.username}
             onChange={handleChange}
-            className="border rounded p-2 pl-10 focus:outline-none focus:border-cyan-500"
+            className="border rounded-md p-2 pl-10 focus:outline-none focus:border-cyan-500"
           />
         </div>
         <div className="flex flex-col w-2/3 p-3 gap-3 relative">
@@ -165,7 +165,7 @@ export default function SignUp() {
             <span className="text-red-500">{errors.password}</span>
           )}
           {showPasswordInfo && (
-            <span className="absolute bg-cyan-700 p-3 rounded left-28 top-5 z-20 h-25 w-100 flex items-center justify-center">
+            <span className="absolute bg-cyan-700 p-3 rounded-md left-28 top-5 z-20 h-25 w-100 flex items-center justify-center">
               Password must be at least 6 characters long and contain at least
               one uppercase letter and one number.
             </span>
@@ -177,17 +177,17 @@ export default function SignUp() {
             id="password"
             value={formData.password}
             onChange={handleChange}
-            className="border rounded p-2 pl-10 focus:outline-none focus:border-cyan-500  "
+            className="border rounded-md p-2 pl-10 focus:outline-none focus:border-cyan-500  "
           />
         </div>
 
         <motion.button
-          className="border p-3 rounded w-30 relative z-0  hover:cursor-pointer"
+          className="border p-3 rounded-md w-30 relative z-0  hover:cursor-pointer"
           aria-label="Sign up"
           whileHover={"hover"}
         >
           <motion.span
-            className="absolute inset-0 bg-cyan-800 z-0 rounded"
+            className="absolute inset-0 bg-cyan-800 z-0 rounded-md"
             style={{
               top: "50%",
               left: "50%",

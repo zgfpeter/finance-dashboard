@@ -95,13 +95,13 @@ export default function EditSettingsModal({ data, onClose }: Props) {
           <div>
             <div className="relative h-20 w-20 md:w-40 md:h-40 justify-self-center my-3">
               {imageLoading && (
-                <div className="absolute inset-0 flex items-center justify-center border border-(--primary-orange) rounded-full bg-black/10 z-10">
+                <div className="absolute inset-0 flex items-center justify-center border border-(--primary-orange) rounded-md bg-black/10 z-10">
                   <LoadingSpinner size="sm" />
                 </div>
               )}
 
               {/* {changeAvatar && (
-                <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-full absolute">
+                <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-md absolute">
                   Change
                 </button>
               )} */}
@@ -138,7 +138,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
                   name="avatar"
                   placeholder="https://"
                   id="avatar"
-                  className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 md:w-full"
+                  className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 md:w-full"
                 />
               </div>
 
@@ -158,7 +158,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
                   onChange={(e) => setUsername(e.target.value)}
                   name="username"
                   id="username"
-                  className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 md:w-full"
+                  className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 md:w-full"
                 />
               </div>
 
@@ -174,7 +174,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
                   onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
                   name="currencies"
                   required
-                  className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 w-fit"
+                  className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 w-fit"
                 >
                   {Object.entries(currencies).map(([code, data]) => (
                     <option key={code} value={code}>

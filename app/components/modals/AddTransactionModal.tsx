@@ -189,7 +189,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
               aria-describedby="company-error"
             />
           </div>
@@ -213,7 +213,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="amount"
                 id="amount"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
                 aria-describedby="amount-error"
               />
             </div>
@@ -228,7 +228,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="date"
                 id="date"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
                 aria-describedby="date-error"
               />
             </div>
@@ -241,7 +241,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="transactionType"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-10 flex w-full "
+                className="border border-(--secondary-blue) px-2 rounded-md h-10 flex w-full "
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -258,7 +258,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                   onChange={handleChange}
                   name="category"
                   required
-                  className="border border-(--secondary-blue) px-2 rounded h-10 flex w-full"
+                  className="border border-(--secondary-blue) px-2 rounded-md h-10 flex w-full"
                 >
                   <option value="subscription">Subscription</option>
                   <option value="bill">Bill</option>
@@ -279,7 +279,7 @@ export default function AddTransactionModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="account"
                 required
-                className="border border-(--secondary-blue) px-2 rounded h-10"
+                className="border border-(--secondary-blue) px-2 rounded-md h-10"
               >
                 {accounts?.map((account, index) => (
                   <option value={account.type} key={index}>
@@ -298,7 +298,7 @@ export default function AddTransactionModal({ onClose }: Props) {
         className="
     relative
     border
-    rounded
+    rounded-md
     px-6
     py-3
     min-w-[180px]
@@ -318,12 +318,12 @@ export default function AddTransactionModal({ onClose }: Props) {
           Add New Transaction
         </span>
         {isPending && (
-          <div className="absolute flex items-center justify-center bg-black inset-0  rounded">
+          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
         {transactionAdded && (
-          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded text-white ">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
             Success <MdCheck />
           </div>
         )}

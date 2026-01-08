@@ -7,6 +7,7 @@ import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { MdCheck } from "react-icons/md";
+import SeparatorLine from "../ui/SeparatorLine";
 interface Props {
   onClose: () => void;
 }
@@ -153,7 +154,7 @@ export default function AddGoalModal({ onClose }: Props) {
               onChange={handleChange}
               name="title"
               id="title"
-              className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
             />
           </div>
           <div className="flex">
@@ -171,7 +172,7 @@ export default function AddGoalModal({ onClose }: Props) {
                 onChange={handleChange}
                 name="currentAmount"
                 id="currentAmount"
-                className="border border-(--secondary-blue) rounded p-2  focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-10"
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative w-1/2">
@@ -188,7 +189,7 @@ export default function AddGoalModal({ onClose }: Props) {
                 inputMode="decimal"
                 name="targetAmount"
                 id="targetAmount"
-                className="border border-(--secondary-blue) rounded p-2 focus:outline-none focus:border-cyan-500 h-10"
+                className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-10"
               />
             </div>
           </div>
@@ -202,7 +203,7 @@ export default function AddGoalModal({ onClose }: Props) {
               onChange={handleChange}
               name="targetDate"
               id="targetDate"
-              className="border border-(--secondary-blue) rounded  pl-1 focus:outline-none focus:border-cyan-500 h-10 iconColor"
+              className="border border-(--secondary-blue) rounded-md  pl-1 focus:outline-none focus:border-cyan-500 h-10 iconColor"
             />
           </div>
 
@@ -210,13 +211,14 @@ export default function AddGoalModal({ onClose }: Props) {
             <span className="text-red-500 pl-12">{errors.date}</span>
           )}
         </div>
-
-        <button
-          type="submit"
-          className="
+      </form>
+      <SeparatorLine width="3/4" />
+      <button
+        type="submit"
+        className="
     relative
     border
-    rounded
+    rounded-md
     px-6
     py-3
     min-w-[180px]
@@ -225,30 +227,29 @@ export default function AddGoalModal({ onClose }: Props) {
     hover:border-teal-500
     disabled:opacity-70
   "
-          aria-label="Add new charge"
-          disabled={isPending}
+        aria-label="Add new charge"
+        disabled={isPending}
+      >
+        <span
+          className={`transition-opacity ${
+            isPending ? "opacity-0" : "opacity-100"
+          }`}
         >
-          <span
-            className={`transition-opacity ${
-              isPending ? "opacity-0" : "opacity-100"
-            }`}
-          >
-            Add New Goal
-          </span>
-          {/* Loading overlay */}
-          {isPending && (
-            <div className="absolute flex items-center justify-center bg-black inset-0  rounded">
-              <LoadingSpinner size="sm" />
-            </div>
-          )}
+          Add New Goal
+        </span>
+        {/* Loading overlay */}
+        {isPending && (
+          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
+            <LoadingSpinner size="sm" />
+          </div>
+        )}
 
-          {goalAdded && (
-            <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded text-white ">
-              Success <MdCheck />
-            </div>
-          )}
-        </button>
-      </form>
+        {goalAdded && (
+          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
+            Success <MdCheck />
+          </div>
+        )}
+      </button>
     </div>
   );
 }

@@ -56,7 +56,7 @@ export default function Navbar() {
             ></Image>
           </div>
 
-          <p className="bg-linear-to-r from-teal-500 via-cyan-600 to-teal-900 bg-clip-text text-transparent text-center text-xl  border-l border-r border-orange-500 w-fit self-center px-5 py-1 rounded ">
+          <p className="bg-linear-to-r from-teal-500 via-cyan-600 to-teal-900 bg-clip-text text-transparent text-center text-xl  border-l border-r border-orange-500 w-fit self-center px-5 py-1 rounded-md ">
             {username}
           </p>
 
@@ -71,7 +71,7 @@ export default function Navbar() {
               <span className="flex items-center gap-2 relative">
                 <FaWrench /> SETTINGS
                 <span
-                  className="absolute -bottom-1 left-0 h-1 rounded-full bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
+                  className="absolute -bottom-1 left-0 h-1 rounded-md bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
                   aria-hidden="true"
                 ></span>
               </span>
@@ -122,10 +122,10 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          <div className="flex items-center gap-3 text-xs w-full justify-between rounded-xl ">
+          <div className="flex items-center gap-3 text-xs w-full justify-between rounded-md ">
             <button className=" hover:bg-(--hover-blue) hover:text-(--text-light) w-36 ">
               <div
-                className="border px-2 py-3 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 w-full "
+                className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-md-none transition-all duration-300 flex items-center justify-center gap-3 w-full "
                 aria-label="Import data"
               >
                 <span>IMPORT</span>
@@ -136,7 +136,7 @@ export default function Navbar() {
               className="hover:bg-(--hover-blue) hover:text-(--text-light) w-36"
               aria-label="Export data"
             >
-              <div className="border px-2 py-3 rounded-xl border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 ">
+              <div className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-md-none transition-all duration-300 flex items-center justify-center gap-3 ">
                 <span>EXPORT</span>
                 <FaFileExport />
               </div>

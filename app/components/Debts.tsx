@@ -24,11 +24,11 @@ export default function Debts() {
 
   return (
     <section
-      className=" flex flex-col rounded-xl gap-3 w-full h-full min-h-50 "
+      className=" flex flex-col rounded-md gap-3 w-full h-full min-h-50 "
       aria-labelledby="debts-heading"
     >
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-xl text-lg">
+        <h2 className="flex items-center gap-2 p-2 rounded-md text-lg">
           <FaLink /> Debts
         </h2>
         <button
@@ -58,7 +58,7 @@ export default function Debts() {
               return (
                 <li
                   key={debt._id}
-                  className="items-center bg-(--border-blue) p-2 px-4 rounded-xl flex flex-col gap-2 relative z-20"
+                  className="items-center bg-(--border-blue) p-2 px-4 rounded-md flex flex-col gap-2 relative z-20"
                 >
                   <div className="flex items-center justify-between w-full">
                     <span aria-label={`Debt company: `}>{debt.company}</span>
@@ -70,7 +70,7 @@ export default function Debts() {
                     <p
                       className={`flex justify-between px-2 border  py-1 ${
                         isFullyPaid ? "border-orange-900" : "border-orange-700"
-                      } rounded-2xl w-full text-sm z-10 relative`}
+                      } rounded-xl w-full text-sm z-10 relative`}
                     >
                       <span aria-label={`Amount paid for ${debt.company}  `}>
                         {debt.currentPaid}
@@ -84,7 +84,7 @@ export default function Debts() {
                     <motion.span
                       aria-hidden="true"
                       // z indes smaller than price <p> so that it sits below the text
-                      className={`absolute left-0 top-0 h-full rounded-2xl z-0 ${
+                      className={`absolute left-0 top-0 h-full rounded-xl z-0 ${
                         isFullyPaid ? "bg-orange-900" : "bg-orange-700"
                       }`}
                       role="progressbar"
@@ -112,7 +112,7 @@ export default function Debts() {
           <EmptyState message="No debts. Add one to get started." />
         )}
         <button
-          className="underline p-2 w-fit self-center rounded-xl"
+          className="underline p-2 w-fit self-center rounded-md"
           aria-label="Open debts modal"
           disabled={!hasDebts}
           onClick={() => dispatch(openModal({ type: "debts", data: null }))}
