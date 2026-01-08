@@ -356,7 +356,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
         </div>
         {data.repeating !== "noRepeat" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-0 md:place-items-center justify-evenly px-2 py-1 ">
-            <div className="flex items-center justify-between gap-3 ">
+            <div className="flex items-center md:justify-between gap-3 ">
               <label htmlFor="interval" className="flex items-center gap-2">
                 Repeats:
               </label>
