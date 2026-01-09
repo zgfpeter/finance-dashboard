@@ -2,7 +2,7 @@
 import { LuBellRing } from "react-icons/lu";
 import { FaPlus, FaClock } from "react-icons/fa6";
 import { useState } from "react";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdEventRepeat, MdOutlineRepeat } from "react-icons/md";
 import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
@@ -145,6 +145,7 @@ export default function UpcomingCharges() {
       ) : hasUpcomingCharges ? (
         <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
           {UCData.map((charge) => {
+            console.log(charge);
             const deadline = calculateDeadline(charge.date);
             return (
               <li
@@ -154,8 +155,8 @@ export default function UpcomingCharges() {
                 {/* <FaPlus color="green" /> */}
 
                 {charge.category && (
-                  <div className="text-xs  text-yellow-500 px-1 w-fit">
-                    {charge.category}
+                  <div className="text-[0.8em] font-extralight text-yellow-500 px-1 ">
+                    <span>{charge.category}</span>
                   </div>
                 )}
                 <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
@@ -166,7 +167,7 @@ export default function UpcomingCharges() {
                   - {currencySymbol} {charge.amount}
                 </p>
 
-                <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2">
+                <div className="text-xs col-start-3 row-span-2 flex flex-col gap-2 relative">
                   <span
                     className={
                       deadline.status === "upcoming"
@@ -180,6 +181,11 @@ export default function UpcomingCharges() {
                   </span>
 
                   <p className="text-xs">{prettifyDate(charge.date)}</p>
+                  {charge.recurring && (
+                    <span className="absolute right-3 -top-1 text-yellow-500">
+                      <MdOutlineRepeat />
+                    </span>
+                  )}
                 </div>
               </li>
             );

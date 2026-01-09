@@ -145,7 +145,9 @@ export default function AddDebtModal({ onClose }: Props) {
       >
         <div className="w-full flex flex-col justify-between  ">
           <div className="flex flex-col p-3 gap-3 relative">
-            <label htmlFor="company">Title</label>
+            <label htmlFor="company">
+              Title <span className="text-red-500">*</span>
+            </label>
             {/* A general error if the form validation fails */}
             {errors.company && (
               <span className="text-red-500 absolute right-5">
@@ -182,7 +184,7 @@ export default function AddDebtModal({ onClose }: Props) {
               />
             </div>
             <div className="flex flex-col p-3 gap-3 relative w-1/2">
-              <label htmlFor="totalAmount">Total Amount</label>
+              <label htmlFor="totalAmount">Total Amount </label>
               {errors.totalAmount && (
                 <span className="text-red-500 absolute right-5">
                   {errors.totalAmount}
@@ -200,7 +202,9 @@ export default function AddDebtModal({ onClose }: Props) {
             </div>
           </div>
           <div className="flex flex-col p-3 gap-3 relative w-1/2">
-            <label htmlFor="dueDate">Due Date</label>
+            <label htmlFor="dueDate">
+              Due Date <span className="text-red-500">*</span>
+            </label>
 
             <input
               type="date"

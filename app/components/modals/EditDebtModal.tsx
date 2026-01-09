@@ -181,7 +181,9 @@ export default function EditDebtModal({ data, onClose }: Props) {
       >
         <div className="w-full flex flex-col justify-between ">
           <div className="flex flex-col p-3 gap-3 relative">
-            <label htmlFor="company">Company</label>
+            <label htmlFor="company">
+              Company <span className="text-red-500">*</span>
+            </label>
             {/* error if the form validation fails */}
             {errors.company && (
               <span className="text-red-500 absolute right-5">
@@ -235,7 +237,9 @@ export default function EditDebtModal({ data, onClose }: Props) {
           </div>
           <div className="flex relative justify-between">
             <div className="flex flex-col p-3 gap-3 relative">
-              <label htmlFor="dueDate">Due Date</label>
+              <label htmlFor="dueDate">
+                Due Date <span className="text-red-500">*</span>
+              </label>
 
               <input
                 type="date"

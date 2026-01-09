@@ -44,7 +44,7 @@ export default function Goals() {
         ) : isError ? (
           <ErrorState message="Could not load goals." />
         ) : hasGoals ? (
-          <ul className="flex flex-col gap-2 h-119 overflow-y-auto ">
+          <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
             {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
             {goals?.map((goal) => {
               const isFullySaved =

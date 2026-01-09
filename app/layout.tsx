@@ -24,6 +24,9 @@ export const metadata = {
     "TailwindCSS",
     "TypeScript",
     "NextAuth",
+    "MongoDB",
+    "Express.js",
+    "Node.js",
   ],
   authors: [{ name: "zgfpeter" }],
   openGraph: {

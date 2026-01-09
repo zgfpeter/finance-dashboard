@@ -173,7 +173,9 @@ export default function ContactModal({ onClose }: Props) {
 
           {/* Title */}
           <div className="flex flex-col p-1 gap-1">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title">
+              Title <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               value={data.title}
@@ -191,7 +193,9 @@ export default function ContactModal({ onClose }: Props) {
 
           {/* Email) */}
           <div className="flex flex-col p-1 gap-1">
-            <label htmlFor="email">Email </label>
+            <label htmlFor="email">
+              Email <span className="text-red-500">*</span>
+            </label>
             <input
               type="email"
               value={data.email}
@@ -209,7 +213,9 @@ export default function ContactModal({ onClose }: Props) {
 
           {/* Body */}
           <div className="flex flex-col p-1 gap-1">
-            <label htmlFor="body">Message</label>
+            <label htmlFor="body">
+              Message <span className="text-red-500">*</span>
+            </label>
             <textarea
               id="body"
               name="body"

@@ -139,7 +139,9 @@ export default function AddGoalModal({ onClose }: Props) {
       >
         <div className="w-full flex flex-col justify-between  ">
           <div className="flex flex-col p-3 gap-3 relative">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title">
+              Title <span className="text-red-500">*</span>
+            </label>
             {/* A general error if the form validation fails */}
             {errors.title && (
               <span className="text-red-500 absolute right-5">
@@ -194,7 +196,9 @@ export default function AddGoalModal({ onClose }: Props) {
             </div>
           </div>
           <div className="flex flex-col p-3 gap-3 relative w-1/2">
-            <label htmlFor="targetDate">Target Date</label>
+            <label htmlFor="targetDate">
+              Target Date <span className="text-red-500">*</span>
+            </label>
 
             <input
               type="date"

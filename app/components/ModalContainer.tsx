@@ -22,6 +22,7 @@ import AddGoalModal from "./modals/AddGoalModal";
 import EditDebtModal from "./modals/EditDebtModal";
 import EditGoalModal from "./modals/EditGoalModal";
 import ContactModal from "./modals/ContactModal";
+import ImportExportModal from "./modals/ImportExportModal";
 
 export default function ModalContainer() {
   const dispatch = useDispatch();
@@ -199,6 +200,17 @@ export default function ModalContainer() {
           ariaLabel="Contact"
         >
           <ContactModal onClose={handleClose} />
+        </ModalWrapper>
+      );
+
+    case "importExport":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[800px] max-w-full"
+          ariaLabel="ImportExport"
+        >
+          <ImportExportModal onClose={handleClose} />
         </ModalWrapper>
       );
 

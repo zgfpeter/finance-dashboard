@@ -259,7 +259,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 px-2 py-1">
           <div className=" flex flex-col gap-1 ">
             <label htmlFor="company" className="">
-              Company
+              Company <span className="text-red-500">*</span>
             </label>
 
             {/* A general error if the form validation fails */}
@@ -307,7 +307,9 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
         </div>
         <div className="grid grid-cols-3 gap-3 px-2 py-1">
           <div className=" flex flex-col gap-1">
-            <label htmlFor="date">Date</label>
+            <label htmlFor="date">
+              Date <span className="text-red-500">*</span>
+            </label>
             <input
               type="date"
               value={data.date}

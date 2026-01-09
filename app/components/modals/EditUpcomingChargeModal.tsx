@@ -177,7 +177,9 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
       >
         <div className="w-full flex flex-col justify-between ">
           <div className="flex flex-col p-3 gap-3 relative">
-            <label htmlFor="company">Company</label>
+            <label htmlFor="company">
+              Company <span className="text-red-500">*</span>
+            </label>
             {/* error if the form validation fails */}
             {errors.company && (
               <span className="text-red-500 absolute right-5">
@@ -214,7 +216,9 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
           </div>
           <div className="flex relative">
             <div className="flex flex-col p-3 gap-3 relative">
-              <label htmlFor="date">Date</label>
+              <label htmlFor="date">
+                Date <span className="text-red-500">*</span>
+              </label>
 
               <input
                 type="date"
