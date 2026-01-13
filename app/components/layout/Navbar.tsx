@@ -29,6 +29,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false); // menu bar state
   const [earlyAccessBubble, setEarlyAccessBubble] = useState(false); // early access info bubble state
   const { resolvedTheme, setTheme } = useTheme();
+  const earlyAccessRef = useRef<HTMLDivElement | null>(null);
 
   const isDark = resolvedTheme === "dark";
   // toggles menu
@@ -43,6 +44,25 @@ export default function Navbar() {
     });
     return () => cancelAnimationFrame(id);
   }, []);
+
+  useEffect(() => {
+    if (!earlyAccessBubble) return;
+
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        earlyAccessRef.current &&
+        !earlyAccessRef.current.contains(event.target as Node)
+      ) {
+        setEarlyAccessBubble(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [earlyAccessBubble]);
 
   return (
     <div className="relative z-50">
@@ -73,6 +93,7 @@ export default function Navbar() {
               <AnimatePresence>
                 {earlyAccessBubble && (
                   <motion.div
+                    ref={earlyAccessRef}
                     initial={{ opacity: 0, scale: 0.95, y: 6 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 6 }}
@@ -260,44 +281,6 @@ export default function Navbar() {
         }}
       >
         {menuOpen ? <MdClose /> : <MdMenu />}
-        {!menuOpen && (
-          <section
-            className="absolute left-5 top-30"
-            onClick={(e) => setEarlyAccessBubble(!earlyAccessBubble)}
-          >
-            <div className="relative flex items-center">
-              {/* Info icon */}
-              <MdInfo
-                className="text-(--primary-orange) cursor-pointer"
-                size={22}
-              />
-
-              {/* Info bubble */}
-              <AnimatePresence>
-                {earlyAccessBubble && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 6 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 6 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute z-50 flex flex-col p-3 mt-2 text-xs text-white -translate-x-1/2 bg-black border rounded-md left-30 w-50 h-fit top-full border-(--primary-orange)"
-                  >
-                    <button
-                      className="absolute text-lg right-1 top-1"
-                      onClick={(e) => setEarlyAccessBubble(false)}
-                    >
-                      <MdClose color="red" />
-                    </button>
-                    <span>Early Access</span>
-                    <span className="opacity-80">
-                      Free during development. Pricing will be introduced later.
-                    </span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </section>
-        )}
       </motion.button>
     </div>
   );
