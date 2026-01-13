@@ -205,14 +205,14 @@ export default function EditOverviewModal({ data, onClose }: Props) {
   if (isError) <ErrorState message="An error has occured" />;
   return (
     <div
-      className="h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -224,11 +224,11 @@ export default function EditOverviewModal({ data, onClose }: Props) {
         </p>
       )}
       <form
-        className="flex flex-col items-center w-full max-w-xl gap-5 relative justify-center"
+        className="relative flex flex-col items-center justify-center w-full max-w-xl gap-5"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between">
-          <div className="flex flex-col gap-3 px-1 relative">
+        <div className="flex flex-col justify-between w-full">
+          <div className="relative flex flex-col gap-3 px-1">
             {/* Total balance is based on accounts balance */}
             <p className="">
               Total Balance:{" "}
@@ -237,17 +237,17 @@ export default function EditOverviewModal({ data, onClose }: Props) {
 
             <SeparatorLine />
 
-            <div className="flex flex-col rounded-md gap-3 items-center">
+            <div className="flex flex-col items-center gap-3 rounded-md">
               <p className="self-start">Your accounts</p>
               {errors.atLeastOne && (
-                <span className="text-red-500 absolute right-5">
+                <span className="absolute text-red-500 right-5">
                   {errors.atLeastOne}
                 </span>
               )}
               {accountsState.map((account, index) => (
                 <div
                   key={index}
-                  className="flex w-full justify-between items-center gap-2 rounded-md"
+                  className="flex items-center justify-between w-full gap-2 rounded-md"
                 >
                   <select
                     className=" appearance-none border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 w-full"
@@ -293,7 +293,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                   <button
                     type="button"
                     onClick={() => removeAccount(index)}
-                    className="text-red-500 hover:scale-120 p-1"
+                    className="p-1 text-red-500 hover:scale-120"
                   >
                     <MdDelete />
                   </button>
@@ -302,7 +302,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
 
               <button
                 type="button"
-                className="border border-emerald-600 rounded-md p-2 focus:outline-none focus:border-cyan-500 w-fit self-center disabled:opacity-50"
+                className="self-center p-2 border rounded-md border-emerald-600 focus:outline-none focus:border-cyan-500 w-fit disabled:opacity-50"
                 onClick={addAccount}
                 disabled={accountsState.length >= MAX_ACCOUNTS}
               >
@@ -311,10 +311,10 @@ export default function EditOverviewModal({ data, onClose }: Props) {
             </div>
           </div>
 
-          <div className="flex justify-evenly items-center self-center p-3 w-full">
+          <div className="flex items-center self-center w-full p-3 justify-evenly">
             <button
               type="button"
-              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
               onClick={onClose}
@@ -323,7 +323,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
             </button>
             <button
               type="submit"
-              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r rounded-full hover:text-emerald-600 border-emerald-600"
               aria-label="Save changes"
               disabled={isPending}
             >

@@ -4,7 +4,7 @@ import { GoArrowLeft } from "react-icons/go";
 const NotFound: React.FC = () => {
   return (
     <main className="min-h-screen flex items-center justify-center flex-col bg-(--primary-blue) text-white">
-      <h1 className="text-5xl font-bold mb-4">404</h1>
+      <h1 className="mb-4 text-5xl font-bold">404</h1>
       <p className="mb-4">Page not found.</p>
       <Link
         href="/"

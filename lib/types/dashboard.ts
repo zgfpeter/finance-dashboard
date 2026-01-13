@@ -143,3 +143,5 @@ export type MonthlySpending = {
   name: string;
   Spending: number;
 };
+
+export type Entity = "transactions" | "upcomingCharges" | "debts" | "goals";

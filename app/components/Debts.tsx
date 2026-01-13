@@ -8,7 +8,6 @@ import {
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { FaPlus, FaLink } from "react-icons/fa6";
-import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { DebtsSkeleton } from "./ui/skeletons/DebtsSkeleton";
@@ -19,20 +18,17 @@ export default function Debts() {
   const debts = data?.debts || [];
   const hasDebts = debts && debts.length > 0;
 
-  const showEmptyState = !isLoading && !hasDebts;
-  const showDebts = !isLoading && hasDebts;
-
   return (
     <section
-      className=" flex flex-col rounded-md gap-3 w-full h-full min-h-50 "
+      className="flex flex-col w-full h-full gap-3 rounded-md min-h-50"
       aria-labelledby="debts-heading"
     >
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-md text-lg">
+        <h2 className="flex items-center gap-2 p-2 text-lg rounded-md">
           <FaLink /> Debts
         </h2>
         <button
-          className="text-xl flex items-center"
+          className="flex items-center text-xl"
           onClick={() => dispatch(openModal({ type: "addDebt", data: null }))}
         >
           <span className="text-yellow-500">
@@ -49,7 +45,7 @@ export default function Debts() {
         ) : isError ? (
           <ErrorState message="Could not load debts." />
         ) : hasDebts ? (
-          <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
+          <ul className="flex flex-col gap-2 overflow-y-auto h-96 ">
             {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
             {debts?.map((debt) => {
               const isFullyPaid =
@@ -112,7 +108,7 @@ export default function Debts() {
           <EmptyState message="No debts. Add one to get started." />
         )}
         <button
-          className="underline p-2 w-fit self-center rounded-md"
+          className="self-center p-2 underline rounded-md w-fit"
           aria-label="Open debts modal"
           disabled={!hasDebts}
           onClick={() => dispatch(openModal({ type: "debts", data: null }))}

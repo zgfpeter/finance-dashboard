@@ -1,8 +1,9 @@
 "use client";
+
+// imports
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Goal } from "@/lib/types/dashboard";
-
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
@@ -15,14 +16,12 @@ interface Props {
 export default function AddGoalModal({ onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
-
   const [data, setData] = useState<Goal>({
     title: "",
     targetDate: "",
     currentAmount: "",
     targetAmount: "",
   });
-
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
     id: "",
@@ -31,18 +30,35 @@ export default function AddGoalModal({ onClose }: Props) {
     currentAmount: "",
     targetAmount: "",
   });
-
   // boolean used to show a success message after the charge has been added successfully
   const [goalAdded, setGoalAdded] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   // handle the input change
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
     const { name, value } = e.target;
-    setData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    setData((prev) => {
+      // sanitize amount input (mobile keyboards may use commas)
+      if (name === "amount") {
+        const sanitized = value
+          .replace(",", ".") // allow european decimal separator
+          .replace(/[^0-9.]/g, "") // remove letters, currency symbols, spaces
+          .replace(/(\..*)\./g, "$1"); // prevent more than one dot
+
+        return {
+          ...prev,
+          amount: sanitized,
+        };
+      }
+
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   }
 
   // simple form validation
@@ -111,18 +127,19 @@ export default function AddGoalModal({ onClose }: Props) {
     onClose();
   }
 
+  // if error occured, return error message
   if (isError) <ErrorState message="An error has occured" />;
 
   return (
     <div
-      className=" h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -134,17 +151,17 @@ export default function AddGoalModal({ onClose }: Props) {
       )}
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between  ">
-          <div className="flex flex-col p-3 gap-3 relative">
+        <div className="flex flex-col justify-between w-full ">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="title">
               Title <span className="text-red-500">*</span>
             </label>
             {/* A general error if the form validation fails */}
             {errors.title && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.title}
               </span>
             )}
@@ -160,42 +177,44 @@ export default function AddGoalModal({ onClose }: Props) {
             />
           </div>
           <div className="flex">
-            <div className="flex flex-col p-3 gap-3 relative w-1/2">
+            <div className="relative flex flex-col w-1/2 gap-3 p-3">
               <label htmlFor="currentAmount">Current Amount</label>
               {errors.currentAmount && (
-                <span className="text-red-500 absolute right-5">
+                <span className="absolute text-red-500 right-5">
                   {errors.currentAmount}
                 </span>
               )}
               <input
-                type="number"
+                type="text"
                 value={data.currentAmount}
                 inputMode="decimal"
+                placeholder="0.00"
                 onChange={handleChange}
                 name="currentAmount"
                 id="currentAmount"
                 className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
-            <div className="flex flex-col p-3 gap-3 relative w-1/2">
+            <div className="relative flex flex-col w-1/2 gap-3 p-3">
               <label htmlFor="targetAmount">Target Amount</label>
               {errors.targetAmount && (
-                <span className="text-red-500 absolute right-5">
+                <span className="absolute text-red-500 right-5">
                   {errors.targetAmount}
                 </span>
               )}
               <input
-                type="number"
+                type="text"
                 value={data.targetAmount}
                 onChange={handleChange}
                 inputMode="decimal"
+                placeholder="0.00"
                 name="targetAmount"
                 id="targetAmount"
                 className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>
-          <div className="flex flex-col p-3 gap-3 relative w-1/2">
+          <div className="relative flex flex-col w-1/2 gap-3 p-3">
             <label htmlFor="targetDate">
               Target Date <span className="text-red-500">*</span>
             </label>
@@ -212,25 +231,14 @@ export default function AddGoalModal({ onClose }: Props) {
           </div>
 
           {errors.date && (
-            <span className="text-red-500 pl-12">{errors.date}</span>
+            <span className="pl-12 text-red-500">{errors.date}</span>
           )}
         </div>
       </form>
       <SeparatorLine width="3/4" />
       <button
         type="submit"
-        className="
-    relative
-    border
-    rounded-md
-    px-6
-    py-3
-    min-w-[180px]
-    grid
-    place-items-center
-    hover:border-teal-500
-    disabled:opacity-70
-  "
+        className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70"
         aria-label="Add new charge"
         disabled={isPending}
       >
@@ -243,13 +251,13 @@ export default function AddGoalModal({ onClose }: Props) {
         </span>
         {/* Loading overlay */}
         {isPending && (
-          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
+          <div className="absolute inset-0 flex items-center justify-center bg-black rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
 
         {goalAdded && (
-          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 text-white rounded-md bg-emerald-900 ">
             Success <MdCheck />
           </div>
         )}

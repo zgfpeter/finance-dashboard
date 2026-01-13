@@ -9,7 +9,7 @@ export function ChartCardSkeleton({ height = 120 }: { height?: number }) {
       "
       style={{ height }}
     >
-      <Skeleton className="h-full w-full" /> {/* title */}
+      <Skeleton className="w-full h-full" /> {/* title */}
     </div>
   );
 }

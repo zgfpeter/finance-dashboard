@@ -10,26 +10,24 @@ import { openModal } from "@/app/store/modalSlice";
 import { FaPlus, FaBullseye } from "react-icons/fa6";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
-import LoadingState from "./ui/LoadingState";
 import { GoalsSkeleton } from "./ui/skeletons/GoalsSkeleton";
 export default function Goals() {
   const dispatch = useDispatch();
   const { data, isLoading, isError } = useDashboard();
   const goals = data?.goals || [];
   const hasGoals = goals && goals.length > 0;
-  const showEmptyState = !isLoading && !hasGoals;
 
   return (
     <section
-      className=" flex flex-col rounded-md gap-3 w-full h-full min-h-50"
+      className="flex flex-col w-full h-full gap-3 rounded-md min-h-50"
       aria-describedby="goals-heading"
     >
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-md text-lg">
+        <h2 className="flex items-center gap-2 p-2 text-lg rounded-md">
           <FaBullseye /> Goals
         </h2>
         <button
-          className="text-xl flex items-center"
+          className="flex items-center text-xl"
           onClick={() => dispatch(openModal({ type: "addGoal", data: null }))}
         >
           <span className="text-yellow-500">
@@ -44,7 +42,7 @@ export default function Goals() {
         ) : isError ? (
           <ErrorState message="Could not load goals." />
         ) : hasGoals ? (
-          <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
+          <ul className="flex flex-col gap-2 overflow-y-auto h-96 ">
             {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
             {goals?.map((goal) => {
               const isFullySaved =
@@ -110,7 +108,7 @@ export default function Goals() {
           <EmptyState message="No goals. Add one to get started." />
         )}
         <button
-          className="underline p-2 w-fit self-center rounded-md"
+          className="self-center p-2 underline rounded-md w-fit"
           aria-label="More goals"
           disabled={!hasGoals}
           onClick={() => dispatch(openModal({ type: "goals", data: null }))}

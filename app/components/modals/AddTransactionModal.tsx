@@ -51,10 +51,25 @@ export default function AddTransactionModal({ onClose }: Props) {
   ) {
     const { name, value } = e.target;
 
-    setData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setData((prev) => {
+      // sanitize amount input (mobile keyboards may use commas)
+      if (name === "amount") {
+        const sanitized = value
+          .replace(",", ".") // allow european decimal separator
+          .replace(/[^0-9.]/g, "") // remove letters, currency symbols, spaces
+          .replace(/(\..*)\./g, "$1"); // prevent more than one dot
+
+        return {
+          ...prev,
+          amount: sanitized,
+        };
+      }
+
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   }
 
   // simple form validation
@@ -141,14 +156,14 @@ export default function AddTransactionModal({ onClose }: Props) {
 
   return (
     <div
-      className=" h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -165,12 +180,12 @@ export default function AddTransactionModal({ onClose }: Props) {
       )}
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative "
+        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly "
         onSubmit={handleSubmit}
         id="addTransaction"
       >
-        <div className="w-full flex flex-col justify-between ">
-          <div className="flex flex-col p-3 gap-3 relative">
+        <div className="flex flex-col justify-between w-full ">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="company">
               Company <span className="text-red-500">*</span>
             </label>
@@ -178,7 +193,7 @@ export default function AddTransactionModal({ onClose }: Props) {
             {errors.company && (
               <span
                 id="company-error"
-                className="text-red-500 absolute right-5"
+                className="absolute text-red-500 right-5"
               >
                 {errors.company}
               </span>
@@ -198,19 +213,20 @@ export default function AddTransactionModal({ onClose }: Props) {
           <div
             className={`grid grid-cols-2 relative gap-3 items-center justify-between`}
           >
-            <div className="flex flex-col gap-3 p-3 relative">
+            <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="amount">Amount</label>
               {errors.amount && (
                 <span
                   id="amount-error"
-                  className="text-red-500 absolute right-5"
+                  className="absolute text-red-500 right-5"
                 >
                   {errors.amount}
                 </span>
               )}
               <input
-                type="number"
+                type="text"
                 value={data.amount}
+                placeholder="0.00"
                 onChange={handleChange}
                 inputMode="decimal"
                 name="amount"
@@ -220,7 +236,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               />
             </div>
 
-            <div className="flex flex-col gap-3 p-3 relative">
+            <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="date">
                 Date <span className="text-red-500">*</span>
               </label>
@@ -237,7 +253,7 @@ export default function AddTransactionModal({ onClose }: Props) {
               />
             </div>
 
-            <div className=" flex flex-col gap-3 p-3 pb-0 ">
+            <div className="flex flex-col gap-3 p-3 pb-0 ">
               <label htmlFor="transactionType">Type</label>
               <select
                 id="transactionType"
@@ -254,7 +270,7 @@ export default function AddTransactionModal({ onClose }: Props) {
 
             {/* Expense category selector */}
             {data.transactionType === "expense" && (
-              <div className="flex flex-col gap-3 p-3 pb-0 relative">
+              <div className="relative flex flex-col gap-3 p-3 pb-0">
                 <label htmlFor="transactionCategory">Category</label>
                 <select
                   id="transactionCategory"
@@ -275,7 +291,7 @@ export default function AddTransactionModal({ onClose }: Props) {
             )}
 
             {/* Account selector for both income and expense */}
-            <div className="flex flex-col gap-3 p-3 pb-0 relative">
+            <div className="relative flex flex-col gap-3 p-3 pb-0">
               <label htmlFor="account">Select Account</label>
               <select
                 id="account"
@@ -322,12 +338,12 @@ export default function AddTransactionModal({ onClose }: Props) {
           Add New Transaction
         </span>
         {isPending && (
-          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
+          <div className="absolute inset-0 flex items-center justify-center bg-black rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
         {transactionAdded && (
-          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 text-white rounded-md bg-emerald-900 ">
             Success <MdCheck />
           </div>
         )}

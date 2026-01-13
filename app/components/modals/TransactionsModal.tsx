@@ -139,27 +139,27 @@ export default function TransactionsModal({ onClose }: Props) {
   }
   return (
     <div
-      className="h-full w-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center w-full h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
 
-      <h2 className="text-xl font-semibold mb-4">Transactions</h2>
+      <h2 className="mb-4 text-xl font-semibold">Transactions</h2>
       <input
         type="text"
         placeholder="Search..."
         className="w-full p-5 mb-2 rounded-md"
         onChange={(e) => setSearch(e.target.value)}
       />
-      <ul className="w-full flex flex-col gap-1 overflow-y-auto grow">
+      <ul className="flex flex-col w-full gap-1 overflow-y-auto grow">
         {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
         {filteredTransactions?.map((transaction) => {
           return (
@@ -168,33 +168,33 @@ export default function TransactionsModal({ onClose }: Props) {
               className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
             >
               {transaction.category ? (
-                <div className="text-xs text-yellow-500 p-1 ">
+                <div className="p-1 text-xs text-yellow-500 ">
                   {transaction.category}
                 </div>
               ) : (
-                <div className="text-xs text-emerald-500 p-1 flex gap-1 items-center">
+                <div className="flex items-center gap-1 p-1 text-xs text-emerald-500">
                   +<FaMoneyBillTransfer />
                 </div>
               )}
 
-              <div className="row-start-2 col-start-1 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+              <div className="col-start-1 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
                 {transaction.company}
               </div>
 
               {transaction.transactionType === "expense" ? (
-                <p className="text-red-500 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+                <p className="row-start-2 p-1 overflow-hidden text-red-500 whitespace-nowrap text-ellipsis">
                   - {currencySymbol} {transaction.amount}
                 </p>
               ) : (
-                <p className="text-green-500 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+                <p className="row-start-2 p-1 overflow-hidden text-green-500 whitespace-nowrap text-ellipsis">
                   + {currencySymbol} {transaction.amount}
                 </p>
               )}
 
-              <p className="text-xs md:text-sm row-start-2 col-start-3 justify-self-end pr-3 p-1">
+              <p className="col-start-3 row-start-2 p-1 pr-3 text-xs md:text-sm justify-self-end">
                 {prettifyDate(transaction.date)}
               </p>
-              <div className="row-start-1 col-start-3 p-1 justify-self-end pr-5 flex gap-1">
+              <div className="flex col-start-3 row-start-1 gap-1 p-1 pr-5 justify-self-end">
                 <button
                   onClick={() =>
                     dispatch(
@@ -231,7 +231,7 @@ export default function TransactionsModal({ onClose }: Props) {
                       Cancel
                     </button>
                     <button
-                      className="px-3 text-red-500  hover:text-red-600"
+                      className="px-3 text-red-500 hover:text-red-600"
                       onClick={() => {
                         if (!transaction._id) return;
                         deleteMutation.mutate(transaction._id);

@@ -5,9 +5,7 @@ export function OverviewSkeleton({ items = 4 }: { items?: number }) {
   return (
     <div
       className="
-        w-full rounded-md border-2 border-(--border-blue)
-        bg-(--primary-bg) p-3 flex flex-col gap-3
-      "
+        w-full rounded-md border-2 border-(--border-blue) bg-(--primary-bg) p-3 flex flex-col gap-3"
     >
       <div className="flex justify-between">
         <h1 className="text-3xl">Overview</h1>
@@ -16,19 +14,19 @@ export function OverviewSkeleton({ items = 4 }: { items?: number }) {
         <p className="text-xl text-(--limegreen) bg-(--primary-blue) flex justify-between ">
           <span>Total balance: </span>
         </p>
-        <Skeleton className="h-6 w-1/5" />
+        <Skeleton className="w-1/5 h-6" />
       </div>
       <SeparatorLine />
       {Array.from({ length: items }).map((_, i) => (
         <div key={i} className="flex justify-between gap-3">
-          <Skeleton className="h-11 w-full" />
+          <Skeleton className="w-full h-11" />
         </div>
       ))}
       <div className="flex justify-between gap-10">
         <SeparatorLine width="1/2" />
         <SeparatorLine width="1/2" />
       </div>
-      <Skeleton className="h-11 w-full" />
+      <Skeleton className="w-full h-11" />
     </div>
   );
 }

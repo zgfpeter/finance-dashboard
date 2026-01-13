@@ -135,20 +135,20 @@ export default function GoalsModal({ onClose }: Props) {
   // TODO fix goals and goals, use one term only consistently
   return (
     <div
-      className="h-full w-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center w-full h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
 
-      <h2 className="text-xl font-semibold mb-4">Goals</h2>
+      <h2 className="mb-4 text-xl font-semibold">Goals</h2>
       <input
         type="text"
         placeholder="Search..."
@@ -156,7 +156,7 @@ export default function GoalsModal({ onClose }: Props) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <ul className="w-full flex flex-col gap-2  overflow-y-auto grow ">
+      <ul className="flex flex-col w-full gap-2 overflow-y-auto grow ">
         {/* each goal goal li is a grid with 2 columns, one for company+date and one for amount */}
         {filteredgoals?.map((goal) => {
           const isFullySaved =
@@ -171,7 +171,7 @@ export default function GoalsModal({ onClose }: Props) {
               key={goal._id}
               className="bg-(--border-blue) p-2 rounded-md gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
             >
-              <div className="flex gap-1  items-center md:justify-center text-xs w-fit ">
+              <div className="flex items-center gap-1 text-xs md:justify-center w-fit ">
                 <MdOutlineWatchLater color="orange" />
                 <span
                   className={
@@ -186,7 +186,7 @@ export default function GoalsModal({ onClose }: Props) {
                 </span>
               </div>
 
-              <div className="flex flex-col gap-1 col-span-2 md:col-span-1">
+              <div className="flex flex-col col-span-2 gap-1 md:col-span-1">
                 <div className="flex items-center justify-between w-full py-2">
                   <span aria-label="Goal title">{goal.title}</span>
                   <span
@@ -197,7 +197,7 @@ export default function GoalsModal({ onClose }: Props) {
                   </span>
                 </div>
                 <div className="relative">
-                  <p className="flex justify-between px-2 border border-teal-700 py-1 rounded-xl w-full text-sm z-10 relative">
+                  <p className="relative z-10 flex justify-between w-full px-2 py-1 text-sm border border-teal-700 rounded-xl">
                     <span aria-label={`Goal ${goal.title} current amount`}>
                       {goal.currentAmount}
                     </span>
@@ -232,7 +232,7 @@ export default function GoalsModal({ onClose }: Props) {
                   ></motion.span>
                 </div>
               </div>
-              <div className="flex items-center justify-self-end md:justify-center gap-1 col-start-2 row-start-1 md:col-start-auto md:row-start-auto">
+              <div className="flex items-center col-start-2 row-start-1 gap-1 justify-self-end md:justify-center md:col-start-auto md:row-start-auto">
                 <button
                   onClick={() =>
                     dispatch(
@@ -268,7 +268,7 @@ export default function GoalsModal({ onClose }: Props) {
                       Cancel
                     </button>
                     <button
-                      className="px-3 text-red-500  hover:text-red-600"
+                      className="px-3 text-red-500 hover:text-red-600"
                       onClick={() => {
                         if (!goal._id) return;
                         deleteMutation.mutate(goal._id);

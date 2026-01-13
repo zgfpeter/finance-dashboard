@@ -29,13 +29,13 @@ export default function DashboardPage() {
   const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   if (isLoading)
     return (
-      <div className="h-screen w-screen flex items-center justify-center">
+      <div className="flex items-center justify-center w-screen h-screen">
         <LoadingSpinner size="lg" />
       </div>
     );
   if (isError)
     return (
-      <div className="flex h-screen items-center p-5 text-red-500 justify-center gap-2">
+      <div className="flex items-center justify-center h-screen gap-2 p-5 text-red-500">
         <MdError />
         An error as occured.
       </div>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
               {isLoading ? (
                 <LoadingState message="" />
               ) : (
-                <span className="text-red-500 pl-1">
+                <span className="pl-1 text-red-500">
                   {" "}
                   {currencySymbol}{" "}
                   {getTotalSpendings(transactions || []).toFixed(2) ?? 0}

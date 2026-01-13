@@ -3,7 +3,6 @@ import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { prettifyDate } from "@/lib/utils";
-import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { TransactionsSkeleton } from "./ui/skeletons/TransactionsSkeleton";
@@ -15,18 +14,17 @@ export default function Transactions() {
   const transactions = data?.transactions || [];
   const dispatch = useDispatch();
   const hasTransactions = transactions.length > 0; // if true, there are some transactions
-  const showEmptyState = !isLoading && !hasTransactions;
   const { data: session } = useSession();
   const currency = session?.user?.currency; // get currency
   const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
   return (
-    <section className="flex flex-col  rounded-md gap-3 w-full h-full min-h-50">
+    <section className="flex flex-col w-full h-full gap-3 rounded-md min-h-50">
       <div className="flex items-center justify-between ">
-        <h2 className="flex items-center gap-2 p-2 rounded-md text-lg">
+        <h2 className="flex items-center gap-2 p-2 text-lg rounded-md">
           <FaMoneyBillTransfer /> Transactions
         </h2>
         <button
-          className="text-xl flex items-center"
+          className="flex items-center text-xl"
           onClick={() =>
             dispatch(openModal({ type: "addTransaction", data: null }))
           }
@@ -42,7 +40,7 @@ export default function Transactions() {
       ) : isError ? (
         <ErrorState message="Could not load transactions." />
       ) : hasTransactions ? (
-        <ul className="flex flex-col gap-2 h-96 overflow-y-auto ">
+        <ul className="flex flex-col gap-2 overflow-y-auto h-96 ">
           {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
           {transactions?.map((transaction) => {
             return (
@@ -50,15 +48,15 @@ export default function Transactions() {
                 key={transaction._id}
                 className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
               >
-                <div className="p-1 overflow-hidden whitespace-nowrap text-ellipsis row-start-2 ">
+                <div className="row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis ">
                   {transaction.company}
                 </div>
                 {transaction.category ? (
-                  <div className="text-xs text-yellow-500 p-1 ">
+                  <div className="p-1 text-xs text-yellow-500 ">
                     {transaction.category}
                   </div>
                 ) : (
-                  <div className="text-xs text-emerald-500 p-1 flex gap-1 items-center">
+                  <div className="flex items-center gap-1 p-1 text-xs text-emerald-500">
                     +<FaMoneyBillTransfer />
                   </div>
                 )}
@@ -71,12 +69,12 @@ export default function Transactions() {
                       - {currencySymbol} {transaction.amount}
                     </p>
                   ) : (
-                    <p className="text-green-500 py-2">
+                    <p className="py-2 text-green-500">
                       + {currencySymbol} {transaction.amount}
                     </p>
                   )}
                 </div>
-                <div className="row-start-2 col-start-3">
+                <div className="col-start-3 row-start-2">
                   <span className="text-xs">
                     {prettifyDate(transaction.date)}
                   </span>
@@ -92,7 +90,7 @@ export default function Transactions() {
 
       {/* shows full modal with all transactions, and options like edit and delete */}
       <button
-        className="underline p-2 w-fit self-center rounded-md  mt-auto"
+        className="self-center p-2 mt-auto underline rounded-md w-fit"
         disabled={!hasTransactions}
         onClick={() =>
           dispatch(openModal({ type: "transactions", data: null }))

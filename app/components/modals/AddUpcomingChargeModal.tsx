@@ -102,6 +102,22 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
     setData((prev) => {
       const key = name as keyof RecurringChargeForm;
+
+      // 5,99 not recognized on mobile devices
+      // replace , with .
+      // also remove any invalid characters (currency symbols, letters, spaces)
+      if (key === "amount") {
+        const sanitized = value
+          .replace(",", ".")
+          .replace(/[^0-9.]/g, "") // allow only digits and dot
+          .replace(/(\..*)\./g, "$1"); // prevent multiple dots
+
+        return {
+          ...prev,
+          amount: sanitized,
+        };
+      }
+
       // number fields we want to store as numbers when not empty:
       if (key === "interval" || key === "count") {
         return {
@@ -229,7 +245,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
   return (
     <div
-      className="h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -239,7 +255,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
           setData({ ...INITIAL_STATE }); // FIX: reset on manual close
           onClose();
         }}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -252,19 +268,19 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
       )}
 
       <form
-        className="w-full  flex flex-col gap-5"
+        className="flex flex-col w-full gap-5"
         onSubmit={handleSubmit}
         id="addCharge"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 px-2 py-1">
-          <div className=" flex flex-col gap-1 ">
+        <div className="grid grid-cols-1 gap-3 px-2 py-1 md:grid-cols-2">
+          <div className="flex flex-col gap-1 ">
             <label htmlFor="company" className="">
               Company <span className="text-red-500">*</span>
             </label>
 
             {/* A general error if the form validation fails */}
             {errors.company && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.company}
               </span>
             )}
@@ -281,24 +297,21 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
             />
           </div>
 
-          <div className=" flex flex-col gap-1">
+          <div className="flex flex-col gap-1 ">
             <label htmlFor="amount">Amount</label>
 
             {errors.amount && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.amount}
               </span>
             )}
 
             <input
-              type="number"
+              type="text" // FIX: number inputs reject commas on mobile (locale issue)
               value={data.amount}
-              min="0.01" // FIX: better UX
-              // with step 0.01, means this accepts positive numbers with up to 2 decimals, which is what i want for money input
-              // 2.99 accepted, but 2.099 not accepted since it doesn't make sense
-              step="0.01"
+              inputMode="decimal" //  shows numeric keyboard on mobile
               onChange={handleChange}
-              inputMode="decimal"
+              placeholder="0.00"
               name="amount"
               id="amount"
               className="border border-(--secondary-blue) rounded-md p-2  h-11"
@@ -306,7 +319,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-3 px-2 py-1">
-          <div className=" flex flex-col gap-1">
+          <div className="flex flex-col gap-1 ">
             <label htmlFor="date">
               Date <span className="text-red-500">*</span>
             </label>
@@ -320,7 +333,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               className="border border-(--secondary-blue) rounded-md pl-1  h-11"
             />
           </div>
-          <div className=" flex flex-col gap-1">
+          <div className="flex flex-col gap-1 ">
             <label htmlFor="chargeCategories">Category</label>
             <select
               id="chargeCategories"
@@ -339,7 +352,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
             </select>
           </div>
 
-          <div className=" flex flex-col gap-1">
+          <div className="flex flex-col gap-1 ">
             <label htmlFor="repeating" className="flex items-center gap-2">
               Repeats <MdEventRepeat />
             </label>
@@ -359,8 +372,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
           </div>
         </div>
         {data.repeating !== "noRepeat" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-0 md:place-items-center justify-evenly px-2 py-1 ">
-            <div className="flex items-center md:justify-between gap-3 ">
+          <div className="grid grid-cols-1 gap-3 px-2 py-1 md:grid-cols-2 md:gap-0 md:place-items-center justify-evenly ">
+            <div className="flex items-center gap-3 md:justify-between ">
               <label htmlFor="interval" className="flex items-center gap-2">
                 Repeats:
               </label>
@@ -403,7 +416,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
           </div>
         )}
 
-        {/* <div className="flex flex-col gap-3 relative">
+        {/* <div className="relative flex flex-col gap-3">
                 <label
                   htmlFor="nrOfOccurences"
                   className="flex items-center gap-2"
@@ -417,12 +430,12 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
                   min={1}
                   value={data.count ?? ""}
                   onChange={handleChange}
-                  className="border rounded-md pl-1 focus:outline-none h-11"
+                  className="pl-1 border rounded-md focus:outline-none h-11"
                 />
               </div>  */}
 
         {errors.date && (
-          <span className="text-red-500 pl-12">{errors.date}</span>
+          <span className="pl-12 text-red-500">{errors.date}</span>
         )}
       </form>
       <SeparatorLine width="3/4" />
@@ -456,14 +469,14 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
         {/* Loading overlay */}
         {isPending && (
-          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
+          <div className="absolute inset-0 flex items-center justify-center bg-black rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
 
         {/* Success overlay */}
         {chargeAdded && (
-          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 text-white rounded-md bg-emerald-900 ">
             Success <MdCheck />
           </div>
         )}

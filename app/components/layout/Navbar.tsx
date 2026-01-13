@@ -1,4 +1,6 @@
+// done
 "use client";
+// imports
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,27 +11,31 @@ import {
   FaWrench,
   FaSun,
   FaMoon,
-  FaMailBulk,
   FaEnvelope,
-  FaRegEnvelope,
 } from "react-icons/fa";
 import { useTheme } from "next-themes";
-import { MdMenu, MdClose } from "react-icons/md";
-import { useState, useEffect } from "react";
+import { MdMenu, MdClose, MdInfo } from "react-icons/md";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { useSession } from "next-auth/react";
-import { FaMailchimp } from "react-icons/fa6";
+
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const sidebarWidth = 350;
-  const { data: session } = useSession();
+  const { data: session } = useSession(); // get session
   const username = session?.user?.username; // get username
+  const [mounted, setMounted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // menu bar state
+  const [earlyAccessBubble, setEarlyAccessBubble] = useState(false); // early access info bubble state
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const isDark = resolvedTheme === "dark";
+  // toggles menu
   function toggleMenu() {
     setMenuOpen(!menuOpen);
   }
-  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     // Schedule the state update after the effect phase
     const id = requestAnimationFrame(() => {
@@ -38,8 +44,6 @@ export default function Navbar() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  const { resolvedTheme, setTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
   return (
     <div className="relative z-50">
       {/* Sidebar */}
@@ -50,22 +54,52 @@ export default function Navbar() {
         transition={{ type: "spring", stiffness: 300, damping: 32 }}
         aria-label="Sidebar navigation"
       >
-        <ul className="flex flex-col px-10 text-(--primary-orange) h-2/3 justify-around w-full">
-          <div className="flex flex-col items-center justify-center ">
-            <Image
-              src="/logo_1.png"
-              width={300}
-              height={200}
-              alt="Logo"
-            ></Image>
-          </div>
-
-          <p className="bg-linear-to-r from-teal-500 via-cyan-600 to-teal-900 bg-clip-text text-transparent text-center text-xl  border-l border-r border-orange-500 w-fit self-center px-5 py-1 rounded-md ">
+        <ul className="flex flex-col px-10 text-(--primary-orange) h-2/3 justify-around w-full ">
+          {/* <div className="flex flex-col items-center justify-center "> */}
+          <Image src="/logo_1.png" width={300} height={200} alt="Logo"></Image>
+          {/* </div> */}
+          <section
+            className="self-center w-fit"
+            onClick={(e) => setEarlyAccessBubble(!earlyAccessBubble)}
+          >
+            <div className="relative flex items-center gap-1">
+              {/* Info icon */}
+              Early Access
+              <MdInfo
+                className="text-(--primary-orange) cursor-pointer"
+                size={22}
+              />
+              {/* Info bubble */}
+              <AnimatePresence>
+                {earlyAccessBubble && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: 6 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: 6 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute z-50 flex flex-col p-3 mt-2 text-xs text-white -translate-x-1/2 bg-black border rounded-md left-30 w-50 h-fit top-full border-(--primary-orange)"
+                  >
+                    <button
+                      className="absolute text-lg right-1 top-1"
+                      onClick={(e) => setEarlyAccessBubble(false)}
+                    >
+                      <MdClose color="red" />
+                    </button>
+                    <span>Early Access</span>
+                    <span className="opacity-80">
+                      Free during development. Pricing will be introduced later.
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </section>
+          <p className="self-center px-5 py-1 text-xl text-center text-transparent border-l border-r border-orange-500 rounded-md bg-linear-to-r from-teal-500 via-cyan-600 to-teal-900 bg-clip-text w-fit ">
             {username}
           </p>
 
-          <div className="flex justify-between py-3 items-center">
-            <div className="flex flex-col items-center justify-between gap-3">
+          <div className="flex items-center justify-between py-3">
+            <div className="flex flex-col justify-between gap-3">
               <button
                 className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2 text-sm"
                 onClick={() =>
@@ -73,8 +107,9 @@ export default function Navbar() {
                 }
                 aria-label="Settings"
               >
-                <span className="flex items-center gap-2 relative">
+                <span className="relative flex items-center gap-2">
                   <FaWrench /> SETTINGS
+                  {/* underline animation */}
                   <span
                     className="absolute -bottom-1 left-0 h-1 rounded-md bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
                     aria-hidden="true"
@@ -88,9 +123,34 @@ export default function Navbar() {
                   dispatch(openModal({ type: "contact", data: null }))
                 }
               >
-                <span className="flex items-center gap-2 relative">
+                <span className="relative flex items-center gap-2">
                   <FaEnvelope /> CONTACT
+                  {/* underline animation */}
                   <span
+                    className="absolute -bottom-1 left-0 h-1 rounded-md bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
+                    aria-hidden="true"
+                  ></span>
+                </span>
+              </button>
+              {/* import / export button */}
+              <button
+                className="hover:bg-(--hover-blue) hover:text-(--text-light) group w-fit p-2 text-sm flex items-center gap-1"
+                aria-label="Import/export data"
+                onClick={() =>
+                  dispatch(openModal({ type: "importExport", data: null }))
+                }
+              >
+                <span className="relative flex items-center gap-2">
+                  <span className="flex items-center gap-1">
+                    <FaFileImport />
+                    IMPORT
+                  </span>
+                  /
+                  <span className="flex items-center gap-1">
+                    EXPORT <FaFileExport />
+                  </span>
+                  <span
+                    //  underline animation
                     className="absolute -bottom-1 left-0 h-1 rounded-md bg-(--limegreen) transition-all duration-300 w-0 group-hover:w-full"
                     aria-hidden="true"
                   ></span>
@@ -108,15 +168,15 @@ export default function Navbar() {
               >
                 <motion.div
                   className="w-5 h-5 bg-(--text-light) rounded-full shadow-lg flex items-center justify-center relative overflow-hidden"
-                  // 1. Move the handle based on theme state
+                  //  Move the handle based on theme state
                   animate={{
                     x: isDark ? 30 : 0, // Moves 30px to the right
                     rotate: isDark ? 360 : 0, // Spins 360 degrees
                   }}
-                  // 2. The spring gives it that physical "rolling" feel
+                  // The spring gives it that physical rolling effect
                   transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 >
-                  {/* SUN ICON */}
+                  {/* sun icon */}
                   <motion.div
                     className="absolute text-orange-500"
                     animate={{
@@ -127,7 +187,7 @@ export default function Navbar() {
                   >
                     <FaSun size={18} />
                   </motion.div>
-                  {/* MOON ICON */}
+                  {/* moon icon */}
                   <motion.div
                     className="absolute "
                     animate={{
@@ -142,36 +202,11 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          <div className="flex items-center gap-3 text-xs w-full justify-between rounded-md ">
-            <button
-              className=" hover:bg-(--hover-blue) hover:text-(--text-light) w-36 "
-              onClick={() =>
-                dispatch(openModal({ type: "importExport", data: null }))
-              }
-            >
-              <div
-                className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 w-full "
-                aria-label="Import data"
-              >
-                <span>IMPORT</span>
-                <FaFileImport />
-              </div>
-            </button>
-            <button
-              className="hover:bg-(--hover-blue) hover:text-(--text-light) w-36"
-              aria-label="Export data"
-            >
-              <div className="border px-2 py-3 rounded-md border-(--error-blue) hover:rounded-none transition-all duration-300 flex items-center justify-center gap-3 ">
-                <span>EXPORT</span>
-                <FaFileExport />
-              </div>
-            </button>
-          </div>
         </ul>
 
-        {/* Sign Out */}
+        {/* Sign out */}
         <motion.div
-          className="relative w-36 self-center mb-20"
+          className="relative self-center mb-20 w-36"
           initial="initial"
           whileHover="hover"
         >
@@ -196,13 +231,12 @@ export default function Navbar() {
         </motion.div>
       </motion.nav>
 
-      {/* Background Overlay */}
-      {/* TODO space button and page content properly */}
+      {/* Background overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
             onClick={toggleMenu}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20"
+            className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -211,7 +245,7 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Toggle Button */}
+      {/* Navbar toggle button */}
       <motion.button
         onClick={toggleMenu}
         className="fixed top-4.5 left-3  lg:top-1/2 lg:-translate-y-1/2 rounded-full bg-(--primary-orange) text-white flex items-center justify-center text-4xl z-30 w-16 h-16 "
@@ -226,6 +260,44 @@ export default function Navbar() {
         }}
       >
         {menuOpen ? <MdClose /> : <MdMenu />}
+        {!menuOpen && (
+          <section
+            className="absolute left-5 top-30"
+            onClick={(e) => setEarlyAccessBubble(!earlyAccessBubble)}
+          >
+            <div className="relative flex items-center">
+              {/* Info icon */}
+              <MdInfo
+                className="text-(--primary-orange) cursor-pointer"
+                size={22}
+              />
+
+              {/* Info bubble */}
+              <AnimatePresence>
+                {earlyAccessBubble && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: 6 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: 6 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute z-50 flex flex-col p-3 mt-2 text-xs text-white -translate-x-1/2 bg-black border rounded-md left-30 w-50 h-fit top-full border-(--primary-orange)"
+                  >
+                    <button
+                      className="absolute text-lg right-1 top-1"
+                      onClick={(e) => setEarlyAccessBubble(false)}
+                    >
+                      <MdClose color="red" />
+                    </button>
+                    <span>Early Access</span>
+                    <span className="opacity-80">
+                      Free during development. Pricing will be introduced later.
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </section>
+        )}
       </motion.button>
     </div>
   );

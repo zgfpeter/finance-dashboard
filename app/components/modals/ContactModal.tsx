@@ -126,14 +126,14 @@ export default function ContactModal({ onClose }: Props) {
 
   return (
     <div
-      className=" h-full flex items-center flex-col justify-evenly relative"
+      className="relative flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -147,13 +147,13 @@ export default function ContactModal({ onClose }: Props) {
       {errors.general && <ErrorState message={errors.general} />}
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly relative"
+        className="relative flex flex-col items-center w-full max-w-xl justify-evenly"
         id="contactForm"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col">
+        <div className="flex flex-col w-full">
           {/* Reason dropdown */}
-          <div className="flex flex-col p-1 gap-1">
+          <div className="flex flex-col gap-1 p-1">
             <label htmlFor="reason">Reason</label>
             <select
               id="reason"
@@ -172,7 +172,7 @@ export default function ContactModal({ onClose }: Props) {
           </div>
 
           {/* Title */}
-          <div className="flex flex-col p-1 gap-1">
+          <div className="flex flex-col gap-1 p-1">
             <label htmlFor="title">
               Title <span className="text-red-500">*</span>
             </label>
@@ -187,12 +187,12 @@ export default function ContactModal({ onClose }: Props) {
               className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
             />
             {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.title}</p>
             )}
           </div>
 
           {/* Email) */}
-          <div className="flex flex-col p-1 gap-1">
+          <div className="flex flex-col gap-1 p-1">
             <label htmlFor="email">
               Email <span className="text-red-500">*</span>
             </label>
@@ -207,12 +207,12 @@ export default function ContactModal({ onClose }: Props) {
               className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
             )}
           </div>
 
           {/* Body */}
-          <div className="flex flex-col p-1 gap-1">
+          <div className="flex flex-col gap-1 p-1">
             <label htmlFor="body">
               Message <span className="text-red-500">*</span>
             </label>
@@ -227,7 +227,7 @@ export default function ContactModal({ onClose }: Props) {
               className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500"
             />
             {errors.body && (
-              <p className="text-red-500 text-sm mt-1">{errors.body}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.body}</p>
             )}
           </div>
         </div>
@@ -250,13 +250,13 @@ export default function ContactModal({ onClose }: Props) {
         </span>
 
         {isPending && (
-          <div className="absolute flex items-center justify-center bg-black inset-0 rounded-md">
+          <div className="absolute inset-0 flex items-center justify-center bg-black rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
 
         {success && (
-          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 text-white rounded-md bg-emerald-900">
             Sent <MdCheck />
           </div>
         )}
@@ -264,7 +264,7 @@ export default function ContactModal({ onClose }: Props) {
 
       {/* server error block: if mutation failed show a simple message */}
       {isError && !errors.general && (
-        <div className="text-red-500 mt-3">
+        <div className="mt-3 text-red-500">
           An error occurred sending the message.
         </div>
       )}

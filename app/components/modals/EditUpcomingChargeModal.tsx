@@ -96,6 +96,25 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
   });
 
   if (!data) return <ErrorState message="No data" />;
+  function sanitizeDecimalInput(value: string) {
+    let sanitized = value.replace(",", "."); // mobile / EU keyboards
+    sanitized = sanitized.replace(/[^0-9.]/g, ""); // keep digits + dot
+
+    const parts = sanitized.split(".");
+    if (parts.length > 2) {
+      sanitized = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    if (sanitized.startsWith(".")) {
+      sanitized = "0" + sanitized;
+    }
+
+    return sanitized;
+  }
+
+  function sanitizeText(value: string) {
+    return value.replace(/\s+/g, " ").trim();
+  }
 
   // get the states from the updateMutation
   const { isPending, isError } = updateMutation;
@@ -157,14 +176,14 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
 
   return (
     <section
-      className=" h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -172,17 +191,17 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
       <h2 className="text-xl font-semibold">Editing charge: {data?.company}</h2>
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between ">
-          <div className="flex flex-col p-3 gap-3 relative">
+        <div className="flex flex-col justify-between w-full ">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="company">
               Company <span className="text-red-500">*</span>
             </label>
             {/* error if the form validation fails */}
             {errors.company && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.company}
               </span>
             )}
@@ -191,31 +210,31 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               value={company}
               required
               maxLength={40}
-              onChange={(e) => setCompany(e.target.value)}
+              onChange={(e) => setCompany(sanitizeText(e.target.value))}
               name="company"
               id="company"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="amount">Amount</label>
             {errors.amount && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.amount}
               </span>
             )}
             <input
-              type="number"
+              type="text"
               value={amount}
               inputMode="decimal"
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(sanitizeDecimalInput(e.target.value))}
               name="amount"
               id="amount"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex relative">
-            <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex">
+            <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="date">
                 Date <span className="text-red-500">*</span>
               </label>
@@ -231,7 +250,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               />
             </div>
             {/* TODO maybe add a recurring charge, or subscription */}
-            <div className="flex flex-col p-3 gap-3 relative">
+            <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="transactionType">Category</label>
               {/* {errors.type && (
                 <span className="text-red-500">{errors.type}</span>
@@ -254,12 +273,12 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
             </div>
           </div>
           {errors.date && (
-            <span className="text-red-500 pl-12">{errors.date}</span>
+            <span className="pl-12 text-red-500">{errors.date}</span>
           )}
 
-          <div className="flex justify-evenly items-center self-center p-3 w-full mt-10">
+          <div className="flex items-center self-center w-full p-3 mt-10 justify-evenly">
             <button
-              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
               onClick={onClose}
@@ -267,7 +286,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               <MdClose size={20} />
             </button>
             <button
-              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r rounded-full hover:text-emerald-600 border-emerald-600"
               aria-label="Save changes"
               disabled={isPending}
             >

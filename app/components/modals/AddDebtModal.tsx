@@ -1,13 +1,15 @@
 "use client";
+
+// imports
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Debt } from "@/lib/types/dashboard";
-
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import SeparatorLine from "../ui/SeparatorLine";
 import { MdCheck } from "react-icons/md";
+
 interface Props {
   onClose: () => void;
 }
@@ -15,17 +17,14 @@ interface Props {
 export default function AddDebtModal({ onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
-
   const [data, setData] = useState<Debt>({
     company: "",
     currentPaid: "",
     totalAmount: "",
     dueDate: "",
   });
-
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
-    id: "",
     company: "",
     currentPaid: "",
     totalAmount: "",
@@ -37,44 +36,67 @@ export default function AddDebtModal({ onClose }: Props) {
   const queryClient = useQueryClient();
 
   // handle the input change
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
     const { name, value } = e.target;
-    setData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    setData((prev) => {
+      // sanitize amount input (mobile keyboards may use commas)
+      if (name === "amount") {
+        const sanitized = value
+          .replace(",", ".") // allow european decimal separator
+          .replace(/[^0-9.]/g, "") // remove letters, currency symbols, spaces
+          .replace(/(\..*)\./g, "$1"); // prevent more than one dot
+
+        return {
+          ...prev,
+          amount: sanitized,
+        };
+      }
+
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   }
 
   // simple form validation
   function validateForm() {
     const newErrors: { [key: string]: string } = {};
+
     // set the errors state so that i can use it to show error messages
     if (!data.company.trim()) {
       newErrors.company = "Company is required.";
     }
+
     if (Number(data.currentPaid) < 0) {
-      newErrors.amount = "Current paid amount must be >= 0";
+      newErrors.currentPaid = "Current paid amount must be ≥ 0";
     }
+
     if (Number(data.totalAmount) < 0) {
-      newErrors.amount = "Total amount must be >= 0";
+      newErrors.totalAmount = "Total amount must be ≥ 0";
     }
+
     if (!data.dueDate) {
-      newErrors.date = "Date is required";
+      newErrors.dueDate = "Date is required";
 
       // it's fine if date is in the past, give users that flexibility
       // } else {
       // to check if the entered date is not a future date:
       //const debtDate = new Date(data.dueDate);
       //const today = new Date();
-      //today.setHours(0, 0, 0, 0);
+      //today.setHours(0, 0, 0, 0);E
 
       // if (debtDate < today) {
-      //   newErrors.date = "Date cannot be in the past.";
+      //   newErrors.dueDate = "Date cannot be in the past.";
       // }
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-    // if there are no errors in the for, this will return true
+    // if there are no errors in the form, this will return true
     // if there's at least one error, then it will return false
   }
 
@@ -82,14 +104,21 @@ export default function AddDebtModal({ onClose }: Props) {
     mutationFn: (payload: Debt) => axiosAuth.post(`/dashboard/debts`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-      // when i cal invalidateQueries, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical if i want fresh UI data updates
+      // when i call invalidateQueries, tanstack query sees that and automatically runs the query again,
+      // gets fresh data, updates UI everywhere. Critical if i want fresh UI data updates
     },
   });
 
+  // if there's no data, return error message
   if (!data) return <ErrorState message="No data" />;
 
   // get the states from the updateMutation
   const { isPending, isError } = addMutation;
+
+  // if an error occured, return error message
+  if (isError) {
+    return <ErrorState message="An error has occured" />;
+  }
 
   // handle the submit: check if form is valid, then call the mutate method that makes the POST request
   function handleSubmit(e: React.FormEvent) {
@@ -111,49 +140,48 @@ export default function AddDebtModal({ onClose }: Props) {
       currentPaid: "",
       totalAmount: "",
     });
+
     setdebtAdded(true);
+
     // closes the modal
     onClose();
   }
 
-  if (isError) <ErrorState message="An error has occured" />;
-
   return (
     <div
-      className=" h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
+      {/* heading */}
       <h2 className="text-xl font-semibold">Add a new debt</h2>
 
-      {errors.generalError && (
-        <p className="text-red-500">{errors.generalError}</p>
-      )}
-
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
         id="addDebt"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between  ">
-          <div className="flex flex-col p-3 gap-3 relative">
+        <div className="flex flex-col justify-between w-full">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="company">
               Title <span className="text-red-500">*</span>
             </label>
+
             {/* A general error if the form validation fails */}
             {errors.company && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.company}
               </span>
             )}
+
             <input
               type="text"
               value={data.company}
@@ -162,46 +190,54 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
+              className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
+
           <div className="flex">
-            <div className="flex flex-col p-3 gap-3 relative w-1/2">
-              <label htmlFor="currentpaid">Paid Amount</label>
-              {errors.paidAmount && (
-                <span className="text-red-500 absolute right-5">
-                  {errors.paidAmount}
+            <div className="relative flex flex-col w-1/2 gap-3 p-3">
+              <label htmlFor="currentPaid">Paid Amount</label>
+
+              {errors.currentPaid && (
+                <span className="absolute text-red-500 right-5">
+                  {errors.currentPaid}
                 </span>
               )}
+
               <input
-                type="number"
+                type="text"
                 value={data.currentPaid}
                 onChange={handleChange}
                 inputMode="decimal"
                 name="currentPaid"
                 id="currentPaid"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
+                className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
-            <div className="flex flex-col p-3 gap-3 relative w-1/2">
-              <label htmlFor="totalAmount">Total Amount </label>
+
+            <div className="relative flex flex-col w-1/2 gap-3 p-3">
+              <label htmlFor="totalAmount">Total Amount</label>
+
               {errors.totalAmount && (
-                <span className="text-red-500 absolute right-5">
+                <span className="absolute text-red-500 right-5">
                   {errors.totalAmount}
                 </span>
               )}
+
               <input
-                type="number"
+                type="text"
                 value={data.totalAmount}
                 onChange={handleChange}
                 inputMode="decimal"
                 name="totalAmount"
+                placeholder="0.00"
                 id="totalAmount"
                 className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
           </div>
-          <div className="flex flex-col p-3 gap-3 relative w-1/2">
+
+          <div className="relative flex flex-col w-1/2 gap-3 p-3">
             <label htmlFor="dueDate">
               Due Date <span className="text-red-500">*</span>
             </label>
@@ -213,28 +249,23 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="dueDate"
               id="dueDate"
-              className="border border-(--secondary-blue) rounded-md  pl-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
+              className="border border-(--secondary-blue) rounded-md pl-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
             />
           </div>
 
-          {errors.date && (
-            <span className="text-red-500 pl-12">{errors.date}</span>
+          {errors.dueDate && (
+            <span className="pl-12 text-red-500">{errors.dueDate}</span>
           )}
         </div>
       </form>
+
       <SeparatorLine width="3/4" />
+
+      {/* Submit button is outside the form, so i need to bind it explicitly using the form id */}
       <button
         type="submit"
-        className="  relative
-    border
-    rounded-md
-    px-6
-    py-3
-    min-w-[180px]
-    grid
-    place-items-center
-    hover:border-teal-500
-    disabled:opacity-70"
+        form="addDebt"
+        className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70"
         aria-label="Add new charge"
       >
         <span
@@ -244,14 +275,16 @@ export default function AddDebtModal({ onClose }: Props) {
         >
           Add New Charge
         </span>
+
         {isPending && (
-          <div className="absolute flex items-center justify-center bg-black inset-0  rounded-md">
+          <div className="absolute inset-0 flex items-center justify-center bg-black rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
+
         {/* Success overlay */}
         {debtAdded && (
-          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-emerald-900 rounded-md text-white ">
+          <div className="absolute inset-0 flex items-center justify-center gap-3 text-white rounded-md bg-emerald-900">
             Success <MdCheck />
           </div>
         )}

@@ -71,14 +71,14 @@ export default function EditSettingsModal({ data, onClose }: Props) {
   if (!data) return <ErrorState message="No data" />;
   return (
     <section
-      className="h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
         type="button"
       >
@@ -88,12 +88,12 @@ export default function EditSettingsModal({ data, onClose }: Props) {
       <h2 className="text-xl font-semibold">Editing settings</h2>
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between ">
+        <div className="flex flex-col justify-between w-full ">
           <div>
-            <div className="relative h-20 w-20 md:w-40 md:h-40 justify-self-center my-3">
+            <div className="relative w-20 h-20 my-3 md:w-40 md:h-40 justify-self-center">
               {imageLoading && (
                 <div className="absolute inset-0 flex items-center justify-center border border-(--primary-orange) rounded-md bg-black/10 z-10">
                   <LoadingSpinner size="sm" />
@@ -124,7 +124,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
                 <label htmlFor="avatar">Avatar Url</label>
                 {/* error if the form validation fails */}
                 {/* {errors.avatar && (
-                  <span className="text-red-500 absolute right-5">
+                  <span className="absolute text-red-500 right-5">
                     {errors.avatar}
                   </span>
                 )} */}
@@ -146,7 +146,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
                 <label htmlFor="username">New username</label>
                 {/* error if the form validation fails */}
                 {/* {errors.username && (
-                  <span className="text-red-500 absolute right-5">
+                  <span className="absolute text-red-500 right-5">
                     {errors.username}
                   </span>
                 )} */}
@@ -187,15 +187,15 @@ export default function EditSettingsModal({ data, onClose }: Props) {
           </div>
 
           {isError && (
-            <p className="text-red-500 text-sm text-center mt-2">
+            <p className="mt-2 text-sm text-center text-red-500">
               {(error as Error).message}
             </p>
           )}
 
-          <div className="flex justify-evenly items-center self-center p-3 w-full">
+          <div className="flex items-center self-center w-full p-3 justify-evenly">
             <button
               type="button"
-              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               onClick={onClose}
             >
@@ -204,7 +204,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
 
             <button
               type="submit"
-              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r rounded-full hover:text-emerald-600 border-emerald-600"
               aria-label="Save changes"
               disabled={isPending}
             >

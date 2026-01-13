@@ -2,7 +2,6 @@
 import { motion } from "framer-motion";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
-import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { IncomeSkeleton } from "./ui/skeletons/IncomeSkeleton";
@@ -26,7 +25,6 @@ export default function IncomeCard() {
   // the ?? 0 is a fallback, if data isn't loaded, it will be 0
 
   const showEmptyState = !isLoading && !hasIncome;
-  const showIncome = !isLoading && hasIncome;
 
   if (isLoading) {
     return <IncomeSkeleton />;

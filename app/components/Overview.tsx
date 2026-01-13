@@ -1,11 +1,9 @@
 import { useDashboard } from "../hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import { IoMdTrendingUp } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useMemo } from "react";
 import SeparatorLine from "./ui/SeparatorLine";
-import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { OverviewSkeleton } from "./ui/skeletons/OverviewSkeleton";
@@ -30,7 +28,6 @@ export default function Overview() {
   const accounts = useMemo(() => {
     return data?.accounts ?? [];
   }, [data?.accounts]);
-  console.log(accounts);
 
   // check if there is any useful data to display
   const hasData =
@@ -67,11 +64,11 @@ export default function Overview() {
   }
 
   return (
-    <section className="flex flex-col gap-3 h-full overflow-y-auto justify-evenly">
+    <section className="flex flex-col h-full gap-3 overflow-y-auto justify-evenly">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl">Overview</h1>
         <button
-          className="text-xl flex items-center p-1"
+          className="flex items-center p-1 text-xl"
           onClick={() =>
             dispatch(
               openModal({

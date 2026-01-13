@@ -43,6 +43,26 @@ export default function EditGoalModal({ data, onClose }: Props) {
     generalError: "",
   });
 
+  function sanitizeDecimalInput(value: string) {
+    let sanitized = value.replace(",", "."); // mobile / EU keyboards
+    sanitized = sanitized.replace(/[^0-9.]/g, ""); // keep digits + dot
+
+    const parts = sanitized.split(".");
+    if (parts.length > 2) {
+      sanitized = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    if (sanitized.startsWith(".")) {
+      sanitized = "0" + sanitized;
+    }
+
+    return sanitized;
+  }
+
+  function sanitizeText(value: string) {
+    return value.replace(/\s+/g, " ").trim();
+  }
+
   // tanstack mutation: PUT
   // this runs when i call mutate()
   const updateMutation = useMutation({
@@ -117,7 +137,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
     // if there are no errors in the form
     updateMutation.mutate({
       ...data,
-      title,
+      title: sanitizeText(title),
       currentAmount,
       targetAmount,
       targetDate,
@@ -160,14 +180,14 @@ export default function EditGoalModal({ data, onClose }: Props) {
 
   return (
     <section
-      className=" h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -175,17 +195,17 @@ export default function EditGoalModal({ data, onClose }: Props) {
       <h2 className="text-xl font-semibold">Editing goal: {data?.title}</h2>
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between ">
-          <div className="flex flex-col p-3 gap-3 relative">
+        <div className="flex flex-col justify-between w-full ">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="title">
               Title <span className="text-red-500">*</span>
             </label>
             {/* error if the form validation fails */}
             {errors.title && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.title}
               </span>
             )}
@@ -194,48 +214,54 @@ export default function EditGoalModal({ data, onClose }: Props) {
               value={title}
               required
               maxLength={40}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setTitle(sanitizeText(e.target.value))}
               name="title"
               id="title"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="currentAmount">Current Amount</label>
             {errors.currentAmount && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.currentAmount}
               </span>
             )}
             <input
-              type="number"
+              type="text"
               value={currentAmount}
               inputMode="decimal"
-              onChange={(e) => setCurrentAmount(e.target.value)}
+              placeholder="0.00"
+              onChange={(e) =>
+                setCurrentAmount(sanitizeDecimalInput(e.target.value))
+              }
               name="currentAmount"
               id="currentAmount"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="targetAmount">Target Amount</label>
             {errors.targetAmount && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.targetAmount}
               </span>
             )}
             <input
-              type="number"
+              type="text"
               value={targetAmount}
               inputMode="decimal"
-              onChange={(e) => setTargetAmount(e.target.value)}
+              placeholder="0.00"
+              onChange={(e) =>
+                setTargetAmount(sanitizeDecimalInput(e.target.value))
+              }
               name="targetAmount"
               id="targetAmount"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex relative justify-between">
-            <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex justify-between">
+            <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="targetDate">
                 Target Date <span className="text-red-500">*</span>
               </label>
@@ -252,19 +278,19 @@ export default function EditGoalModal({ data, onClose }: Props) {
             </div>
           </div>
           {errors.date && (
-            <span className="text-red-500 pl-12">{errors.date}</span>
+            <span className="pl-12 text-red-500">{errors.date}</span>
           )}
 
-          <div className="flex justify-evenly items-center self-center p-3 w-full mt-10">
+          <div className="flex items-center self-center w-full p-3 mt-10 justify-evenly">
             <button
-              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
             >
               <MdClose size={20} />
             </button>
             <button
-              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r rounded-full hover:text-emerald-600 border-emerald-600"
               aria-label="Save changes"
               disabled={isPending}
             >

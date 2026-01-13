@@ -28,23 +28,22 @@ export default function SettingsModal({ onClose }: Props) {
 
   return (
     <div
-      className=" flex flex-col  h-full items-center py-10
-      "
+      className="flex flex-col items-center h-full py-10 "
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
-      <h2 className="text-xl font-semibold mb-4">Settings</h2>
-      <div className="w-full flex justify-around items-center h-full">
-        <div className="flex flex-col h-full justify-center gap-5 relative">
-          <h3 className="flex  justify-between items-center">
+      <h2 className="mb-4 text-xl font-semibold">Settings</h2>
+      <div className="flex items-center justify-around w-full h-full">
+        <div className="relative flex flex-col justify-center h-full gap-5">
+          <h3 className="flex items-center justify-between">
             <span>{user?.username}</span>
           </h3>
 
@@ -52,7 +51,7 @@ export default function SettingsModal({ onClose }: Props) {
             <p>{user?.email}</p>
           </div>
 
-          <div className="flex items-center gap-3 relative ">
+          <div className="relative flex items-center gap-3 ">
             <p>
               Currency:{" "}
               <span>
@@ -63,7 +62,7 @@ export default function SettingsModal({ onClose }: Props) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-1 relative hover:cursor-pointer h-50 w-50">
+        <div className="relative flex flex-col items-center gap-1 hover:cursor-pointer h-50 w-50">
           <Image
             src="/userProfile.jpg"
             alt="user profile photo"
@@ -80,7 +79,7 @@ export default function SettingsModal({ onClose }: Props) {
       </div>
       <div className="flex gap-10">
         <button
-          className="flex items-center p-3 gap-1 hover:text-orange-400 "
+          className="flex items-center gap-1 p-3 hover:text-orange-400 "
           onClick={() =>
             dispatch(
               openModal({
@@ -93,7 +92,7 @@ export default function SettingsModal({ onClose }: Props) {
           <MdEdit className="pt-px" color="orange" /> Edit Details
         </button>
         <button
-          className="flex items-center p-3 gap-1 hover:text-red-500"
+          className="flex items-center gap-1 p-3 hover:text-red-500"
           onClick={() => setOpenConfirmationModal(true)}
         >
           <MdDelete className="pt-px " color="red" /> Delete Account
@@ -103,7 +102,7 @@ export default function SettingsModal({ onClose }: Props) {
       {/* inset is shorthand for top-0, bottom-0,left-0,right-0 */}
       {openConfirmationModal && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-20"
+          className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm"
           onClick={() => setOpenConfirmationModal(false)}
         ></div>
       )}
@@ -115,19 +114,19 @@ export default function SettingsModal({ onClose }: Props) {
           <h2 className="text-lg font-semibold ">
             Are you sure you want to delete your account?
           </h2>
-          <p className="text-stone-400 flex flex-col ">
+          <p className="flex flex-col text-stone-400 ">
             <span className="font-semibold text-red-500">Warning! </span>
             <span>This cannot be undone. All your data will be erased.</span>
           </p>
 
-          <div className=" flex items-center justify-evenly ">
+          <div className="flex items-center justify-evenly">
             <button
-              className="hover:text-emerald-600 flex items-center justify-center border-emerald-500 border-l border-r px-3 rounded-md h-11"
+              className="flex items-center justify-center px-3 border-l border-r rounded-md hover:text-emerald-600 border-emerald-500 h-11"
               onClick={() => setOpenConfirmationModal(false)}
             >
               Cancel
             </button>
-            <button className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r px-3 rounded-md h-11">
+            <button className="flex items-center justify-center px-3 border-l border-r border-red-500 rounded-md hover:text-red-600 h-11">
               Delete
             </button>
           </div>

@@ -14,7 +14,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen">
       <Navbar /> {/* only renders if session exists */}
       <main className="flex-1">{children}</main>
     </div>

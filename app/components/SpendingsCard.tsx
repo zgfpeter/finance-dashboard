@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useDashboard } from "../hooks/useDashboard";
-import LoadingState from "./ui/LoadingState";
 import EmptyState from "./ui/EmptyState";
 import ErrorState from "./ui/ErrorState";
 import { SpendingsSkeleton } from "./ui/skeletons/SpendingsSkeleton";

@@ -35,6 +35,30 @@ export default function EditDebtModal({ data, onClose }: Props) {
     return new Date(data?.dueDate).toISOString().slice(0, 10);
   });
 
+  // sanitize decimal input:
+  // - replace commas with dots
+  // - allow only digits and ONE dot
+  // - normalize leading dot (.5 -> 0.5)
+  function sanitizeDecimalInput(value: string) {
+    let sanitized = value.replace(",", "."); // mobile / EU keyboards
+    sanitized = sanitized.replace(/[^0-9.]/g, ""); // keep digits + dot
+
+    const parts = sanitized.split(".");
+    if (parts.length > 2) {
+      sanitized = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    if (sanitized.startsWith(".")) {
+      sanitized = "0" + sanitized;
+    }
+
+    return sanitized;
+  }
+
+  function sanitizeText(value: string) {
+    return value.replace(/\s+/g, " ").trim();
+  }
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
     id: "",
@@ -117,11 +141,12 @@ export default function EditDebtModal({ data, onClose }: Props) {
     }
 
     // if there are no errors in the form
+    // sanitize again before mutation
     updateMutation.mutate({
       ...data,
-      company,
-      currentPaid,
-      totalAmount,
+      company: sanitizeText(company),
+      currentPaid: Number(sanitizeDecimalInput(String(currentPaid))),
+      totalAmount: Number(sanitizeDecimalInput(String(totalAmount))),
       dueDate,
     });
   };
@@ -161,14 +186,14 @@ export default function EditDebtModal({ data, onClose }: Props) {
 
   return (
     <section
-      className=" h-full flex items-center flex-col justify-evenly"
+      className="flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
@@ -176,17 +201,17 @@ export default function EditDebtModal({ data, onClose }: Props) {
       <h2 className="text-xl font-semibold">Editing debt: {data?.company}</h2>
 
       <form
-        className="flex flex-col items-center w-full max-w-xl justify-evenly gap-5 relative"
+        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
         onSubmit={handleSubmit}
       >
-        <div className="w-full flex flex-col justify-between ">
-          <div className="flex flex-col p-3 gap-3 relative">
+        <div className="flex flex-col justify-between w-full ">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="company">
               Company <span className="text-red-500">*</span>
             </label>
             {/* error if the form validation fails */}
             {errors.company && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.company}
               </span>
             )}
@@ -195,48 +220,54 @@ export default function EditDebtModal({ data, onClose }: Props) {
               value={company}
               required
               maxLength={40}
-              onChange={(e) => setCompany(e.target.value)}
+              onChange={(e) => setCompany(sanitizeText(e.target.value))}
               name="company"
               id="company"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="currentPaid">Paid</label>
             {errors.currentPaid && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.currentPaid}
               </span>
             )}
             <input
-              type="number"
+              type="text"
               value={currentPaid}
               inputMode="decimal"
-              onChange={(e) => setCurrentPaid(e.target.value)}
+              placeholder="0.00"
+              onChange={(e) =>
+                setCurrentPaid(sanitizeDecimalInput(e.target.value))
+              }
               name="currentPaid"
               id="currentPaid"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex flex-col gap-3 p-3">
             <label htmlFor="totalAmount">Total Owed</label>
             {errors.totalAmount && (
-              <span className="text-red-500 absolute right-5">
+              <span className="absolute text-red-500 right-5">
                 {errors.totalAmount}
               </span>
             )}
             <input
-              type="number"
+              type="text"
               value={totalAmount}
-              onChange={(e) => setTotalAmount(e.target.value)}
+              onChange={(e) =>
+                setCurrentPaid(sanitizeDecimalInput(e.target.value))
+              }
               inputMode="decimal"
+              placeholder="0.00"
               name="totalAmount"
               id="totalAmount"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="flex relative justify-between">
-            <div className="flex flex-col p-3 gap-3 relative">
+          <div className="relative flex justify-between">
+            <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="dueDate">
                 Due Date <span className="text-red-500">*</span>
               </label>
@@ -253,19 +284,19 @@ export default function EditDebtModal({ data, onClose }: Props) {
             </div>
           </div>
           {errors.date && (
-            <span className="text-red-500 pl-12">{errors.date}</span>
+            <span className="pl-12 text-red-500">{errors.date}</span>
           )}
 
-          <div className="flex justify-evenly items-center self-center p-3 w-full mt-10">
+          <div className="flex items-center self-center w-full p-3 mt-10 justify-evenly">
             <button
-              className="hover:text-red-600 flex items-center justify-center border-red-500 border-l border-r w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
             >
               <MdClose size={20} />
             </button>
             <button
-              className="hover:text-emerald-600 flex items-center justify-center border-l border-r border-emerald-600 w-10 rounded-full h-10"
+              className="flex items-center justify-center w-10 h-10 border-l border-r rounded-full hover:text-emerald-600 border-emerald-600"
               aria-label="Save changes"
               disabled={isPending}
             >

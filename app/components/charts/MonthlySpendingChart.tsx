@@ -1,28 +1,11 @@
 "use client";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
 import type { MonthlySpending } from "@/lib/types/dashboard";
-// #region Sample data
-
-const data = [
-  { name: "Jan", Spending: 1000 },
-  { name: "Feb", Spending: 400 },
-  { name: "Mar", Spending: 1200 },
-  { name: "Apr", Spending: 700 },
-  { name: "May", Spending: 200 },
-  { name: "Jun", Spending: 400 },
-  { name: "Jul", Spending: 1220 },
-  { name: "Aug", Spending: 620 },
-  { name: "Sept", Spending: 400 },
-  { name: "Oct", Spending: 900 },
-  { name: "Nov", Spending: 100 },
-  { name: "Dec", Spending: 0 },
-];
 
 interface Props {
   data: MonthlySpending[] | [];
 }
 
-// #endregion
 const MonthlySpendingChart = ({ data }: Props) => {
   return (
     <section className="flex flex-col w-full mr-4">

@@ -92,20 +92,20 @@ export default function UpcomingChargesModal({ onClose }: Props) {
   }
   return (
     <div
-      className=" h-full flex items-center flex-col justify-evenly relative"
+      className="relative flex flex-col items-center h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute right-10 top-4 text-red-500 text-xl"
+        className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
 
-      <h2 className="text-xl font-semibold mb-4">Upcoming Charges</h2>
+      <h2 className="mb-4 text-xl font-semibold">Upcoming Charges</h2>
 
       <input
         type="text"
@@ -115,7 +115,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <ul className="w-full flex flex-col gap-1 overflow-y-auto grow">
+      <ul className="flex flex-col w-full gap-1 overflow-y-auto grow">
         {filteredCharges.map((charge) => (
           <li
             key={charge._id}
@@ -134,21 +134,21 @@ export default function UpcomingChargesModal({ onClose }: Props) {
                 )}
               </div>
             )}
-            <div className="row-start-2 col-start-1 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+            <div className="col-start-1 row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
               {charge.company}
             </div>
 
             {/* amount */}
-            <p className=" text-yellow-500  row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis">
+            <p className="row-start-2 p-1 overflow-hidden text-yellow-500 whitespace-nowrap text-ellipsis">
               - {currencySymbol} {charge.amount}
             </p>
             {/* date */}
-            <p className="text-xs md:text-sm row-start-2 col-start-3 justify-self-end pr-3 p-1">
+            <p className="col-start-3 row-start-2 p-1 pr-3 text-xs md:text-sm justify-self-end">
               {prettifyDate(charge.date)}
             </p>
 
             {/* edit and delete buttons */}
-            <div className="row-start-1 col-start-3 p-1 justify-self-end pr-5 flex gap-1">
+            <div className="flex col-start-3 row-start-1 gap-1 p-1 pr-5 justify-self-end">
               {/* Edit button now dispatches Redux action */}
               <button
                 onClick={() =>
