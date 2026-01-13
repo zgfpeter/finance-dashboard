@@ -140,7 +140,7 @@ export default function UpcomingCharges() {
             return (
               <li
                 key={charge._id}
-                className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+                className="bg-(--border-blue) rounded-md relative  grid grid-cols-[4fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
               >
                 {charge.category && (
                   <div className="text-[0.8em] font-extralight text-yellow-500 px-1 flex items-center gap-1">

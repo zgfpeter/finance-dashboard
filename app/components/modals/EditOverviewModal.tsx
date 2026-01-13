@@ -2,14 +2,13 @@ import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { currencies, EditOverview } from "@/lib/types/dashboard";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { MdClose, MdCheck, MdAdd, MdDelete } from "react-icons/md";
+import { MdClose, MdCheck, MdDelete } from "react-icons/md";
 import {
   AccountType,
   DashboardData,
   CurrencyCode,
 } from "@/lib/types/dashboard";
 import { formatCurrency } from "@/lib/utils";
-import { filterGraphicalNotStackedItems } from "recharts/types/state/selectors/axisSelectors";
 import SeparatorLine from "../ui/SeparatorLine";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";

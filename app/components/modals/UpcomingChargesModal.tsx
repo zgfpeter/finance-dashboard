@@ -6,12 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { currencies, CurrencyCode, DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import {
-  MdEdit,
-  MdDelete,
-  MdEventRepeat,
-  MdOutlineRepeat,
-} from "react-icons/md";
+import { MdEdit, MdDelete, MdOutlineRepeat } from "react-icons/md";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { prettifyDate } from "@/lib/utils";
 import EmptyState from "../ui/EmptyState";
@@ -124,7 +119,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         {filteredCharges.map((charge) => (
           <li
             key={charge._id}
-            className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
+            className="bg-(--border-blue) rounded-md relative  grid grid-cols-[4fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
           >
             {/* company and category */}
 

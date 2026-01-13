@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
@@ -7,49 +7,40 @@ import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import SeparatorLine from "../ui/SeparatorLine";
 import { MdCheck } from "react-icons/md";
-
+import { useSession } from "next-auth/react";
+import { ContactForm, ContactReason } from "@/lib/types/contact";
 interface Props {
   onClose: () => void;
-}
-
-// Proper enum for contact reasons (exported for reuse if desired)
-export enum ContactReason {
-  Technical = "Technical",
-  Suggestion = "Suggestion",
-  Billing = "Billing",
-  Other = "Other",
-}
-
-// Shape of the form state
-interface ContactForm {
-  reason: ContactReason;
-  title: string;
-  body: string;
-  email?: string; // optional so you can contact back
 }
 
 export default function ContactModal({ onClose }: Props) {
   const axiosAuth = useAxiosAuth();
   const queryClient = useQueryClient();
 
+  // destructure data and rename the variable to session
+  const { data: session } = useSession();
+  const username = session?.user?.username || "";
+  const email = session?.user?.email || "";
+
   // initial form state
-  const [data, setData] = useState<ContactForm>({
+  const [formData, setFormData] = useState<ContactForm>({
     reason: ContactReason.Technical,
     title: "",
-    body: "",
-    email: "",
+    message: "",
+    email: email,
+    username: username,
   });
 
   // object of errors keyed by field name
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     reason: "",
     title: "",
-    body: "",
+    message: "",
     email: "",
     general: "",
   });
 
-  // success indicator
+  // message successfully sent indicator
   const [success, setSuccess] = useState(false);
 
   // Generic onChange handler that works for <input>, <textarea>, <select>
@@ -59,7 +50,7 @@ export default function ContactModal({ onClose }: Props) {
     >
   ) {
     const { name, value } = e.target;
-    setData((prev) => ({ ...prev, [name]: value } as ContactForm));
+    setFormData((prev) => ({ ...prev, [name]: value } as ContactForm));
 
     // clear an error for the field as user types
     setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -69,19 +60,19 @@ export default function ContactModal({ onClose }: Props) {
   function validateForm() {
     const newErrors: Record<string, string> = {};
 
-    if (!data.title.trim()) newErrors.title = "Title is required.";
-    if (!data.body.trim()) newErrors.body = "Message body is required.";
+    if (!formData.title.trim()) newErrors.title = "Title is required.";
+    if (!formData.message.trim()) newErrors.message = "Message is required.";
 
     // optional email validation if provided
-    if (data.email && data.email.trim()) {
+    if (formData.email && formData.email.trim()) {
       // very small email regex (okay for client-side only)
       const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-      if (!emailRe.test(data.email.trim()))
+      if (!emailRe.test(formData.email.trim()))
         newErrors.email = "Enter a valid email.";
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors).length === 0; // if an error exists, this will be false
   }
 
   // mutation to send the contact payload to the backend
@@ -90,11 +81,12 @@ export default function ContactModal({ onClose }: Props) {
     onSuccess: () => {
       // small optimistic UI: mark success, reset form and optionally invalidate queries
       setSuccess(true);
-      setData({
+      setFormData({
         reason: ContactReason.Technical,
         title: "",
-        body: "",
-        email: "",
+        message: "",
+        email: email,
+        username: username,
       });
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] }); // optional: in case contact affects server-side state you care about
 
@@ -121,7 +113,7 @@ export default function ContactModal({ onClose }: Props) {
     if (!validateForm()) return;
 
     // send the payload
-    contactMutation.mutate(data);
+    contactMutation.mutate(formData);
   }
 
   return (
@@ -139,6 +131,7 @@ export default function ContactModal({ onClose }: Props) {
         ✕
       </button>
 
+      {/* heading */}
       <h2 id="modal-title" className="text-xl font-semibold">
         Get in touch
       </h2>
@@ -158,7 +151,7 @@ export default function ContactModal({ onClose }: Props) {
             <select
               id="reason"
               name="reason"
-              value={data.reason}
+              value={formData.reason}
               onChange={handleChange}
               className="border border-(--secondary-blue) rounded-md p-2 h-11"
             >
@@ -178,7 +171,7 @@ export default function ContactModal({ onClose }: Props) {
             </label>
             <input
               type="text"
-              value={data.title}
+              value={formData.title}
               onChange={handleChange}
               name="title"
               id="title"
@@ -193,45 +186,44 @@ export default function ContactModal({ onClose }: Props) {
 
           {/* Email) */}
           <div className="flex flex-col gap-1 p-1">
-            <label htmlFor="email">
-              Email <span className="text-red-500">*</span>
-            </label>
+            <label htmlFor="email">Email</label>
             <input
+              disabled
               type="email"
-              value={data.email}
-              onChange={handleChange}
+              value={formData.email}
               name="email"
               id="email"
-              required={true}
               placeholder="yourEmail@example.com"
-              className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 h-11"
+              className="border border-(--secondary-blue) rounded-md p-2  h-11 text-gray-500"
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-500">{errors.email}</p>
             )}
           </div>
 
-          {/* Body */}
+          {/* message */}
           <div className="flex flex-col gap-1 p-1">
-            <label htmlFor="body">
+            <label htmlFor="message">
               Message <span className="text-red-500">*</span>
             </label>
             <textarea
-              id="body"
-              name="body"
-              value={data.body}
+              id="message"
+              name="message"
+              value={formData.message}
               onChange={handleChange}
               rows={3}
               required={true}
               maxLength={2000}
+              placeholder="Max 2000 characters"
               className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500"
             />
-            {errors.body && (
-              <p className="mt-1 text-sm text-red-500">{errors.body}</p>
+            {errors.message && (
+              <p className="mt-1 text-sm text-red-500">{errors.message}</p>
             )}
           </div>
         </div>
       </form>
+
       <SeparatorLine width="3/4" />
 
       <button

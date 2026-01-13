@@ -3,7 +3,7 @@
 import { useUpdateUserDetails } from "@/app/hooks/useUpdateUser";
 import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 import { UserSettings } from "@/lib/types/User";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import Image from "next/image";

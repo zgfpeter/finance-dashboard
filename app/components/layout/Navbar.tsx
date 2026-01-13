@@ -45,6 +45,7 @@ export default function Navbar() {
     return () => cancelAnimationFrame(id);
   }, []);
 
+  // handle clicks outside the early access info bubble
   useEffect(() => {
     if (!earlyAccessBubble) return;
 
@@ -56,7 +57,7 @@ export default function Navbar() {
         setEarlyAccessBubble(false);
       }
     }
-
+    // listen for clicks
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
@@ -74,8 +75,8 @@ export default function Navbar() {
         transition={{ type: "spring", stiffness: 300, damping: 32 }}
         aria-label="Sidebar navigation"
       >
+        {/* navbar menu links */}
         <ul className="flex flex-col px-10 text-(--primary-orange) h-2/3 justify-around w-full ">
-          {/* <div className="flex flex-col items-center justify-center "> */}
           <Image src="/logo_1.png" width={300} height={200} alt="Logo"></Image>
           {/* </div> */}
           <section
@@ -98,7 +99,7 @@ export default function Navbar() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 6 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute z-50 flex flex-col p-3 mt-2 text-xs text-white -translate-x-1/2 bg-black border rounded-md left-30 w-50 h-fit top-full border-(--primary-orange)"
+                    className="absolute z-50 flex flex-col p-3 mt-2  text-white -translate-x-1/2 bg-black border rounded-md left-30 w-60 h-fit top-full border-(--primary-orange)"
                   >
                     <button
                       className="absolute text-lg right-1 top-1"
@@ -115,6 +116,8 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           </section>
+
+          {/* display username */}
           <p className="self-center px-5 py-1 text-xl text-center text-transparent border-l border-r border-orange-500 rounded-md bg-linear-to-r from-teal-500 via-cyan-600 to-teal-900 bg-clip-text w-fit ">
             {username}
           </p>
@@ -183,9 +186,9 @@ export default function Navbar() {
               <div
                 onClick={() => setTheme(isDark ? "light" : "dark")}
                 className={`
-        flex items-center w-15 h-8 rounded-full p-1 cursor-pointer transition-colors duration-300
-        ${isDark ? "bg-slate-800" : "bg-stone-300"}
-      `}
+        flex items-center w-15 h-8 rounded-full p-1 cursor-pointer transition-colors duration-300 ${
+          isDark ? "bg-slate-800" : "bg-stone-300"
+        }`}
               >
                 <motion.div
                   className="w-5 h-5 bg-(--text-light) rounded-full shadow-lg flex items-center justify-center relative overflow-hidden"
@@ -225,7 +228,7 @@ export default function Navbar() {
           </div>
         </ul>
 
-        {/* Sign out */}
+        {/* Sign out button */}
         <motion.div
           className="relative self-center mb-20 w-36"
           initial="initial"

@@ -46,7 +46,7 @@ export default function Transactions() {
             return (
               <li
                 key={transaction._id}
-                className="bg-(--border-blue) rounded-md relative  grid grid-cols-[2fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
+                className="bg-(--border-blue) rounded-md relative  grid grid-cols-[4fr_2fr_1fr] grid-rows-2 items-center text-sm py-2 "
               >
                 <div className="row-start-2 p-1 overflow-hidden whitespace-nowrap text-ellipsis ">
                   {transaction.company}

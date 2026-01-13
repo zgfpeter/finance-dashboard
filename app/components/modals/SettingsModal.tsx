@@ -1,12 +1,12 @@
 "use client";
-import { MdDelete, MdEdit } from "react-icons/md";
-import { useState } from "react";
+import { MdClose, MdDelete, MdEdit } from "react-icons/md";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { currencies, CurrencyCode } from "@/lib/types/dashboard";
-import { useUpdateUserDetails } from "@/app/hooks/useUpdateUser";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
+import { motion, AnimatePresence } from "framer-motion"; // import Framer Motion
 
 interface Props {
   onClose: () => void;
@@ -15,16 +15,34 @@ interface Props {
 export default function SettingsModal({ onClose }: Props) {
   const { data: session } = useSession();
   const user = session?.user;
-  console.log(user);
   const username = user?.username || "";
   const currency = user?.currency || "EUR";
   const avatarUrl = user?.avatarUrl || "";
-  const dispatch = useDispatch();
+  const [deleteAccountMessage, setDeleteAccountMessage] = useState("");
 
+  const dispatch = useDispatch();
   const [openConfirmationModal, setOpenConfirmationModal] =
     useState<boolean>(false);
 
-  function handleDelete() {}
+  // handle delete with fade-out
+  function handleDelete() {
+    // show message immediately
+    setDeleteAccountMessage(
+      "We received your request and are working on it. This might take a few days."
+    );
+  }
+
+  // automatically clear message after 2 seconds
+  useEffect(() => {
+    if (!deleteAccountMessage) return;
+
+    const timer = setTimeout(() => {
+      setDeleteAccountMessage("");
+      setOpenConfirmationModal(false);
+    }, 2000);
+
+    return () => clearTimeout(timer); // cleanup if message changes quickly
+  }, [deleteAccountMessage]);
 
   return (
     <div
@@ -68,7 +86,7 @@ export default function SettingsModal({ onClose }: Props) {
             alt="user profile photo"
             fill
             className="border border-(--primary-orange) rounded-full object-cover"
-            // object-cover so that the image keeps it's aspect ratio
+            // object-cover so that the image keeps its aspect ratio
           ></Image>
           {/* {changeAvatar && (
             <button className=" bg-(--primary-blue)/80 border border-(--primary-orange) h-full  w-full rounded-md absolute">
@@ -77,7 +95,7 @@ export default function SettingsModal({ onClose }: Props) {
           )} */}
         </div>
       </div>
-      <div className="flex gap-10">
+      <div className="relative flex gap-10">
         <button
           className="flex items-center gap-1 p-3 hover:text-orange-400 "
           onClick={() =>
@@ -108,25 +126,46 @@ export default function SettingsModal({ onClose }: Props) {
       )}
       {openConfirmationModal && (
         <div
-          className="fixed z-30 bg-(--primary-blue) p-5 rounded-md shadow-lg top-1/2 left-1/2
-                      -translate-x-1/2 -translate-y-1/2 w-9/10 max-w-xl h-75 text-center flex flex-col justify-evenly gap-5 border border-cyan-500 "
+          className="fixed z-30 bg-(--primary-blue)  rounded-md shadow-lg top-1/2 left-1/2
+                      -translate-x-1/2 -translate-y-1/2 w-full max-w-xl h-75 text-center flex flex-col justify-evenly gap-5 border border-cyan-500 "
         >
+          {/* Animated delete message */}
+          <AnimatePresence>
+            {deleteAccountMessage && (
+              <motion.div
+                key="deleteMessage"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute z-40 flex items-center w-full h-full bg-black rounded-md"
+              >
+                <button className="absolute text-2xl text-red-500 top-5 right-5">
+                  <MdClose />
+                </button>
+                {deleteAccountMessage}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <h2 className="text-lg font-semibold ">
             Are you sure you want to delete your account?
           </h2>
-          <p className="flex flex-col text-stone-400 ">
+          <p className="flex flex-col text-stone-400">
             <span className="font-semibold text-red-500">Warning! </span>
             <span>This cannot be undone. All your data will be erased.</span>
           </p>
 
           <div className="flex items-center justify-evenly">
             <button
-              className="flex items-center justify-center px-3 border-l border-r rounded-md hover:text-emerald-600 border-emerald-500 h-11"
+              className="flex items-center justify-center px-3 hover:text-emerald-600 h-11"
               onClick={() => setOpenConfirmationModal(false)}
             >
               Cancel
             </button>
-            <button className="flex items-center justify-center px-3 border-l border-r border-red-500 rounded-md hover:text-red-600 h-11">
+            <button
+              className="flex items-center justify-center px-3 text-red-500 hover:text-red-600 h-11"
+              onClick={(e) => handleDelete()}
+            >
               Delete
             </button>
           </div>

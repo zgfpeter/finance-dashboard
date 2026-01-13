@@ -44,6 +44,9 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  pages: {
+    signIn: "/userLogin",
+  },
   session: {
     strategy: "jwt" as const,
     // NextAuth adds the user data inside a JWT

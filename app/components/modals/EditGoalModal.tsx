@@ -17,11 +17,6 @@ interface Props {
   onClose: () => void;
 }
 
-//   title: string;
-//   currentPaid: number | string;
-//   totalAmount: number | string;
-//   dueDate: string;
-
 export default function EditGoalModal({ data, onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();

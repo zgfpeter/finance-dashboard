@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ExpenseCategory, Transaction } from "@/lib/types/dashboard";
+import { Transaction } from "@/lib/types/dashboard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { useDashboard } from "@/app/hooks/useDashboard";

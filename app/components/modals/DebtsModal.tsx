@@ -40,9 +40,7 @@ export default function DebtsModal({ onClose }: Props) {
   const { data, isLoading, isError } = useDashboard();
   const debts = useMemo(() => data?.debts ?? [], [data]);
   const hasDebts = debts && debts.length > 0;
-
   const showEmptyState = !isLoading && !hasDebts;
-  const showDebts = !isLoading && hasDebts;
   // if data exists and data.transactions exists, use it, otherwise fall bcak to an empty array
 
   // /?? is called the nullish coalescing operator, it returns the right side only if the left side is null or undefined.
