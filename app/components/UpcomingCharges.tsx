@@ -173,7 +173,7 @@ export default function UpcomingCharges() {
                     {deadline.text}
                   </span>
 
-                  <p className="text-xs">{prettifyDate(charge.date)}</p>
+                  <p className="pr-4 text-xs">{prettifyDate(charge.date)}</p>
                 </div>
               </li>
             );

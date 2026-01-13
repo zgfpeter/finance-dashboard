@@ -119,7 +119,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
         {filteredCharges.map((charge) => (
           <li
             key={charge._id}
-            className="bg-(--border-blue) rounded-md relative  grid grid-cols-[4fr_2fr_1fr] grid-rows-2 items-center text-sm py-1"
+            className="bg-(--border-blue) rounded-md relative  grid grid-cols-[4fr_2fr_1fr] grid-rows-2 items-center text-sm py-2"
           >
             {/* company and category */}
 

@@ -75,7 +75,7 @@ export default function Transactions() {
                   )}
                 </div>
                 <div className="col-start-3 row-start-2">
-                  <span className="text-xs">
+                  <span className="pr-4 text-xs">
                     {prettifyDate(transaction.date)}
                   </span>
                 </div>
