@@ -98,7 +98,7 @@ export default function ImportUploader({ entity, onSuccess }: Props) {
         <input
           type="file"
           accept=".csv"
-          className="border border-(--secondary-blue) rounded-md h-11 file:h-full file:border-0 file:bg-transparent file:p-3 file:text-sm w-fit hover:border-cyan-600"
+          className="border border-(--secondary-blue) rounded-md h-11 file:h-full file:border-0 file:bg-transparent file:p-3 file:text-sm  hover:border-cyan-600"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
         />
 

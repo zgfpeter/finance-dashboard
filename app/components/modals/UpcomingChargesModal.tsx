@@ -6,7 +6,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { currencies, CurrencyCode, DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import { MdEdit, MdDelete, MdEventRepeat } from "react-icons/md";
+import {
+  MdEdit,
+  MdDelete,
+  MdEventRepeat,
+  MdOutlineRepeat,
+} from "react-icons/md";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
 import { prettifyDate } from "@/lib/utils";
 import EmptyState from "../ui/EmptyState";
@@ -127,8 +132,11 @@ export default function UpcomingChargesModal({ onClose }: Props) {
               <div className="text-[0.8em] font-extralight font-stretch-semi-expanded text-yellow-500 px-1 w-fit flex items-center gap-1">
                 {charge.recurring && (
                   <span className="flex items-center gap-1">
-                    <MdEventRepeat />
+                    <span className="flex items-center gap-1 text-cyan-500">
+                      <MdOutlineRepeat />
+                    </span>
                     {charge.repeating}
+
                     <span>{charge.category}</span>
                   </span>
                 )}
