@@ -31,7 +31,7 @@ export default function AddDebtModal({ onClose }: Props) {
     dueDate: "",
   });
 
-  // boolean used to show a success message after the charge has been added successfully
+  // boolean used to show a success message after the debt has been added successfully
   const [debtAdded, setdebtAdded] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
@@ -196,7 +196,7 @@ export default function AddDebtModal({ onClose }: Props) {
 
           <div className="flex">
             <div className="relative flex flex-col w-1/2 gap-3 p-3">
-              <label htmlFor="currentPaid">Paid Amount</label>
+              <label htmlFor="currentPaid">Paid amount</label>
 
               {errors.currentPaid && (
                 <span className="absolute text-red-500 right-5">
@@ -216,7 +216,7 @@ export default function AddDebtModal({ onClose }: Props) {
             </div>
 
             <div className="relative flex flex-col w-1/2 gap-3 p-3">
-              <label htmlFor="totalAmount">Total Amount</label>
+              <label htmlFor="totalAmount">Total amount</label>
 
               {errors.totalAmount && (
                 <span className="absolute text-red-500 right-5">
@@ -239,7 +239,7 @@ export default function AddDebtModal({ onClose }: Props) {
 
           <div className="relative flex flex-col w-1/2 gap-3 p-3">
             <label htmlFor="dueDate">
-              Due Date <span className="text-red-500">*</span>
+              Due date <span className="text-red-500">*</span>
             </label>
 
             <input
@@ -249,7 +249,7 @@ export default function AddDebtModal({ onClose }: Props) {
               onChange={handleChange}
               name="dueDate"
               id="dueDate"
-              className="border border-(--secondary-blue) rounded-md pl-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
+              className="border border-(--secondary-blue) rounded-md px-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
             />
           </div>
 
@@ -266,14 +266,14 @@ export default function AddDebtModal({ onClose }: Props) {
         type="submit"
         form="addDebt"
         className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70"
-        aria-label="Add new charge"
+        aria-label="Add new debt"
       >
         <span
           className={`transition-opacity ${
             isPending ? "opacity-0" : "opacity-100"
           }`}
         >
-          Add New Charge
+          Add debt
         </span>
 
         {isPending && (

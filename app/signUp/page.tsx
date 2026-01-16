@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import customAxios from "@/lib/axios";
 import { isAxiosError } from "axios";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 export default function SignUp() {
   const router = useRouter();
 
@@ -23,7 +24,7 @@ export default function SignUp() {
   });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false); // to track loading status
   const [showPasswordInfo, setShowPasswordInfo] = useState(false);
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     //console.log([e.target.name], e.target.value);
@@ -44,6 +45,8 @@ export default function SignUp() {
   }
 
   async function handleSignup() {
+    // start loading
+    setIsLoading(true);
     const userData = {
       email: formData.email,
       username: formData.username,
@@ -57,10 +60,11 @@ export default function SignUp() {
         setRegistrationSuccess(true);
         setErrorMessage(null); // clear any previous errors
         setTimeout(() => {
-          router.push("/UserLogin");
+          router.push("/userLogin");
         }, 1000);
       } else {
         setRegistrationSuccess(false);
+        setIsLoading(false);
         setErrorMessage("An error has occurred. Please try again.");
       }
     } catch (error: unknown) {
@@ -206,10 +210,12 @@ export default function SignUp() {
               },
             }}
           />
-          <span className="relative z-10 ">Sign Up</span>
+          <span className="relative z-10 ">
+            {isLoading ? <LoadingSpinner size="sm" /> : "Sign Up"}
+          </span>
         </motion.button>
         <span>or</span>
-        <Link href="/UserLogin" aria-label="Create an account">
+        <Link href="/userLogin" aria-label="Create an account">
           <span>
             Already have an account?
             <span className="underline hover:cursor-pointer"> Log in</span>

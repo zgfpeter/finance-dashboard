@@ -216,7 +216,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
             />
           </div>
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="currentAmount">Current Amount</label>
+            <label htmlFor="currentAmount">Current amount</label>
             {errors.currentAmount && (
               <span className="absolute text-red-500 right-5">
                 {errors.currentAmount}
@@ -236,7 +236,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
             />
           </div>
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="targetAmount">Target Amount</label>
+            <label htmlFor="targetAmount">Target amount</label>
             {errors.targetAmount && (
               <span className="absolute text-red-500 right-5">
                 {errors.targetAmount}
@@ -258,7 +258,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
           <div className="relative flex justify-between">
             <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="targetDate">
-                Target Date <span className="text-red-500">*</span>
+                Target date <span className="text-red-500">*</span>
               </label>
 
               <input
@@ -281,6 +281,8 @@ export default function EditGoalModal({ data, onClose }: Props) {
               className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
+              onClick={onClose}
+              type="button"
             >
               <MdClose size={20} />
             </button>

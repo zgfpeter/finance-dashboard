@@ -40,12 +40,12 @@ export default function SpendingsCard() {
   const differenceAbs = Math.abs(difference);
 
   return (
-    <section className="bg-(--border-blue) rounded-md h-1/2 w-full flex justify-between md:flex-col p-2">
+    <section className="bg-(--border-blue) rounded-md h-1/2 w-full flex justify-between md:flex-col p-2 gap-3">
       <h2 id="spendings-heading" className="flex items-center gap-3 rounded-md">
         Expenses <FaArrowRightLong color="red" />
       </h2>
 
-      <div className=" bg-(--primary-bg) rounded-md flex flex-col justify-center gap-2 p-3 w-2/3  md:w-full">
+      <div className=" bg-(--primary-bg) rounded-md flex flex-col justify-center gap-2 p-3 w-2/3  md:w-full ">
         <p>
           This month:
           <span className="text-red-500">

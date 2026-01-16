@@ -36,6 +36,8 @@ export default function SettingsModal({ onClose }: Props) {
   useEffect(() => {
     if (!deleteAccountMessage) return;
 
+    // TODO add the delete user account functionality
+    // log users out after deletion
     const timer = setTimeout(() => {
       setDeleteAccountMessage("");
       setOpenConfirmationModal(false);
@@ -107,13 +109,13 @@ export default function SettingsModal({ onClose }: Props) {
             )
           }
         >
-          <MdEdit className="pt-px" color="orange" /> Edit Details
+          <MdEdit className="pt-px" color="orange" /> Edit details
         </button>
         <button
           className="flex items-center gap-1 p-3 hover:text-red-500"
           onClick={() => setOpenConfirmationModal(true)}
         >
-          <MdDelete className="pt-px " color="red" /> Delete Account
+          <MdDelete className="pt-px " color="red" /> Delete account
         </button>
       </div>
       {/* position:fixed, doesn't move when scrolling */}
@@ -150,7 +152,7 @@ export default function SettingsModal({ onClose }: Props) {
           <h2 className="text-lg font-semibold ">
             Are you sure you want to delete your account?
           </h2>
-          <p className="flex flex-col text-stone-400">
+          <p className="flex flex-col gap-3 text-stone-400">
             <span className="font-semibold text-red-500">Warning! </span>
             <span>This cannot be undone. All your data will be erased.</span>
           </p>

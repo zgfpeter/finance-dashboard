@@ -85,7 +85,7 @@ export default function Navbar() {
           >
             <div className="relative flex items-center gap-1">
               {/* Info icon */}
-              Early Access
+              Early access
               <MdInfo
                 className="text-(--primary-orange) cursor-pointer"
                 size={22}
@@ -191,7 +191,7 @@ export default function Navbar() {
         }`}
               >
                 <motion.div
-                  className="w-5 h-5 bg-(--text-light) rounded-full shadow-lg flex items-center justify-center relative overflow-hidden"
+                  className="relative flex items-center justify-center w-5 h-5 overflow-hidden"
                   //  Move the handle based on theme state
                   animate={{
                     x: isDark ? 30 : 0, // Moves 30px to the right
@@ -202,7 +202,7 @@ export default function Navbar() {
                 >
                   {/* sun icon */}
                   <motion.div
-                    className="absolute text-orange-500"
+                    className="absolute "
                     animate={{
                       scale: isDark ? 0 : 1,
                       opacity: isDark ? 0 : 1,
@@ -220,7 +220,7 @@ export default function Navbar() {
                     }}
                     transition={{ duration: 0.2 }}
                   >
-                    <FaMoon size={16} />
+                    <FaMoon size={18} />
                   </motion.div>
                 </motion.div>
               </div>
@@ -241,7 +241,7 @@ export default function Navbar() {
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           ></motion.div>{" "}
           <button
-            onClick={() => signOut({ callbackUrl: "/UserLogin" })}
+            onClick={() => signOut({ callbackUrl: "/userLogin" })}
             className=" relative w-full h-20 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) "
             aria-label="Sign out"
           >

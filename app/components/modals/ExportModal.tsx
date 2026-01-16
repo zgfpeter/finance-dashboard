@@ -50,7 +50,7 @@ export default function ExportModal({ entity }: { entity: Entity }) {
       ) : (
         <>
           <MdDownload className="text-lg" />
-          Export {entity} / Download Template
+          Export {entity} / Download template
         </>
       )}
     </button>

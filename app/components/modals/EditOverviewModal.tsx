@@ -230,8 +230,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
           <div className="relative flex flex-col gap-3 px-1">
             {/* Total balance is based on accounts balance */}
             <p className="">
-              Total Balance:{" "}
-              {formatCurrency(Number(totalBalance), currencySymbol)}
+              Total Balance: {currencySymbol} {totalBalance}
             </p>
 
             <SeparatorLine />
@@ -278,15 +277,24 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                     className="border border-(--secondary-blue) rounded-md p-2 focus:outline-none focus:border-cyan-500 w-full"
                     type="text"
                     value={account.balance}
-                    onChange={(e) =>
-                      setAccountsState((prev) =>
-                        prev.map((acc, i) =>
-                          i === index
-                            ? { ...acc, balance: e.target.value }
-                            : acc
-                        )
-                      )
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      // Regex Explanation:
+                      // ^        -> Start of string
+                      // \d* -> Zero or more digits
+                      // \.?      -> Optional decimal point
+                      // \d{0,2}  -> 0 to 2 decimal digits
+                      // $        -> End of string
+                      // TODO find a better way to handle accounts and account values
+                      if (value === "" || /^\d*\.?\d{0,2}$/.test(value)) {
+                        setAccountsState((prev) =>
+                          prev.map((acc, i) =>
+                            i === index ? { ...acc, balance: value } : acc
+                          )
+                        );
+                      }
+                    }}
                   />
 
                   <button
@@ -305,7 +313,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                 onClick={addAccount}
                 disabled={accountsState.length >= MAX_ACCOUNTS}
               >
-                Add Account
+                Add account
               </button>
             </div>
           </div>

@@ -45,7 +45,7 @@ export default function IncomeCard() {
 
   return (
     <section
-      className="bg-(--border-blue) rounded-md h-1/2 w-full flex justify-between md:flex-col p-2"
+      className="bg-(--border-blue) rounded-md h-1/2 w-full flex justify-between md:flex-col p-2 gap-3"
       aria-describedby="income-heading"
     >
       <h2 id="income-heading" className="flex items-center gap-3 rounded-md">

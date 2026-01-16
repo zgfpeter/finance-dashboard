@@ -247,7 +247,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
             />
           </div>
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="totalAmount">Total Owed</label>
+            <label htmlFor="totalAmount">Total owed</label>
             {errors.totalAmount && (
               <span className="absolute text-red-500 right-5">
                 {errors.totalAmount}
@@ -269,7 +269,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
           <div className="relative flex justify-between">
             <div className="relative flex flex-col gap-3 p-3">
               <label htmlFor="dueDate">
-                Due Date <span className="text-red-500">*</span>
+                Due date <span className="text-red-500">*</span>
               </label>
 
               <input
@@ -292,6 +292,8 @@ export default function EditDebtModal({ data, onClose }: Props) {
               className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
+              type="button"
+              onClick={onClose}
             >
               <MdClose size={20} />
             </button>

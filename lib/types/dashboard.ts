@@ -145,3 +145,5 @@ export type MonthlySpending = {
 };
 
 export type Entity = "transactions" | "upcomingCharges" | "debts" | "goals";
+
+export type ViewMode = "list" | "calendar";

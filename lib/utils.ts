@@ -22,44 +22,44 @@ export function calcProgressPercent(current: number, total: number): number {
 
 // calculate the deadline for an upcoming charge or goal or debt
 type DeadlineStatus = "overdue" | "upcoming" | "soon";
-export function calculateDeadline(date: string): {
+export function calculateDeadline(dateString: string): {
   text: string;
   status: DeadlineStatus;
 } {
+  const targetDate = new Date(dateString); // get target date ( saved as UTC midnight in db)
+  // Get "today", normalized to UTC Midnight
+
   const now = new Date();
-  const dueDate = new Date(date);
+  const todayUtc = new Date(
+    Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+  );
 
-  const differenceInMs = dueDate.getTime() - now.getTime();
+  //  Compare  based on calendar days (ms difference between two UTC midnights)
+  // getTime() returns absolute ms, so this works for UTC dates
+  const differenceInMs = targetDate.getTime() - todayUtc.getTime();
 
-  if (differenceInMs > 0) {
-    const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
-    const differenceInHours = Math.floor(
-      (differenceInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
+  // Calculate difference in days
+  // Rounding isn't needed if we stick to midnights, but safe to Math.round or Math.floor
+  const differenceInDays = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
 
-    if (differenceInDays > 0) {
-      return {
-        text: `In ${differenceInDays} day${differenceInDays > 1 ? "s" : ""}`,
-        status: "upcoming",
-      };
-    }
+  // difference logic
 
-    if (differenceInHours > 0) {
-      return {
-        text: `In ${differenceInHours} hour${differenceInHours > 1 ? "s" : ""}`,
-        status: "soon",
-      };
-    }
-
-    return {
-      text: "Due soon",
-      status: "soon",
-    };
+  if (differenceInDays < 0) {
+    return { text: "Overdue", status: "overdue" };
   }
 
+  if (differenceInDays === 0) {
+    return { text: "Due today", status: "soon" };
+  }
+
+  if (differenceInDays === 1) {
+    return { text: "Due tomorrow", status: "upcoming" };
+  }
+
+  // if it's in the future
   return {
-    text: "Overdue",
-    status: "overdue",
+    text: `In ${differenceInDays} days`,
+    status: "upcoming",
   };
 }
 
@@ -105,7 +105,7 @@ export function getMonthlySpendingsData(
   transactions.forEach((transactions) => {
     if (transactions.transactionType !== "expense") return; // i only want the expenses
     const date = new Date(transactions.date); // get the date, right now it's in the format 2025-12-12
-    const monthIndex = date.getMonth(); // index based, jan = 0 , feb = 1 etc
+    const monthIndex = date.getUTCMonth(); // index based, jan = 0 , feb = 1 etc
     monthlyTotals[monthIndex] += Number(transactions.amount);
   });
 
@@ -130,8 +130,8 @@ export function calculateIncomeSummary(income: Income[] | undefined): {
   }
 
   const now = new Date();
-  const currentMonth = now.getMonth(); // in numbers 0 to 11
-  const currentYear = now.getFullYear();
+  const currentMonth = now.getUTCMonth();
+  const currentYear = now.getUTCFullYear();
 
   // edge cases
   const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
@@ -150,8 +150,8 @@ export function calculateIncomeSummary(income: Income[] | undefined): {
     const amount = Number(entry.amount);
     if (!Number.isFinite(amount)) continue;
 
-    const entryMonth = date.getMonth();
-    const entryYear = date.getFullYear();
+    const entryMonth = date.getUTCMonth();
+    const entryYear = date.getUTCFullYear();
 
     if (entryMonth === currentMonth && entryYear === currentYear) {
       thisMonthTotal += amount;
@@ -173,6 +173,7 @@ export function prettifyDate(date: string) {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -188,7 +189,7 @@ export function getTotalForMonth(
     .filter((t) => t.transactionType === type)
     .filter((t) => {
       const d = new Date(t.date);
-      return d.getMonth() === month && d.getFullYear() === year;
+      return d.getUTCMonth() === month && d.getUTCFullYear() === year;
     })
     .reduce((sum, t) => sum + Number(t.amount), 0);
 }
@@ -200,15 +201,18 @@ export function getThisAndLastMonthTotals(
 ) {
   // get current date
   const now = new Date();
-  const thisMonth = now.getMonth();
-  const thisYear = now.getFullYear();
+  const thisMonth = now.getUTCMonth();
+  const thisYear = now.getUTCFullYear();
 
-  // get last month's date
-  const lastMonthDate = new Date(thisYear, thisMonth - 1);
-  const lastMonth = lastMonthDate.getMonth();
-  const lastMonthYear = lastMonthDate.getFullYear();
+  // Calculate last month based on UTC values
+  // (Handling year rollover manually is safer with indexes)
+  let lastMonth = thisMonth - 1;
+  let lastMonthYear = thisYear;
+  if (lastMonth < 0) {
+    lastMonth = 11;
+    lastMonthYear -= 1;
+  }
 
-  // calculate total for this month
   const thisMonthTotal = getTotalForMonth(
     transactions,
     type,
@@ -216,7 +220,6 @@ export function getThisAndLastMonthTotals(
     thisYear
   );
 
-  // calculate total for last year
   const lastMonthTotal = getTotalForMonth(
     transactions,
     type,
@@ -224,22 +227,23 @@ export function getThisAndLastMonthTotals(
     lastMonthYear
   );
 
-  // calculate the difference between this month and last month
-  const difference = thisMonthTotal - lastMonthTotal;
-
-  // return this month's total, last month's total, and the difference
   return {
     thisMonthTotal,
     lastMonthTotal,
-    difference,
+    difference: thisMonthTotal - lastMonthTotal,
   };
 }
 
 // format currency, more helpful for negative balanace
 // show - € 250 instead of €-250
-export const formatCurrency = (amount: number | undefined, symbol: string) => {
-  if (!amount) return `${symbol} 0`;
-  return amount < 0 ? `- ${symbol} ${Math.abs(amount)}` : `${symbol} ${amount}`;
+
+export const formatCurrency = (amount: number = 0, symbol: string) => {
+  return {
+    isNegative: amount < 0,
+    // We format the absolute value (20.00) separate from the sign
+    value: Math.abs(amount).toFixed(2),
+    symbol: symbol,
+  };
 };
 
 // reccuring upcoming charge

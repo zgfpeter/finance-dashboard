@@ -88,24 +88,41 @@ export default function Overview() {
         <div className="flex flex-col gap-3">
           {/* total balance-current net worth across accounts */}
           <p className="text-xl text-(--limegreen) bg-(--primary-blue) flex justify-between ">
-            <span>Total balance: </span>{" "}
-            {formatCurrency(totalBalance, currencySymbol)}
+            <span>Total balance: </span>
+            {currencySymbol} {totalBalance}
           </p>
           <SeparatorLine />
           <h2>Accounts summary</h2>
           <ul className="flex flex-col gap-2 ">
-            {accounts.map((account) => (
-              <li
-                key={account._id}
-                className="items-center bg-(--border-blue) px-2 py-3 rounded-md"
-              >
-                <p className="grid grid-cols-2">
-                  {account.type.charAt(0).toUpperCase() + account.type.slice(1)}{" "}
-                  :
-                  <span>{formatCurrency(account.balance, currencySymbol)}</span>{" "}
-                </p>
-              </li>
-            ))}
+            {accounts.map((account) => {
+              // Use the helper to get clean parts
+              const { isNegative, value, symbol } = formatCurrency(
+                account.balance,
+                currencySymbol
+              );
+
+              return (
+                <li
+                  key={account._id}
+                  className="flex items-center justify-between px-2 py-3 rounded-md bg-(--border-blue)"
+                >
+                  <span className="capitalize">{account.type}</span>
+
+                  <div className="flex items-center font-medium">
+                    <span className={`mr-1 ${isNegative ? "" : "invisible"}`}>
+                      -
+                    </span>
+
+                    {/* currency symbol */}
+                    <span className="mr-1 0">{symbol}</span>
+
+                    {/* amount */}
+                    {/* 'tabular-nums' ensures all digits (0-9) have the same width */}
+                    <span className="text-right tabular-nums">{value}</span>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

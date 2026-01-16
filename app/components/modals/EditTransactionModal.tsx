@@ -329,9 +329,11 @@ export default function EditTransactionModal({ data, onClose }: Props) {
 
         <div className="flex items-center self-center w-full p-3 mt-5 justify-evenly">
           <button
+            type="button"
             className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
             disabled={isPending}
             aria-label="Cancel changes"
+            onClick={onClose}
           >
             <MdClose size={20} />
           </button>

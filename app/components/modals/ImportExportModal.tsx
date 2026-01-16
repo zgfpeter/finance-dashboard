@@ -33,7 +33,7 @@ export default function ImportExportModal({
 // Helper component to keep the modal clean
 function Section({ entity, title }: { entity: Entity; title: string }) {
   return (
-    <div className="flex flex-col border border-(--secondary-blue) rounded-md ">
+    <div className="flex flex-col gap-3 border border-(--secondary-blue) rounded-md ">
       <div className="flex items-center self-end justify-between pt-3 pr-3 mb-2">
         <ExportModal entity={entity} />
       </div>

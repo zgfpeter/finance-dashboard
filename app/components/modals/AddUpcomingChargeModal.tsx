@@ -330,7 +330,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
               onChange={handleChange}
               name="date"
               id="date"
-              className="border border-(--secondary-blue) rounded-md pl-1  h-11"
+              className="border border-(--secondary-blue) rounded-md px-1  h-11"
             />
           </div>
           <div className="flex flex-col gap-1 ">
@@ -402,7 +402,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
             </div>
             <div className="flex items-center gap-3">
               <label htmlFor="endDate" className="flex items-center gap-2">
-                End Date
+                End date
               </label>
               <input
                 id="endDate"
@@ -464,7 +464,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
             isPending ? "opacity-0" : "opacity-100"
           }`}
         >
-          Add New Charge
+          Add charge
         </span>
 
         {/* Loading overlay */}

@@ -30,7 +30,7 @@ export default function AddGoalModal({ onClose }: Props) {
     currentAmount: "",
     targetAmount: "",
   });
-  // boolean used to show a success message after the charge has been added successfully
+  // boolean used to show a success message after the goal has been added successfully
   const [goalAdded, setGoalAdded] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
@@ -152,6 +152,7 @@ export default function AddGoalModal({ onClose }: Props) {
 
       <form
         className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
+        id="addGoal"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col justify-between w-full ">
@@ -178,7 +179,7 @@ export default function AddGoalModal({ onClose }: Props) {
           </div>
           <div className="flex">
             <div className="relative flex flex-col w-1/2 gap-3 p-3">
-              <label htmlFor="currentAmount">Current Amount</label>
+              <label htmlFor="currentAmount">Current amount</label>
               {errors.currentAmount && (
                 <span className="absolute text-red-500 right-5">
                   {errors.currentAmount}
@@ -196,7 +197,7 @@ export default function AddGoalModal({ onClose }: Props) {
               />
             </div>
             <div className="relative flex flex-col w-1/2 gap-3 p-3">
-              <label htmlFor="targetAmount">Target Amount</label>
+              <label htmlFor="targetAmount">Target amount</label>
               {errors.targetAmount && (
                 <span className="absolute text-red-500 right-5">
                   {errors.targetAmount}
@@ -216,7 +217,7 @@ export default function AddGoalModal({ onClose }: Props) {
           </div>
           <div className="relative flex flex-col w-1/2 gap-3 p-3">
             <label htmlFor="targetDate">
-              Target Date <span className="text-red-500">*</span>
+              Target date <span className="text-red-500">*</span>
             </label>
 
             <input
@@ -226,7 +227,7 @@ export default function AddGoalModal({ onClose }: Props) {
               onChange={handleChange}
               name="targetDate"
               id="targetDate"
-              className="border border-(--secondary-blue) rounded-md  pl-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
+              className="border border-(--secondary-blue) rounded-md  px-1 focus:outline-none focus:border-cyan-500 h-11 iconColor"
             />
           </div>
 
@@ -238,8 +239,9 @@ export default function AddGoalModal({ onClose }: Props) {
       <SeparatorLine width="3/4" />
       <button
         type="submit"
+        form="addGoal"
         className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70"
-        aria-label="Add new charge"
+        aria-label="Add new goal"
         disabled={isPending}
       >
         <span
@@ -247,7 +249,7 @@ export default function AddGoalModal({ onClose }: Props) {
             isPending ? "opacity-0" : "opacity-100"
           }`}
         >
-          Add New Goal
+          Add goal
         </span>
         {/* Loading overlay */}
         {isPending && (

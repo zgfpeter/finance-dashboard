@@ -28,10 +28,9 @@ export default function UserLogin() {
   }, [session, router]);
 
   // states for the user sign in
-  const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [loginSuccess, setLoginSuccess] = useState(false);
-
+  const [loadingType, setLoadingType] = useState<"login" | "demo" | null>(null);
   const [showPasswordInfo, setShowPasswordInfo] = useState(false);
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     //console.log([e.target.name], e.target.value);
@@ -40,11 +39,13 @@ export default function UserLogin() {
       [e.target.name]: e.target.value,
     }));
   }
+
+  // user login ( through login button )
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    setIsLoading(true);
+    setLoadingType("login");
     setLoginError("");
 
     const result = await signIn("credentials", {
@@ -53,7 +54,7 @@ export default function UserLogin() {
       redirect: false, // prevents automatic redirection
     });
 
-    setIsLoading(false);
+    setLoadingType(null);
 
     if (result?.error) {
       setLoginError("Invalid email or password.");
@@ -89,12 +90,13 @@ export default function UserLogin() {
   const DEMO_EMAIL = "testuser@example.com";
   const DEMO_PASSWORD = "Abc12345";
 
+  // user login ( through demo button )
   async function handleDemoLogin() {
     setFormData({
       email: DEMO_EMAIL,
       password: DEMO_PASSWORD,
     });
-    setIsLoading(true);
+    setLoadingType("demo");
 
     const result = await signIn("credentials", {
       email: DEMO_EMAIL,
@@ -102,7 +104,7 @@ export default function UserLogin() {
       redirect: false,
     });
 
-    setIsLoading(false);
+    setLoadingType(null);
 
     if (result?.error) {
       setLoginError("Demo login failed.");
@@ -171,16 +173,17 @@ export default function UserLogin() {
             className="p-2 pl-10 border rounded-md focus:outline-none focus:border-cyan-500 "
           />
         </div>
-        {isLoading && <LoadingSpinner />}
+
         {loginSuccess && (
           <div className="pb-3 text-green-500">{loginSuccess}</div>
         )}
         {loginError && <div className="pb-3 text-red-500">{loginError}</div>}
-        <div className="flex gap-3">
+        <div className="relative flex gap-3">
           <motion.button
             className="relative z-0 p-3 border rounded-md w-30 hover:cursor-pointer"
             aria-label="Log in"
             whileHover={"hover"}
+            disabled={loadingType !== null} // disable button if loading
           >
             <motion.span
               className="absolute inset-0 z-0 rounded-md bg-cyan-800"
@@ -202,14 +205,25 @@ export default function UserLogin() {
                 },
               }}
             />
-            <span className="relative z-10">Log In</span>
+            <span className="relative z-10">
+              {loadingType !== "login" ? (
+                <span>LOG IN</span>
+              ) : (
+                <LoadingSpinner size="sm" />
+              )}
+            </span>
           </motion.button>
           <button
-            className="z-0 p-3 border rounded-md w-30 hover:cursor-pointer"
+            className="z-0 p-3 border rounded-md  w-30 hover:cursor-pointer"
             aria-label="Demo login"
             onClick={handleDemoLogin}
+            disabled={loadingType !== null}
           >
-            DEMO
+            {loadingType !== "demo" ? (
+              <span>DEMO</span>
+            ) : (
+              <LoadingSpinner size="sm" />
+            )}
           </button>
         </div>
         <span>or</span>

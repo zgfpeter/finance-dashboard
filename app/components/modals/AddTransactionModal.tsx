@@ -1,158 +1,163 @@
 "use client";
+// imports
 import { useState } from "react";
-import { Transaction } from "@/lib/types/dashboard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosAuth from "@/app/hooks/useAxiosAuth";
-import { useDashboard } from "@/app/hooks/useDashboard";
+import { MdCheck } from "react-icons/md";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import SeparatorLine from "../ui/SeparatorLine";
-import { MdCheck } from "react-icons/md";
+import {
+  AccountType,
+  ExpenseCategory,
+  TransactionType,
+} from "@/lib/types/dashboard";
+import { useSession } from "next-auth/react";
+import { AxiosError } from "axios";
+
+// Form state interface matching your Transaction type but with strings for inputs
+export interface TransactionForm {
+  date: string;
+  company: string;
+  amount: string; // string input
+  transactionType: TransactionType;
+  category: ExpenseCategory;
+  account: AccountType;
+}
+
+// Payload expected by backend
+interface CreateTransactionPayload {
+  date: string;
+  company: string;
+  amount: number;
+  transactionType: TransactionType;
+  category: ExpenseCategory;
+  account: AccountType;
+}
+
+const INITIAL_STATE: TransactionForm = {
+  date: "",
+  company: "",
+  amount: "",
+  transactionType: "expense",
+  category: "other",
+  account: "checking", // default account
+};
 
 interface Props {
   onClose: () => void;
 }
 
 export default function AddTransactionModal({ onClose }: Props) {
-  const accounts = useDashboard().data?.accounts;
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
+  const queryClient = useQueryClient();
+  const { data: session } = useSession(); // Access user currency if needed later
 
-  // local state for creating a new transaction
-  const [data, setData] = useState<Transaction>({
-    date: "",
-    company: "",
-    amount: "",
-    transactionType: "expense",
-    category: "other",
-    account: accounts?.[0]?.type || "cash", // dynamically pick first account
-  });
+  const [data, setData] = useState<TransactionForm>({ ...INITIAL_STATE });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
-    // holds validation error messages, ex. a required field is empty
-    id: "",
-    date: "",
     company: "",
     amount: "",
-    transactionType: "expense",
-    category: "",
-    account: "",
+    date: "",
     generalError: "",
   });
 
-  // displays a success message if the transaction has been added successfully
   const [transactionAdded, setTransactionAdded] = useState<boolean>(false);
 
-  const queryClient = useQueryClient();
-
-  // handle change in input
+  // handle the input change
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     const { name, value } = e.target;
 
     setData((prev) => {
-      // sanitize amount input (mobile keyboards may use commas)
-      if (name === "amount") {
-        const sanitized = value
-          .replace(",", ".") // allow european decimal separator
-          .replace(/[^0-9.]/g, "") // remove letters, currency symbols, spaces
-          .replace(/(\..*)\./g, "$1"); // prevent more than one dot
+      const key = name as keyof TransactionForm;
 
-        return {
-          ...prev,
-          amount: sanitized,
-        };
+      // Handle Amount formatting (same as upcoming charge)
+      if (key === "amount") {
+        const sanitized = value
+          .replace(",", ".")
+          .replace(/[^0-9.]/g, "")
+          .replace(/(\..*)\./g, "$1");
+
+        return { ...prev, amount: sanitized };
       }
 
-      return {
-        ...prev,
-        [name]: value,
-      };
+      return { ...prev, [key]: value };
     });
   }
 
   // simple form validation
   function validateForm() {
     const newErrors: { [key: string]: string } = {};
-    // set the errors state so that it can use it to show error messages
+
     if (!data.company.trim()) {
       newErrors.company = "Company is required.";
     }
+
     if (Number(data.amount) <= 0) {
       newErrors.amount = "Amount must be > 0";
     }
-    if (!data.account) {
-      newErrors.account = "An account is required.";
-    }
+
     if (!data.date) {
       newErrors.date = "Date is required";
     } else {
-      // to check if the entered date is not a future date:
-      const transactionDate = new Date(data.date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (transactionDate > today) {
-        newErrors.date = "Transaction date cannot be in the future.";
-      }
+      // Transactions CAN be in the past, but usually not future (up to you)
+      // Removing future check if you want to allow planning ahead
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-    // if there are no errors in the form, this will return true
-    // if there's at least one error, then it will return false
   }
 
-  // tanstack query mutation to POST a new transaction
   const addMutation = useMutation({
-    mutationFn: (payload: Transaction) =>
+    mutationFn: (payload: CreateTransactionPayload) =>
       axiosAuth.post(`/dashboard/transactions`, payload),
+
     onSuccess: () => {
+      // show success briefly, invalidate, then close
+      setTransactionAdded(true);
       queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-      // when invalidateQueries is called, tanstack query sees that and automatically runs the query again, gets fresh data, updates UI everywhere. Critical for fresh UI data updates
+
+      setTimeout(() => {
+        setTransactionAdded(false);
+        setData({ ...INITIAL_STATE }); // reset form
+        onClose();
+      }, 700);
+    },
+
+    onError: (err: AxiosError<{ message?: string }>) => {
+      setErrors((prev) => ({
+        ...prev,
+        generalError:
+          err.response?.data?.message || "Failed to add transaction",
+      }));
     },
   });
 
-  if (!data) return <ErrorState message="No data" />;
-
-  // get the states from the updateMutation
   const { isPending, isError } = addMutation;
 
-  // handles the submit, checks if form is valid, then calls mutation
+  // handle submit
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    addMutation.mutate(
-      { ...data, amount: Number(data.amount) },
-      {
-        onSuccess: () => {
-          setTransactionAdded(true); // show success
-          queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-          // optional: close modal after 1s
-          setTimeout(() => {
-            onClose();
-            setTransactionAdded(false);
-          }, 1000);
-        },
-      }
-    );
+    const payload: CreateTransactionPayload = {
+      date: data.date,
+      company: data.company.trim(),
+      amount: Number(data.amount),
+      transactionType: data.transactionType,
+      category: data.category,
+      account: data.account,
+    };
 
-    // reset form data
-    setData({
-      date: "",
-      company: "",
-      amount: "",
-      transactionType: "expense",
-      category: "other",
-      account: accounts?.[0]?.type || "cash", // reset to first account
-      // at least one account must exist
-    });
-
-    // closes the modal
-    onClose();
+    addMutation.mutate(payload);
   }
 
-  if (isError) <ErrorState message="An error has occured" />;
+  if (isError) {
+    return <ErrorState message="An error has occurred" />;
+  }
 
   return (
     <div
@@ -162,39 +167,34 @@ export default function AddTransactionModal({ onClose }: Props) {
       aria-labelledby="modal-title"
     >
       <button
-        onClick={onClose}
+        onClick={() => {
+          setData({ ...INITIAL_STATE });
+          onClose();
+        }}
         className="absolute text-xl text-red-500 right-10 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
-      <h2
-        id="modal-title"
-        className="text-xl font-semibold max-w-4/5 md:max-w-full"
-      >
-        Add a new transaction
-      </h2>
+
+      <h2 className="text-xl font-semibold">Add a new transaction</h2>
 
       {errors.generalError && (
         <p className="text-red-500">{errors.generalError}</p>
       )}
 
       <form
-        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly "
+        className="flex flex-col w-full gap-5"
         onSubmit={handleSubmit}
         id="addTransaction"
       >
-        <div className="flex flex-col justify-between w-full ">
-          <div className="relative flex flex-col gap-3 p-3">
+        <div className="grid grid-cols-1 gap-3 px-2 py-1 md:grid-cols-2">
+          <div className="flex flex-col gap-1 ">
             <label htmlFor="company">
               Company <span className="text-red-500">*</span>
             </label>
-            {/* A general error if the form validation fails */}
             {errors.company && (
-              <span
-                id="company-error"
-                className="absolute text-red-500 right-5"
-              >
+              <span className="absolute text-red-500 right-5">
                 {errors.company}
               </span>
             )}
@@ -206,142 +206,139 @@ export default function AddTransactionModal({ onClose }: Props) {
               onChange={handleChange}
               name="company"
               id="company"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
-              aria-describedby="company-error"
+              className="border border-(--secondary-blue) rounded-md p-2 h-11"
             />
           </div>
-          <div
-            className={`grid grid-cols-2 relative gap-3 items-center justify-between`}
-          >
-            <div className="relative flex flex-col gap-3 p-3">
-              <label htmlFor="amount">Amount</label>
-              {errors.amount && (
-                <span
-                  id="amount-error"
-                  className="absolute text-red-500 right-5"
-                >
-                  {errors.amount}
-                </span>
-              )}
-              <input
-                type="text"
-                value={data.amount}
-                placeholder="0.00"
-                onChange={handleChange}
-                inputMode="decimal"
-                name="amount"
-                id="amount"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
-                aria-describedby="amount-error"
-              />
-            </div>
 
-            <div className="relative flex flex-col gap-3 p-3">
-              <label htmlFor="date">
-                Date <span className="text-red-500">*</span>
-              </label>
-
-              <input
-                type="date"
-                value={data.date}
-                required
-                onChange={handleChange}
-                name="date"
-                id="date"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
-                aria-describedby="date-error"
-              />
-            </div>
-
-            <div className="flex flex-col gap-3 p-3 pb-0 ">
-              <label htmlFor="transactionType">Type</label>
-              <select
-                id="transactionType"
-                value={data.transactionType}
-                onChange={handleChange}
-                name="transactionType"
-                required
-                className="border border-(--secondary-blue) px-2 rounded-md h-11 flex w-full "
-              >
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
-              </select>
-            </div>
-
-            {/* Expense category selector */}
-            {data.transactionType === "expense" && (
-              <div className="relative flex flex-col gap-3 p-3 pb-0">
-                <label htmlFor="transactionCategory">Category</label>
-                <select
-                  id="transactionCategory"
-                  value={data.category}
-                  onChange={handleChange}
-                  name="category"
-                  required
-                  className="border border-(--secondary-blue) px-2 rounded-md h-11 flex w-full"
-                >
-                  <option value="subscription">Subscription</option>
-                  <option value="bill">Bill</option>
-                  <option value="tax">Tax</option>
-                  <option value="insurance">Insurance</option>
-                  <option value="loan">Loan</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
+          <div className="flex flex-col gap-1 ">
+            <label htmlFor="amount">Amount</label>
+            {errors.amount && (
+              <span className="absolute text-red-500 right-5">
+                {errors.amount}
+              </span>
             )}
-
-            {/* Account selector for both income and expense */}
-            <div className="relative flex flex-col gap-3 p-3 pb-0">
-              <label htmlFor="account">Select Account</label>
-              <select
-                id="account"
-                value={data.account}
-                onChange={handleChange}
-                name="account"
-                required
-                className="border border-(--secondary-blue) px-2 rounded-md h-11"
-              >
-                {accounts?.map((account, index) => (
-                  <option value={account.type} key={index}>
-                    {account.type}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <input
+              type="text"
+              value={data.amount}
+              inputMode="decimal"
+              onChange={handleChange}
+              placeholder="0.00"
+              name="amount"
+              id="amount"
+              className="border border-(--secondary-blue) rounded-md p-2 h-11"
+            />
           </div>
         </div>
+
+        <div className="grid grid-cols-2 gap-3 px-2 py-1 md:grid-cols-4">
+          <div className="flex flex-col gap-1 ">
+            <label htmlFor="date">
+              Date <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="date"
+              value={data.date}
+              required
+              onChange={handleChange}
+              name="date"
+              id="date"
+              className="border border-(--secondary-blue) rounded-md px-1 h-11"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1 ">
+            <label htmlFor="transactionType">Type</label>
+            <select
+              id="transactionType"
+              value={data.transactionType}
+              onChange={handleChange}
+              name="transactionType"
+              className="border border-(--secondary-blue) px-1 rounded-md h-11"
+            >
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1 ">
+            <label htmlFor="account">Account</label>
+            <select
+              id="account"
+              value={data.account}
+              onChange={handleChange}
+              name="account"
+              required
+              className="border border-(--secondary-blue) px-1 rounded-md h-11"
+            >
+              <option value="checking">Checking</option>
+              <option value="savings">Savings</option>
+              <option value="credit">Credit</option>
+              <option value="cash">Cash</option>
+            </select>
+          </div>
+
+          {/* Only show category if expense */}
+          {data.transactionType === "expense" && (
+            <div className="flex flex-col gap-1 ">
+              <label htmlFor="category">Category</label>
+              <select
+                id="category"
+                value={data.category}
+                onChange={handleChange}
+                name="category"
+                className="border border-(--secondary-blue) px-1 rounded-md h-11"
+              >
+                <option value="subscription">Subscription</option>
+                <option value="bill">Bill</option>
+                <option value="tax">Tax</option>
+                <option value="insurance">Insurance</option>
+                <option value="loan">Loan</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          )}
+        </div>
+
+        {errors.date && (
+          <span className="pl-12 text-red-500">{errors.date}</span>
+        )}
       </form>
+
       <SeparatorLine width="3/4" />
+
       <button
         type="submit"
         form="addTransaction"
-        className="
-    relative
-    border
-    rounded-md
-    px-6
-    py-3
-    min-w-[180px]
-    grid
-    place-items-center
-    hover:border-teal-500
-    disabled:opacity-70
-  "
-        aria-label="Add transaction"
         disabled={isPending}
+        aria-label="Add new transaction"
+        className="
+          relative
+          border
+          border-(--secondary-blue)
+          rounded-md
+          px-6
+          py-3
+          min-w-[180px]
+          grid
+          place-items-center
+          hover:border-teal-500
+          disabled:opacity-70
+        "
       >
         <span
           className={`transition-opacity ${
             isPending ? "opacity-0" : "opacity-100"
           }`}
         >
-          Add New Transaction
+          Add transaction
         </span>
+
         {isPending && (
           <div className="absolute inset-0 flex items-center justify-center bg-black rounded-md">
             <LoadingSpinner size="sm" />
           </div>
         )}
+
         {transactionAdded && (
           <div className="absolute inset-0 flex items-center justify-center gap-3 text-white rounded-md bg-emerald-900 ">
             Success <MdCheck />

@@ -282,6 +282,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               aria-label="Cancel changes"
               disabled={isPending}
               onClick={onClose}
+              type="button"
             >
               <MdClose size={20} />
             </button>

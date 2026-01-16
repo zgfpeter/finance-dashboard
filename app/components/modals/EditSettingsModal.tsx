@@ -121,7 +121,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
 
             <div>
               <div className="flex flex-col gap-3 m-3">
-                <label htmlFor="avatar">Avatar Url</label>
+                <label htmlFor="avatar">Avatar url</label>
                 {/* error if the form validation fails */}
                 {/* {errors.avatar && (
                   <span className="absolute text-red-500 right-5">

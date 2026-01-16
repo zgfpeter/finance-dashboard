@@ -4,7 +4,6 @@
 // onClose is a function with no arguments and no return value
 // ()=> void is the TypeScript way to write "a function that returns nothing"
 interface Props {
-  data: Goal | null;
   onClose: () => void;
 }
 
@@ -15,7 +14,7 @@ import { MdEdit, MdDelete, MdOutlineWatchLater } from "react-icons/md";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData, Goal } from "@/lib/types/dashboard";
+import { DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { calculateDeadline, prettifyDate } from "@/lib/utils";
@@ -59,7 +58,7 @@ export default function GoalsModal({ onClose }: Props) {
 
   // filters by date, company, amount and transaction type (expense or income)
   // so if the user types "expense" or "income", it will find the transactions that are expenses or incomes
-  const filteredgoals = useMemo(() => {
+  const filteredGoals = useMemo(() => {
     const term = search.trim().toLowerCase();
     // trim spaces and convert to lowercase for case-insensitivity
     if (!term) return goals;
@@ -99,7 +98,7 @@ export default function GoalsModal({ onClose }: Props) {
 
         return {
           ...old,
-          debts: old.debts.filter((c) => c._id !== id),
+          goals: old.goals.filter((c) => c._id !== id),
         };
       });
 
@@ -126,7 +125,7 @@ export default function GoalsModal({ onClose }: Props) {
   }
 
   if (showEmptyState) {
-    return <EmptyState message="No goals data yet." />;
+    return <EmptyState message="No goals data yet." onClose={onClose} />;
   }
   if (isError) {
     return <ErrorState message="Could not load goals data." />;
@@ -135,7 +134,7 @@ export default function GoalsModal({ onClose }: Props) {
   // TODO fix goals and goals, use one term only consistently
   return (
     <div
-      className="flex flex-col items-center w-full h-full justify-evenly"
+      className="relative flex flex-col items-center w-full h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -148,28 +147,29 @@ export default function GoalsModal({ onClose }: Props) {
         ✕
       </button>
 
-      <h2 className="mb-4 text-xl font-semibold">Goals</h2>
-      <input
-        type="text"
-        placeholder="Search..."
-        className="w-full p-5 mb-2 rounded-md"
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <h2 className="mt-4 mb-4 text-xl font-semibold">Goals</h2>
 
-      <ul className="flex flex-col w-full gap-2 overflow-y-auto grow ">
+      {/* Styled Search Input to match DebtsModal */}
+      <div className="flex w-full px-5 mb-4">
+        <input
+          type="text"
+          placeholder="Search goals..."
+          className="p-2 border rounded-md grow bg-stone-100 dark:bg-stone-800 border-stone-300 dark:border-stone-700 placeholder:text-stone-500 text-stone-500"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      <ul className="flex flex-col w-full gap-2 px-5 pb-5 overflow-y-auto grow ">
         {/* each goal goal li is a grid with 2 columns, one for company+date and one for amount */}
-        {filteredgoals?.map((goal) => {
+        {filteredGoals?.map((goal) => {
           const isFullySaved =
             Number(goal.currentAmount) >= Number(goal.targetAmount);
           const deadline = calculateDeadline(goal.targetDate);
           return (
-            // <li
-            //   key={goal._id}
-            //   className="bg-(--border-blue) p-2 rounded-md gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
-            // >
             <li
               key={goal._id}
-              className="bg-(--border-blue) p-2 rounded-md gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
+              className="bg-(--border-blue) p-2 rounded-md gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_4fr_1fr] md:grid-rows-1"
             >
               <div className="flex items-center gap-1 text-xs md:justify-center w-fit ">
                 <MdOutlineWatchLater color="orange" />
@@ -242,12 +242,12 @@ export default function GoalsModal({ onClose }: Props) {
                       })
                     )
                   }
-                  className="p-1"
+                  className="p-2 rounded-full hover:bg-stone-900"
                   aria-label="Edit goals goal"
                 >
                   <MdEdit color="orange" />
                 </button>
-                <button className="p-1 ">
+                <button className="p-2 rounded-full hover:bg-stone-900">
                   <MdDelete
                     color="red"
                     onClick={() => setDeleteId(goal._id)}

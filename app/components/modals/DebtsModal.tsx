@@ -4,7 +4,6 @@
 // onClose is a function with no arguments and no return value
 // ()=> void is the TypeScript way to write "a function that returns nothing"
 interface Props {
-  data: Debt | null;
   onClose: () => void;
 }
 
@@ -15,7 +14,7 @@ import { MdEdit, MdDelete, MdOutlineWatchLater } from "react-icons/md";
 import { useDashboard } from "@/app/hooks/useDashboard";
 import { useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData, Debt } from "@/lib/types/dashboard";
+import { DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { calculateDeadline, prettifyDate } from "@/lib/utils";
@@ -124,7 +123,7 @@ export default function DebtsModal({ onClose }: Props) {
   }
 
   if (showEmptyState) {
-    return <EmptyState message="No debts data yet." />;
+    return <EmptyState message="No debts data yet." onClose={onClose} />;
   }
   if (isError) {
     return <ErrorState message="Could not load debts data." />;
@@ -132,28 +131,33 @@ export default function DebtsModal({ onClose }: Props) {
 
   return (
     <div
-      className="flex flex-col items-center w-full h-full justify-evenly"
+      className="relative flex flex-col items-center w-full h-full justify-evenly"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute z-10 text-xl text-red-500 right-5 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
 
-      <h2 className="mb-4 text-xl font-semibold">Debts</h2>
-      <input
-        type="text"
-        placeholder="Search..."
-        className="w-full p-5 mb-2 rounded-md"
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <h2 className="mt-4 mb-2 text-xl font-semibold">Debts</h2>
 
-      <ul className="flex flex-col w-full gap-2 overflow-y-auto grow ">
+      {/* Styled Search Input to match other modals */}
+      <div className="flex w-full px-5 mb-4">
+        <input
+          type="text"
+          placeholder="Search debts..."
+          className="p-2 border rounded-md grow bg-stone-100 dark:bg-stone-800 border-stone-300 dark:border-stone-700 placeholder:text-stone-500 text-stone-500"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      <ul className="flex flex-col w-full gap-2 px-5 pb-5 overflow-y-auto grow">
         {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
         {filteredDebts?.map((debt) => {
           const isFullyPaid =
@@ -162,7 +166,7 @@ export default function DebtsModal({ onClose }: Props) {
           return (
             <li
               key={debt._id}
-              className="bg-(--border-blue) p-2 rounded-md gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_2fr_1fr] md:grid-rows-1"
+              className="bg-(--border-blue) p-2 rounded-md gap-2 relative grid grid-cols-2 grid-rows-[auto_1fr] md:grid-cols-[1fr_4fr_1fr] md:grid-rows-1"
             >
               <div className="flex items-center gap-1 text-xs md:justify-center w-fit ">
                 <MdOutlineWatchLater color="orange" />
@@ -230,12 +234,12 @@ export default function DebtsModal({ onClose }: Props) {
                       })
                     )
                   }
-                  className="p-1"
+                  className="p-2 rounded-full hover:bg-stone-900"
                   aria-label="Edit debt"
                 >
                   <MdEdit color="orange" />
                 </button>
-                <button className="p-1 ">
+                <button className="p-2 rounded-full hover:bg-stone-900">
                   <MdDelete
                     color="red"
                     onClick={() => setDeleteId(debt._id)}

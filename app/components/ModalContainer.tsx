@@ -43,7 +43,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Edit Overview"
         >
           <EditOverviewModal data={modalData} onClose={handleClose} />
@@ -53,7 +53,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Transactions"
         >
           <TransactionsModal onClose={handleClose} />
@@ -63,7 +63,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Settings"
         >
           <SettingsModal onClose={handleClose} />
@@ -73,7 +73,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Edit Settings"
         >
           <EditSettingsModal data={modalData} onClose={handleClose} />
@@ -83,7 +83,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Add Transaction"
         >
           <AddTransactionModal onClose={handleClose} />
@@ -93,7 +93,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Add Upcoming Charge"
         >
           <AddUpcomingChargeModal onClose={handleClose} />
@@ -103,7 +103,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Edit Upcoming Charge"
         >
           {/* data is the Upcoming Charge to be edited */}
@@ -114,7 +114,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Upcoming Charges"
         >
           <UpcomingChargesModal onClose={handleClose} />
@@ -124,7 +124,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Edit Transaction"
         >
           {/* Modal data is the Transaction to be edited */}
@@ -135,7 +135,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="More Debts"
         >
           <Debts data={modalData} onClose={handleClose} />
@@ -145,7 +145,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Add a debt"
         >
           <AddDebtModal onClose={handleClose} />
@@ -155,7 +155,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Edit Debt"
         >
           <EditDebtModal data={modalData} onClose={handleClose} />
@@ -166,7 +166,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="More Goals"
         >
           <Goals data={modalData} onClose={handleClose} />
@@ -176,7 +176,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Add a Goal"
         >
           <AddGoalModal onClose={handleClose} />
@@ -186,7 +186,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Edit Goal"
         >
           <EditGoalModal data={modalData} onClose={handleClose} />
@@ -196,7 +196,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="Contact"
         >
           <ContactModal onClose={handleClose} />
@@ -207,7 +207,7 @@ export default function ModalContainer() {
       return (
         <ModalWrapper
           onClose={handleClose}
-          widthClass="w-[800px] max-w-full"
+          widthClass="w-[900px] max-w-full"
           ariaLabel="ImportExport"
         >
           <ImportExportModal onClose={handleClose} />
