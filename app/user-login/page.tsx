@@ -214,7 +214,7 @@ export default function UserLogin() {
             </span>
           </motion.button>
           <button
-            className="z-0 p-3 border rounded-md  w-30 hover:cursor-pointer"
+            className="z-0 p-3 border rounded-md w-30 hover:cursor-pointer"
             aria-label="Demo login"
             onClick={handleDemoLogin}
             disabled={loadingType !== null}
@@ -228,7 +228,7 @@ export default function UserLogin() {
         </div>
         <span>or</span>
         <Link
-          href="/signUp"
+          href="/sign-up"
           className="underline hover:cursor-pointer"
           aria-label="Create an account"
         >

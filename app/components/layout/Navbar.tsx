@@ -241,7 +241,7 @@ export default function Navbar() {
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
           ></motion.div>{" "}
           <button
-            onClick={() => signOut({ callbackUrl: "/userLogin" })}
+            onClick={() => signOut({ callbackUrl: "/user-login" })}
             className=" relative w-full h-20 flex items-center justify-center border-8 gap-3 text-(--primary-orange) border-(--primary-orange) "
             aria-label="Sign out"
           >

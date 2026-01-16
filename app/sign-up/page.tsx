@@ -60,7 +60,7 @@ export default function SignUp() {
         setRegistrationSuccess(true);
         setErrorMessage(null); // clear any previous errors
         setTimeout(() => {
-          router.push("/userLogin");
+          router.push("/user-login");
         }, 1000);
       } else {
         setRegistrationSuccess(false);
@@ -215,7 +215,7 @@ export default function SignUp() {
           </span>
         </motion.button>
         <span>or</span>
-        <Link href="/userLogin" aria-label="Create an account">
+        <Link href="/user-login" aria-label="Create an account">
           <span>
             Already have an account?
             <span className="underline hover:cursor-pointer"> Log in</span>

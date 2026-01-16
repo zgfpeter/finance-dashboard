@@ -34,7 +34,7 @@ const useAxiosAuth = () => {
       (error) => {
         if (error.response?.status === 401 && !isLoggingOut) {
           isLoggingOut = true;
-          signOut({ callbackUrl: "/userLogin" });
+          signOut({ callbackUrl: "/user-login" });
         }
         return Promise.reject(error);
       }

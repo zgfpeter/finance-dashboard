@@ -216,7 +216,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="flex gap-1 p-1 rounded-md text-stone-500 bg-stone-200 dark:bg-stone-800">
+          <div className="flex gap-1 p-1 rounded-md text-cyan-500 bg-stone-200 dark:bg-stone-800">
             <button
               onClick={() => {
                 setViewMode("list");
