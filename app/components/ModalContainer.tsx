@@ -29,6 +29,7 @@ export default function ModalContainer() {
 
   // get the modal type and optional payload from Redux state
   // payload can be the data the modal has to display
+  // data needed for edits
   const { type: modalType, data: modalData } = useSelector(
     (state: RootState) => state.modal
   );
@@ -138,7 +139,7 @@ export default function ModalContainer() {
           widthClass="w-[900px] max-w-full"
           ariaLabel="More Debts"
         >
-          <Debts data={modalData} onClose={handleClose} />
+          <Debts onClose={handleClose} />
         </ModalWrapper>
       );
     case "addDebt":
@@ -169,7 +170,7 @@ export default function ModalContainer() {
           widthClass="w-[900px] max-w-full"
           ariaLabel="More Goals"
         >
-          <Goals data={modalData} onClose={handleClose} />
+          <Goals onClose={handleClose} />
         </ModalWrapper>
       );
     case "addGoal":
