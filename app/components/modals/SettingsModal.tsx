@@ -48,21 +48,21 @@ export default function SettingsModal({ onClose }: Props) {
 
   return (
     <div
-      className="flex flex-col items-center h-full py-10 "
+      className="flex flex-col items-center justify-between h-full"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-4"
         aria-label="Close modal"
       >
         ✕
       </button>
-      <h2 className="mb-4 text-xl font-semibold">Settings</h2>
-      <div className="flex items-center justify-around w-full h-full">
-        <div className="relative flex flex-col justify-center h-full gap-5">
+      <h2 className="text-xl font-semibold ">Settings</h2>
+      <div className="flex items-center justify-around w-full">
+        <div className="relative flex flex-col justify-center gap-5">
           <h3 className="flex items-center justify-between">
             <span>{user?.username}</span>
           </h3>

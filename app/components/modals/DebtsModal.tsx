@@ -138,7 +138,7 @@ export default function DebtsModal({ onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute z-10 text-xl text-red-500 right-5 top-4"
+        className="absolute top-0 z-10 text-xl text-red-500 right-5"
         aria-label="Close modal"
       >
         ✕
@@ -157,7 +157,7 @@ export default function DebtsModal({ onClose }: Props) {
         />
       </div>
 
-      <ul className="flex flex-col w-full gap-2 px-5 pb-5 overflow-y-auto grow">
+      <ul className="flex flex-col w-full gap-2 pb-5 overflow-y-auto md:px-5 grow">
         {/* each transaction li is a grid with 2 columns, one for company+date and one for amount */}
         {filteredDebts?.map((debt) => {
           const isFullyPaid =

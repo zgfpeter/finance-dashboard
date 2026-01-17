@@ -196,12 +196,12 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-3"
         aria-label="Close modal"
       >
         ✕
       </button>
-      <h2 className="text-xl font-semibold">
+      <h2 className="py-2 text-xl font-semibold">
         Editing transaction: {data?.company}
       </h2>
 
@@ -210,7 +210,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
       )} */}
 
       <form
-        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
+        className="relative flex flex-col items-center justify-around w-full max-w-xl py-5 "
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col justify-between w-full ">
@@ -327,7 +327,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
           </div>
         </div>
 
-        <div className="flex items-center self-center w-full p-3 mt-5 justify-evenly">
+        <div className="flex items-center self-center w-full p-3 justify-evenly">
           <button
             type="button"
             className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"

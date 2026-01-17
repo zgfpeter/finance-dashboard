@@ -182,15 +182,17 @@ export default function EditGoalModal({ data, onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-3"
         aria-label="Close modal"
       >
         ✕
       </button>
-      <h2 className="text-xl font-semibold">Editing goal: {data?.title}</h2>
+      <h2 className="py-2 text-xl font-semibold">
+        Editing goal: {data?.title}
+      </h2>
 
       <form
-        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
+        className="relative flex flex-col items-center w-full max-w-xl py-5 justify-evenly"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col justify-between w-full ">

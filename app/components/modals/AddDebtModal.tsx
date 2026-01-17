@@ -156,16 +156,16 @@ export default function AddDebtModal({ onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-3"
         aria-label="Close modal"
       >
         ✕
       </button>
       {/* heading */}
-      <h2 className="text-xl font-semibold">Add a new debt</h2>
+      <h2 className="py-2 text-xl font-semibold">Add a new debt</h2>
 
       <form
-        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
+        className="relative flex flex-col items-center w-full max-w-xl py-5 justify-evenly"
         id="addDebt"
         onSubmit={handleSubmit}
       >
@@ -265,7 +265,7 @@ export default function AddDebtModal({ onClose }: Props) {
       <button
         type="submit"
         form="addDebt"
-        className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70"
+        className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70 mb-5"
         aria-label="Add new debt"
       >
         <span

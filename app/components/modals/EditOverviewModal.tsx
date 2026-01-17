@@ -211,19 +211,19 @@ export default function EditOverviewModal({ data, onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-3"
         aria-label="Close modal"
       >
         ✕
       </button>
-      <h2 className="text-xl font-semibold">Editing Overview</h2>
+      <h2 className="py-2 text-xl font-semibold">Editing Overview</h2>
       {errors.generalError && (
         <p className="text-red-500">
           Form contains errors, please check again.
         </p>
       )}
       <form
-        className="relative flex flex-col items-center justify-center w-full max-w-xl gap-5"
+        className="relative flex flex-col items-center justify-center w-full max-w-xl py-5"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col justify-between w-full">

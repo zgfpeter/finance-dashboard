@@ -197,7 +197,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute z-10 text-xl text-red-500 right-5 top-4"
+        className="absolute top-0 z-10 text-xl text-red-500 right-5"
         aria-label="Close modal"
       >
         ✕
@@ -206,7 +206,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
       <h2 className="mt-4 mb-2 text-xl font-semibold">Upcoming charges</h2>
 
       {/* Controls Bar */}
-      <div className="flex flex-col w-full gap-3 px-5 mb-4">
+      <div className="flex flex-col w-full gap-3 my-3 md:px-5">
         {/* Search & View Toggle */}
         <div className="flex w-full gap-2">
           <input

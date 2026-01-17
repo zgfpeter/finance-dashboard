@@ -232,7 +232,7 @@ export default function TransactionsModal({ onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute z-10 text-xl text-red-500 right-5 top-4"
+        className="absolute top-0 z-10 text-xl text-red-500 right-5"
         aria-label="Close modal"
       >
         ✕
@@ -241,7 +241,7 @@ export default function TransactionsModal({ onClose }: Props) {
       <h2 className="mt-4 mb-2 text-xl font-semibold">Transactions</h2>
 
       {/* Controls Bar */}
-      <div className="flex flex-col w-full gap-3 px-5 mb-4">
+      <div className="flex flex-col w-full gap-3 my-3 md:px-5">
         {/* Search Bar */}
         <div className="flex w-full gap-2">
           <input
@@ -299,9 +299,9 @@ export default function TransactionsModal({ onClose }: Props) {
         )}
       </div>
 
-      {/* Content Area */}
-      <div className="w-full px-5 pb-5 overflow-y-auto grow">
-        {/* --- 1. Global List View --- */}
+      {/* Content area */}
+      <div className="w-full overflow-y-auto md:px-5 grow">
+        {/* Global list view */}
         {(viewMode === "list" || search) && (
           <ul className="flex flex-col w-full gap-2">
             {filteredTransactions.length === 0 ? (
@@ -324,7 +324,7 @@ export default function TransactionsModal({ onClose }: Props) {
           </ul>
         )}
 
-        {/* --- 2. Calendar View (Grid) --- */}
+        {/* Calendar view (grid)  */}
         {viewMode === "calendar" && !search && !selectedDate && (
           <div className="flex flex-col w-full h-full duration-300 animate-in fade-in">
             {/* Weekday Headers */}
@@ -334,14 +334,14 @@ export default function TransactionsModal({ onClose }: Props) {
               ))}
             </div>
 
-            {/* Days Grid */}
+            {/* Days grid */}
             <div className="grid grid-cols-7 auto-rows-fr gap-1 grow min-h-[300px]">
-              {/* Empty padding slots */}
+              {/* Empty padding buttons */}
               {calendarData.paddingDays.map((_, i) => (
                 <div key={`pad-${i}`} className="bg-transparent" />
               ))}
 
-              {/* Actual Days */}
+              {/* Actual days */}
               {calendarData.days.map((dayNum) => {
                 // Find transactions for this specific day
                 const daysTransactions = filteredTransactions.filter((t) => {
@@ -369,7 +369,7 @@ export default function TransactionsModal({ onClose }: Props) {
                       );
                       setSelectedDate(clickedDate);
                     }}
-                    className="relative bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-md px-1 flex flex-col gap-1 min-h-[60px] text-left hover:border-(--primary-blue) transition-colors group"
+                    className="relative bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-md px-1 flex flex-col gap-1 min-h-[65px] text-left hover:border-(--primary-blue) transition-colors group"
                   >
                     <span
                       className={`text-xs font-semibold ${
@@ -414,7 +414,7 @@ export default function TransactionsModal({ onClose }: Props) {
           </div>
         )}
 
-        {/* --- 3. Day Detail View (Drill-Down) --- */}
+        {/*  Day detail view  */}
         {viewMode === "calendar" && selectedDate && !search && (
           <div className="flex flex-col w-full h-full gap-2 duration-200 animate-in slide-in-from-right-10">
             <div className="flex items-center gap-2 pb-2 mb-2 border-b border-stone-200 dark:border-stone-700">

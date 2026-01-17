@@ -139,19 +139,19 @@ export default function AddGoalModal({ onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-3"
         aria-label="Close modal"
       >
         ✕
       </button>
-      <h2 className="text-xl font-semibold">Add a new goal</h2>
+      <h2 className="py-2 text-xl font-semibold">Add a new goal</h2>
 
       {errors.generalError && (
         <p className="text-red-500">{errors.generalError}</p>
       )}
 
       <form
-        className="relative flex flex-col items-center w-full max-w-xl gap-5 justify-evenly"
+        className="relative flex flex-col items-center w-full max-w-xl py-5 justify-evenly"
         id="addGoal"
         onSubmit={handleSubmit}
       >
@@ -240,7 +240,7 @@ export default function AddGoalModal({ onClose }: Props) {
       <button
         type="submit"
         form="addGoal"
-        className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70"
+        className="relative border rounded-md px-6 py-3 min-w-[180px] grid place-items-center hover:border-teal-500 disabled:opacity-70 mb-5"
         aria-label="Add new goal"
         disabled={isPending}
       >

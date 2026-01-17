@@ -171,20 +171,20 @@ export default function AddTransactionModal({ onClose }: Props) {
           setData({ ...INITIAL_STATE });
           onClose();
         }}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-3"
         aria-label="Close modal"
       >
         ✕
       </button>
 
-      <h2 className="text-xl font-semibold">Add a new transaction</h2>
+      <h2 className="py-2 text-xl font-semibold">Add a new transaction</h2>
 
       {errors.generalError && (
         <p className="text-red-500">{errors.generalError}</p>
       )}
 
       <form
-        className="flex flex-col w-full gap-5"
+        className="flex flex-col w-full gap-5 py-5"
         onSubmit={handleSubmit}
         id="addTransaction"
       >
@@ -322,7 +322,7 @@ export default function AddTransactionModal({ onClose }: Props) {
           grid
           place-items-center
           hover:border-teal-500
-          disabled:opacity-70
+          disabled:opacity-70 mb-5
         "
       >
         <span

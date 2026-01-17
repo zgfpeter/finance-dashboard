@@ -255,7 +255,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
           setData({ ...INITIAL_STATE }); // FIX: reset on manual close
           onClose();
         }}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-3"
         aria-label="Close modal"
       >
         ✕
@@ -268,7 +268,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
       )}
 
       <form
-        className="flex flex-col w-full gap-5"
+        className="flex flex-col w-full gap-5 py-5"
         onSubmit={handleSubmit}
         id="addCharge"
       >
@@ -455,7 +455,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
     grid
     place-items-center
     hover:border-teal-500
-    disabled:opacity-70
+    disabled:opacity-70 mb-5
   "
       >
         {/* Normal state */}

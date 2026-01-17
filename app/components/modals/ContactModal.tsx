@@ -125,7 +125,7 @@ export default function ContactModal({ onClose }: Props) {
     >
       <button
         onClick={onClose}
-        className="absolute text-xl text-red-500 right-10 top-4"
+        className="absolute text-xl text-red-500 right-5 top-0"
         aria-label="Close modal"
       >
         ✕
