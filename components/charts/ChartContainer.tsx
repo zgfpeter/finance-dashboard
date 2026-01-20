@@ -1,4 +1,4 @@
-import EmptyState from "@/app/components/ui/EmptyState";
+import EmptyState from "../ui/EmptyState";
 import { ChartCardSkeleton } from "../ui/skeletons/ChartCardSkeleton";
 interface Props {
   isLoading: boolean;

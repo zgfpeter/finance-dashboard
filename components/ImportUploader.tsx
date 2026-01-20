@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import { useQueryClient } from "@tanstack/react-query";
 import { MdUpload } from "react-icons/md";
 import { AxiosError } from "axios";

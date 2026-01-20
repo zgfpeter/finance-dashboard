@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdCheck, MdEventRepeat } from "react-icons/md";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import SeparatorLine from "../ui/SeparatorLine";
@@ -86,8 +86,8 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
       repeating === "Monthly"
         ? "month"
         : repeating === "Yearly"
-        ? "year"
-        : "week"; // Weekly maps to week
+          ? "year"
+          : "week"; // Weekly maps to week
 
     // human-friendly: "every week" (not "every 1 week") or "every 3 weeks"
     if (rawInterval === 1) return baseUnit; // "week" / "month" / "year"
@@ -96,7 +96,7 @@ export default function AddUpcomingChargeModal({ onClose }: Props) {
 
   // handle the input change
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) {
     const { name, value } = e.target;
 

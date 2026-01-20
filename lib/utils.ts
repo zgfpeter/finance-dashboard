@@ -31,7 +31,7 @@ export function calculateDeadline(dateString: string): {
 
   const now = new Date();
   const todayUtc = new Date(
-    Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+    Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()),
   );
 
   //  Compare  based on calendar days (ms difference between two UTC midnights)
@@ -96,7 +96,7 @@ const months = [
 
 // get the total monthly spendings
 export function getMonthlySpendingsData(
-  transactions: Transaction[]
+  transactions: Transaction[],
 ): MonthlySpending[] {
   // initial array, with zeroes
   const monthlyTotals = Array(12).fill(0);
@@ -178,12 +178,11 @@ export function prettifyDate(date: string) {
 }
 
 // get the total amount for a given type ("income" or "expense" for a specific month and year)
-
 export function getTotalForMonth(
   transactions: Transaction[],
   type: TransactionType,
   month: number,
-  year: number
+  year: number,
 ): number {
   return transactions
     .filter((t) => t.transactionType === type)
@@ -197,7 +196,7 @@ export function getTotalForMonth(
 // get the totals for this month and last month for a given transaction type (expense or income)
 export function getThisAndLastMonthTotals(
   transactions: Transaction[],
-  type: TransactionType
+  type: TransactionType,
 ) {
   // get current date
   const now = new Date();
@@ -217,14 +216,14 @@ export function getThisAndLastMonthTotals(
     transactions,
     type,
     thisMonth,
-    thisYear
+    thisYear,
   );
 
   const lastMonthTotal = getTotalForMonth(
     transactions,
     type,
     lastMonth,
-    lastMonthYear
+    lastMonthYear,
   );
 
   return {
@@ -268,9 +267,6 @@ export function addInterval(dateIso: string, repeating: string, interval = 1) {
     case "Weekly":
       next = new Date(d.getTime() + 7 * 24 * 60 * 60 * 1000 * interval);
       break;
-    case "BiWeekly":
-      next = new Date(d.getTime() + 14 * 24 * 60 * 60 * 1000 * interval);
-      break;
     case "Monthly": {
       const year = d.getUTCFullYear();
       const month = d.getUTCMonth();
@@ -285,8 +281,8 @@ export function addInterval(dateIso: string, repeating: string, interval = 1) {
           Date.UTC(
             lastDay.getUTCFullYear(),
             lastDay.getUTCMonth(),
-            lastDay.getUTCDate()
-          )
+            lastDay.getUTCDate(),
+          ),
         );
       } else {
         next = tentative;
@@ -295,7 +291,11 @@ export function addInterval(dateIso: string, repeating: string, interval = 1) {
     }
     case "Yearly": {
       next = new Date(
-        Date.UTC(d.getUTCFullYear() + interval, d.getUTCMonth(), d.getUTCDate())
+        Date.UTC(
+          d.getUTCFullYear() + interval,
+          d.getUTCMonth(),
+          d.getUTCDate(),
+        ),
       );
       break;
     }
@@ -305,6 +305,7 @@ export function addInterval(dateIso: string, repeating: string, interval = 1) {
   return dateToIso(next);
 }
 
+//generate occurences for repeating upcoming charges
 export function generateOccurrences({
   startDateIso,
   repeating,

@@ -1,4 +1,4 @@
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import { currencies, EditOverview } from "@/lib/types/dashboard";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -45,7 +45,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
   const currencySymbol = currencies[currency as CurrencyCode]?.symbol;
 
   const [totalBalance, setTotalBalance] = useState<string>(
-    data ? data.totalBalance.toString() : ""
+    data ? data.totalBalance.toString() : "",
   );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
@@ -60,7 +60,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
       type: a.type,
       balance: a.balance.toString(),
       isNew: false,
-    })) || []
+    })) || [],
   );
 
   // at most the user can have 4 accounts ( one of each type, there are 4 types)
@@ -90,7 +90,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
   // when the user selects one, it becomes unavailable and cannot be selected again
   function getAvailableAccountTypes(index: number) {
     const usedTypes = new Set(
-      accountsState.filter((_, i) => i !== index).map((acc) => acc.type)
+      accountsState.filter((_, i) => i !== index).map((acc) => acc.type),
     );
     return allAccountTypes.filter((t) => !usedTypes.has(t));
   }
@@ -106,7 +106,7 @@ export default function EditOverviewModal({ data, onClose }: Props) {
 
     // filter out empty accounts
     const filledAccounts = accountsState.filter(
-      (acc) => !isEmptyString(acc.type) || !isEmptyString(acc.balance)
+      (acc) => !isEmptyString(acc.type) || !isEmptyString(acc.balance),
     );
 
     // at least one account must exist
@@ -255,8 +255,8 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                         prev.map((acc, i) =>
                           i === index
                             ? { ...acc, type: e.target.value as AccountType }
-                            : acc
-                        )
+                            : acc,
+                        ),
                       )
                     }
                   >
@@ -290,8 +290,8 @@ export default function EditOverviewModal({ data, onClose }: Props) {
                       if (value === "" || /^\d*\.?\d{0,2}$/.test(value)) {
                         setAccountsState((prev) =>
                           prev.map((acc, i) =>
-                            i === index ? { ...acc, balance: value } : acc
-                          )
+                            i === index ? { ...acc, balance: value } : acc,
+                          ),
                         );
                       }
                     }}

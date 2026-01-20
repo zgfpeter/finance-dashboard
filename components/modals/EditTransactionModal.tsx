@@ -10,7 +10,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardData } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import ErrorState from "../ui/ErrorState";
 // -- end imports --
@@ -32,10 +32,10 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     return new Date(data.date).toISOString().slice(0, 10);
   });
   const [transactionType, setTransactionType] = useState<TransactionType>(
-    data?.transactionType ?? "expense"
+    data?.transactionType ?? "expense",
   );
   const [category, setCategory] = useState<ExpenseCategory>(
-    data?.category ?? "other"
+    data?.category ?? "other",
   );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({
@@ -56,7 +56,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
     mutationFn: (updatedTransaction: Transaction) =>
       axiosAuth.put(
         `/dashboard/transactions/${updatedTransaction._id}`,
-        updatedTransaction
+        updatedTransaction,
       ),
     // runs immediately when i click 'Save"
     // this runs before the PUT request is send, i can do optimistic updates here
@@ -78,7 +78,7 @@ export default function EditTransactionModal({ data, onClose }: Props) {
           transactions: old.transactions.map((c) =>
             c._id === updatedTransaction._id
               ? { ...c, ...updatedTransaction }
-              : c
+              : c,
           ),
         };
       });

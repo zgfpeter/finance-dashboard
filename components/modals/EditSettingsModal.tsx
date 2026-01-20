@@ -1,6 +1,6 @@
 "use client";
 
-import { useUpdateUserDetails } from "@/app/hooks/useUpdateUser";
+import { useUpdateUserDetails } from "@/hooks/useUpdateUser";
 import { currencies, CurrencyCode } from "@/lib/types/dashboard";
 import { UserSettings } from "@/lib/types/User";
 import { FormEvent, useState } from "react";
@@ -21,10 +21,10 @@ export default function EditSettingsModal({ data, onClose }: Props) {
   const updateUserMutation = useUpdateUserDetails();
 
   const [currency, setCurrency] = useState<CurrencyCode>(
-    data?.currency || "EUR"
+    data?.currency || "EUR",
   );
   const [username, setUsername] = useState(
-    data?.username || "default username"
+    data?.username || "default username",
   );
 
   // avatar url that will be sent to backend
@@ -32,7 +32,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
 
   // temp avatar url for preview
   const [tempAvatarUrl, setTempAvatarUrl] = useState(
-    data?.avatarUrl || "/userProfile.jpg"
+    data?.avatarUrl || "/userProfile.jpg",
   );
 
   const [imageLoading, setImageLoading] = useState(true);
@@ -57,7 +57,7 @@ export default function EditSettingsModal({ data, onClose }: Props) {
 
           onClose();
         },
-      }
+      },
     );
   };
 

@@ -4,98 +4,41 @@
 import React, { useState } from "react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  DashboardData,
-  UpcomingCharge,
-  ExpenseCategory,
-} from "@/lib/types/dashboard";
+import { DashboardData, Debt } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 // -- end imports --
 // the props the component takes
 interface Props {
-  data: UpcomingCharge | null;
+  data: Debt | null;
   onClose: () => void;
 }
 
-export default function EditUpcomingChargeModal({ data, onClose }: Props) {
+//   company: string;
+//   currentPaid: number | string;
+//   totalAmount: number | string;
+//   dueDate: string;
+
+export default function EditDebtModal({ data, onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
   const queryClient = useQueryClient();
   const [company, setCompany] = useState(data?.company ?? "");
-  const [amount, setAmount] = useState(data?.amount ?? "");
-  const [date, setDate] = useState(() => {
-    if (!data?.date) return "";
-    return new Date(data.date).toISOString().slice(0, 10);
+  const [currentPaid, setCurrentPaid] = useState(data?.currentPaid ?? "");
+  const [totalAmount, setTotalAmount] = useState(data?.totalAmount ?? "");
+
+  const [dueDate, setDueDate] = useState(() => {
+    if (!data?.dueDate) return "";
+    return new Date(data?.dueDate).toISOString().slice(0, 10);
   });
 
-  const [category, setCategory] = useState<ExpenseCategory>(
-    data?.category ?? "other"
-  ); // Default category is Other
-  const [errors, setErrors] = useState<{ [key: string]: string }>({
-    // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
-    id: "",
-    date: "",
-    company: "",
-    amount: "",
-    category: "",
-    generalError: "",
-  });
-
-  // tanstack mutation: PUT
-  // this runs when i call mutate()
-  const updateMutation = useMutation({
-    // sends the update to the backend, doesn't wait to finish to update UI
-    mutationFn: (updatedCharge: UpcomingCharge) =>
-      axiosAuth.put(
-        `/dashboard/upcomingCharges/${updatedCharge._id}`,
-        updatedCharge
-      ),
-    // runs immediately when i click 'Save"
-    // this runs before the PUT request is send, i can do optimistic updates here
-    // cancel queries: because maybe another refetch is happening at the same time
-    // cancel it to avoid UI flickering or outdated data ( race conditions )
-    onMutate: async (updatedCharge: UpcomingCharge) => {
-      await queryClient.cancelQueries({ queryKey: ["dashboardData"] });
-
-      // store the previous value in case i need to rollback
-      const previous = queryClient.getQueryData<DashboardData>([
-        "dashboardData",
-      ]);
-
-      // optimistic update: update the UI before the server request is finished, instant new values
-      queryClient.setQueryData<DashboardData>(["dashboardData"], (old) => {
-        if (!old) return old;
-        return {
-          ...old,
-          upcomingCharges: old.upcomingCharges.map((c) =>
-            c._id === updatedCharge._id ? { ...c, ...updatedCharge } : c
-          ),
-        };
-      });
-
-      // this is accessible in onError
-      return { previous };
-    },
-
-    // runs after a successfuly PUT request
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-      console.log("Success");
-      onClose();
-    },
-
-    // if request fails: restore the old value (from previous)
-    onError: (_err, _updatedCharge, context) => {
-      console.log("An error has occured: ", _err);
-      queryClient.setQueryData(["dashboardData"], context?.previous);
-    },
-  });
-
-  if (!data) return <ErrorState message="No data" />;
+  // sanitize decimal input:
+  // - replace commas with dots
+  // - allow only digits and ONE dot
+  // - normalize leading dot (.5 -> 0.5)
   function sanitizeDecimalInput(value: string) {
     let sanitized = value.replace(",", "."); // mobile / EU keyboards
     sanitized = sanitized.replace(/[^0-9.]/g, ""); // keep digits + dot
@@ -116,8 +59,67 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     return value.replace(/\s+/g, " ").trim();
   }
 
+  const [errors, setErrors] = useState<{ [key: string]: string }>({
+    // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
+    id: "",
+    dueDate: "",
+    company: "",
+    currentPaid: "",
+    totalAmount: "",
+    generalError: "",
+  });
+
+  // tanstack mutation: PUT
+  // this runs when i call mutate()
+  const updateMutation = useMutation({
+    // sends the update to the backend, doesn't wait to finish to update UI
+    mutationFn: (debt: Debt) =>
+      axiosAuth.put(`/dashboard/debts/${debt._id}`, debt),
+    // runs immediately when i click 'Save"
+    // this runs before the PUT request is send, i can do optimistic updates here
+    // cancel queries: because maybe another refetch is happening at the same time
+    // cancel it to avoid UI flickering or outdated data ( race conditions )
+    onMutate: async (debt: Debt) => {
+      await queryClient.cancelQueries({ queryKey: ["dashboardData"] });
+
+      // store the previous value in case i need to rollback
+      const previous = queryClient.getQueryData<DashboardData>([
+        "dashboardData",
+      ]);
+
+      // optimistic update: update the UI before the server request is finished, instant new values
+      queryClient.setQueryData<DashboardData>(["dashboardData"], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          debts: old.debts.map((c) =>
+            c._id === debt._id ? { ...c, ...debt } : c,
+          ),
+        };
+      });
+
+      // this is accessible in onError
+      return { previous };
+    },
+
+    // runs after a successfuly PUT request
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
+      console.log("Success");
+      onClose();
+    },
+
+    // if request fails: restore the old value (from previous)
+    onError: (_err, _debt, context) => {
+      console.log("An error has occured: ", _err);
+      queryClient.setQueryData(["dashboardData"], context?.previous);
+    },
+  });
+
+  if (!data) return <ErrorState message="No data" />;
+
   // get the states from the updateMutation
-  const { isPending, isError } = updateMutation;
+  const { isPending, isError, error } = updateMutation;
 
   // handle the user SAVE
   const handleSubmit = (e: React.FormEvent) => {
@@ -126,9 +128,9 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     // if nothing changed and the user clicks SAVE
     if (
       company === data.company &&
-      amount === data.amount &&
-      date === data.date &&
-      category === data.category
+      currentPaid === data.currentPaid &&
+      totalAmount === data.totalAmount &&
+      dueDate === data.dueDate
     ) {
       onClose();
       return;
@@ -139,10 +141,15 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     }
 
     // if there are no errors in the form
-    updateMutation.mutate({ ...data, company, amount, date, category });
+    // sanitize again before mutation
+    updateMutation.mutate({
+      ...data,
+      company: sanitizeText(company),
+      currentPaid: Number(sanitizeDecimalInput(String(currentPaid))),
+      totalAmount: Number(sanitizeDecimalInput(String(totalAmount))),
+      dueDate,
+    });
   };
-
-  // Same as AddTransaction, because i need a dropdown for the categories
 
   // simple form validation
   // TODO add a more robust validation
@@ -152,18 +159,21 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
     if (!company.trim()) {
       newErrors.company = "Company is required.";
     }
-    if (Number(amount) <= 0) {
-      newErrors.amount = "Amount must be > 0";
+    if (Number(currentPaid) < 0) {
+      newErrors.amount = "Amount must be >= 0";
     }
-    if (!date) {
+    if (Number(totalAmount) < 0) {
+      newErrors.amount = "Amount must be >= 0";
+    }
+    if (!dueDate) {
       newErrors.date = "Date is required";
     } else {
       // to check if the entered date is not a future date:
-      const chargeDate = new Date(date);
+      const debtDate = new Date(dueDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      if (chargeDate < today) {
-        newErrors.date = "Upcoming charge date cannot be in the past.";
+      if (debtDate < today) {
+        newErrors.date = "Date cannot be in the past.";
       }
     }
     setErrors(newErrors);
@@ -189,7 +199,7 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
         ✕
       </button>
       <h2 className="py-2 text-xl font-semibold">
-        Editing charge: {data?.company}
+        Editing debt: {data?.company}
       </h2>
 
       <form
@@ -219,59 +229,60 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
             />
           </div>
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="amount">Amount</label>
-            {errors.amount && (
+            <label htmlFor="currentPaid">Paid</label>
+            {errors.currentPaid && (
               <span className="absolute text-red-500 right-5">
-                {errors.amount}
+                {errors.currentPaid}
               </span>
             )}
             <input
               type="text"
-              value={amount}
+              value={currentPaid}
               inputMode="decimal"
-              onChange={(e) => setAmount(sanitizeDecimalInput(e.target.value))}
-              name="amount"
-              id="amount"
+              placeholder="0.00"
+              onChange={(e) =>
+                setCurrentPaid(sanitizeDecimalInput(e.target.value))
+              }
+              name="currentPaid"
+              id="currentPaid"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="relative flex">
+          <div className="relative flex flex-col gap-3 p-3">
+            <label htmlFor="totalAmount">Total owed</label>
+            {errors.totalAmount && (
+              <span className="absolute text-red-500 right-5">
+                {errors.totalAmount}
+              </span>
+            )}
+            <input
+              type="text"
+              value={totalAmount}
+              onChange={(e) =>
+                setCurrentPaid(sanitizeDecimalInput(e.target.value))
+              }
+              inputMode="decimal"
+              placeholder="0.00"
+              name="totalAmount"
+              id="totalAmount"
+              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
+            />
+          </div>
+          <div className="relative flex justify-between">
             <div className="relative flex flex-col gap-3 p-3">
-              <label htmlFor="date">
-                Date <span className="text-red-500">*</span>
+              <label htmlFor="dueDate">
+                Due date <span className="text-red-500">*</span>
               </label>
 
               <input
                 type="date"
-                value={date}
+                value={dueDate}
                 required
-                onChange={(e) => setDate(e.target.value)}
-                name="date"
-                id="date"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11  w-40"
+                onChange={(e) => setDueDate(e.target.value)}
+                name="dueDate"
+                id="dueDate"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
-            </div>
-            {/* TODO maybe add a recurring charge, or subscription */}
-            <div className="relative flex flex-col gap-3 p-3">
-              <label htmlFor="transactionType">Category</label>
-              {/* {errors.type && (
-                <span className="text-red-500">{errors.type}</span>
-              )} */}
-              <select
-                id="transactionType"
-                value={category}
-                onChange={(e) => setCategory(e.target.value as ExpenseCategory)}
-                name="transactionTypes"
-                required
-                className="border border-(--secondary-blue) px-2 rounded-md h-11 flex min-w-40"
-              >
-                <option value="subscription">Subscription</option>
-                <option value="bill">Bill</option>
-                <option value="tax">Tax</option>
-                <option value="insurance">Insurance</option>
-                <option value="loan">Loan</option>
-                <option value="other">Other</option>
-              </select>
             </div>
           </div>
           {errors.date && (
@@ -283,8 +294,8 @@ export default function EditUpcomingChargeModal({ data, onClose }: Props) {
               className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
-              onClick={onClose}
               type="button"
+              onClick={onClose}
             >
               <MdClose size={20} />
             </button>

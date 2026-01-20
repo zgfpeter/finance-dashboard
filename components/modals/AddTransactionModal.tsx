@@ -2,7 +2,7 @@
 // imports
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import { MdCheck } from "react-icons/md";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
@@ -67,7 +67,7 @@ export default function AddTransactionModal({ onClose }: Props) {
 
   // handle the input change
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) {
     const { name, value } = e.target;
 

@@ -4,40 +4,98 @@
 import React, { useState } from "react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData, Goal } from "@/lib/types/dashboard";
+import {
+  DashboardData,
+  UpcomingCharge,
+  ExpenseCategory,
+} from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 // -- end imports --
 // the props the component takes
 interface Props {
-  data: Goal | null;
+  data: UpcomingCharge | null;
   onClose: () => void;
 }
 
-export default function EditGoalModal({ data, onClose }: Props) {
+export default function EditUpcomingChargeModal({ data, onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
   const queryClient = useQueryClient();
-  const [title, setTitle] = useState(data?.title ?? "");
-  const [currentAmount, setCurrentAmount] = useState(data?.currentAmount ?? "");
-  const [targetAmount, setTargetAmount] = useState(data?.targetAmount ?? "");
-  const [targetDate, setTargetDate] = useState(() => {
-    if (!data?.targetDate) return "";
-    return new Date(data?.targetDate).toISOString().slice(0, 10);
+  const [company, setCompany] = useState(data?.company ?? "");
+  const [amount, setAmount] = useState(data?.amount ?? "");
+  const [date, setDate] = useState(() => {
+    if (!data?.date) return "";
+    return new Date(data.date).toISOString().slice(0, 10);
   });
+
+  const [category, setCategory] = useState<ExpenseCategory>(
+    data?.category ?? "other",
+  ); // Default category is Other
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
     id: "",
-    targetDate: "",
-    title: "",
-    currentAmount: "",
-    targetAmount: "",
+    date: "",
+    company: "",
+    amount: "",
+    category: "",
     generalError: "",
   });
 
+  // tanstack mutation: PUT
+  // this runs when i call mutate()
+  const updateMutation = useMutation({
+    // sends the update to the backend, doesn't wait to finish to update UI
+    mutationFn: (updatedCharge: UpcomingCharge) =>
+      axiosAuth.put(
+        `/dashboard/upcomingCharges/${updatedCharge._id}`,
+        updatedCharge,
+      ),
+    // runs immediately when i click 'Save"
+    // this runs before the PUT request is send, i can do optimistic updates here
+    // cancel queries: because maybe another refetch is happening at the same time
+    // cancel it to avoid UI flickering or outdated data ( race conditions )
+    onMutate: async (updatedCharge: UpcomingCharge) => {
+      await queryClient.cancelQueries({ queryKey: ["dashboardData"] });
+
+      // store the previous value in case i need to rollback
+      const previous = queryClient.getQueryData<DashboardData>([
+        "dashboardData",
+      ]);
+
+      // optimistic update: update the UI before the server request is finished, instant new values
+      queryClient.setQueryData<DashboardData>(["dashboardData"], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          upcomingCharges: old.upcomingCharges.map((c) =>
+            c._id === updatedCharge._id ? { ...c, ...updatedCharge } : c,
+          ),
+        };
+      });
+
+      // this is accessible in onError
+      return { previous };
+    },
+
+    // runs after a successfuly PUT request
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
+      console.log("Success");
+      onClose();
+    },
+
+    // if request fails: restore the old value (from previous)
+    onError: (_err, _updatedCharge, context) => {
+      console.log("An error has occured: ", _err);
+      queryClient.setQueryData(["dashboardData"], context?.previous);
+    },
+  });
+
+  if (!data) return <ErrorState message="No data" />;
   function sanitizeDecimalInput(value: string) {
     let sanitized = value.replace(",", "."); // mobile / EU keyboards
     sanitized = sanitized.replace(/[^0-9.]/g, ""); // keep digits + dot
@@ -58,55 +116,6 @@ export default function EditGoalModal({ data, onClose }: Props) {
     return value.replace(/\s+/g, " ").trim();
   }
 
-  // tanstack mutation: PUT
-  // this runs when i call mutate()
-  const updateMutation = useMutation({
-    // sends the update to the backend, doesn't wait to finish to update UI
-    mutationFn: (goal: Goal) =>
-      axiosAuth.put(`/dashboard/goals/${goal._id}`, goal),
-    // runs immediately when i click 'Save"
-    // this runs before the PUT request is send, i can do optimistic updates here
-    // cancel queries: because maybe another refetch is happening at the same time
-    // cancel it to avoid UI flickering or outdated data ( race conditions )
-    onMutate: async (goal: Goal) => {
-      await queryClient.cancelQueries({ queryKey: ["dashboardData"] });
-
-      // store the previous value in case i need to rollback
-      const previous = queryClient.getQueryData<DashboardData>([
-        "dashboardData",
-      ]);
-
-      // optimistic update: update the UI before the server request is finished, instant new values
-      queryClient.setQueryData<DashboardData>(["dashboardData"], (old) => {
-        if (!old) return old;
-        return {
-          ...old,
-          goals: old.goals.map((c) =>
-            c._id === goal._id ? { ...c, ...goal } : c
-          ),
-        };
-      });
-
-      // this is accessible in onError
-      return { previous };
-    },
-
-    // runs after a successfuly PUT request
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dashboardData"] });
-      console.log("Success");
-      onClose();
-    },
-
-    // if request fails: restore the old value (from previous)
-    onError: (_err, _debt, context) => {
-      console.log("An error has occured: ", _err);
-      queryClient.setQueryData(["dashboardData"], context?.previous);
-    },
-  });
-
-  if (!data) return <ErrorState message="No data" />;
-
   // get the states from the updateMutation
   const { isPending, isError } = updateMutation;
 
@@ -116,10 +125,10 @@ export default function EditGoalModal({ data, onClose }: Props) {
 
     // if nothing changed and the user clicks SAVE
     if (
-      title === data.title &&
-      currentAmount === data.currentAmount &&
-      targetAmount === data.targetAmount &&
-      targetDate === data.targetDate
+      company === data.company &&
+      amount === data.amount &&
+      date === data.date &&
+      category === data.category
     ) {
       onClose();
       return;
@@ -130,40 +139,32 @@ export default function EditGoalModal({ data, onClose }: Props) {
     }
 
     // if there are no errors in the form
-    updateMutation.mutate({
-      ...data,
-      title: sanitizeText(title),
-      currentAmount,
-      targetAmount,
-      targetDate,
-    });
+    updateMutation.mutate({ ...data, company, amount, date, category });
   };
+
+  // Same as AddTransaction, because i need a dropdown for the categories
 
   // simple form validation
   // TODO add a more robust validation
   function validateForm() {
     const newErrors: { [key: string]: string } = {};
     // set the errors state so that i can use it to show error messages
-    if (!title.trim()) {
-      newErrors.title = "Title is required.";
+    if (!company.trim()) {
+      newErrors.company = "Company is required.";
     }
-    if (Number(currentAmount) < 0) {
-      newErrors.amount = "Amount must be >= 0";
+    if (Number(amount) <= 0) {
+      newErrors.amount = "Amount must be > 0";
     }
-    if (Number(targetAmount) < 0) {
-      newErrors.amount = "Amount must be >= 0";
-    }
-    if (!targetDate) {
+    if (!date) {
       newErrors.date = "Date is required";
-      // it's fine if date it's in the past, give users that option
-      // } else {
-      //   // to check if the entered date is not a future date:
-      //   const goalDate = new Date(targetDate);
-      //   const today = new Date();
-      //   today.setHours(0, 0, 0, 0);
-      //   if (goalDate < today) {
-      //     newErrors.date = "Date cannot be in the past.";
-      //   }
+    } else {
+      // to check if the entered date is not a future date:
+      const chargeDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (chargeDate < today) {
+        newErrors.date = "Upcoming charge date cannot be in the past.";
+      }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -188,7 +189,7 @@ export default function EditGoalModal({ data, onClose }: Props) {
         ✕
       </button>
       <h2 className="py-2 text-xl font-semibold">
-        Editing goal: {data?.title}
+        Editing charge: {data?.company}
       </h2>
 
       <form
@@ -197,81 +198,80 @@ export default function EditGoalModal({ data, onClose }: Props) {
       >
         <div className="flex flex-col justify-between w-full ">
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="title">
-              Title <span className="text-red-500">*</span>
+            <label htmlFor="company">
+              Company <span className="text-red-500">*</span>
             </label>
             {/* error if the form validation fails */}
-            {errors.title && (
+            {errors.company && (
               <span className="absolute text-red-500 right-5">
-                {errors.title}
+                {errors.company}
               </span>
             )}
             <input
               type="text"
-              value={title}
+              value={company}
               required
               maxLength={40}
-              onChange={(e) => setTitle(sanitizeText(e.target.value))}
-              name="title"
-              id="title"
+              onChange={(e) => setCompany(sanitizeText(e.target.value))}
+              name="company"
+              id="company"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="currentAmount">Current amount</label>
-            {errors.currentAmount && (
+            <label htmlFor="amount">Amount</label>
+            {errors.amount && (
               <span className="absolute text-red-500 right-5">
-                {errors.currentAmount}
+                {errors.amount}
               </span>
             )}
             <input
               type="text"
-              value={currentAmount}
+              value={amount}
               inputMode="decimal"
-              placeholder="0.00"
-              onChange={(e) =>
-                setCurrentAmount(sanitizeDecimalInput(e.target.value))
-              }
-              name="currentAmount"
-              id="currentAmount"
+              onChange={(e) => setAmount(sanitizeDecimalInput(e.target.value))}
+              name="amount"
+              id="amount"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
-          <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="targetAmount">Target amount</label>
-            {errors.targetAmount && (
-              <span className="absolute text-red-500 right-5">
-                {errors.targetAmount}
-              </span>
-            )}
-            <input
-              type="text"
-              value={targetAmount}
-              inputMode="decimal"
-              placeholder="0.00"
-              onChange={(e) =>
-                setTargetAmount(sanitizeDecimalInput(e.target.value))
-              }
-              name="targetAmount"
-              id="targetAmount"
-              className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
-            />
-          </div>
-          <div className="relative flex justify-between">
+          <div className="relative flex">
             <div className="relative flex flex-col gap-3 p-3">
-              <label htmlFor="targetDate">
-                Target date <span className="text-red-500">*</span>
+              <label htmlFor="date">
+                Date <span className="text-red-500">*</span>
               </label>
 
               <input
                 type="date"
-                value={targetDate}
+                value={date}
                 required
-                onChange={(e) => setTargetDate(e.target.value)}
-                name="targetDate"
-                id="targetDate"
-                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
+                onChange={(e) => setDate(e.target.value)}
+                name="date"
+                id="date"
+                className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11  w-40"
               />
+            </div>
+            {/* TODO maybe add a recurring charge, or subscription */}
+            <div className="relative flex flex-col gap-3 p-3">
+              <label htmlFor="transactionType">Category</label>
+              {/* {errors.type && (
+                <span className="text-red-500">{errors.type}</span>
+              )} */}
+              <select
+                id="transactionType"
+                value={category}
+                onChange={(e) => setCategory(e.target.value as ExpenseCategory)}
+                name="transactionTypes"
+                required
+                className="border border-(--secondary-blue) px-2 rounded-md h-11 flex min-w-40"
+              >
+                <option value="subscription">Subscription</option>
+                <option value="bill">Bill</option>
+                <option value="tax">Tax</option>
+                <option value="insurance">Insurance</option>
+                <option value="loan">Loan</option>
+                <option value="other">Other</option>
+              </select>
             </div>
           </div>
           {errors.date && (

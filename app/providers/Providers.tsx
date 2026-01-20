@@ -6,7 +6,7 @@ import QueryProvider from "./QueryProvider";
 // import { ModalProvider } from "../context/ModalContext";
 import { Provider } from "react-redux"; // my global store provider
 import { store } from "../store/store";
-import ModalContainer from "../components/ModalContainer";
+import ModalContainer from "@/components/ModalContainer";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (

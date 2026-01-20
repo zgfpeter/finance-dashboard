@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import SeparatorLine from "../ui/SeparatorLine";
@@ -47,10 +47,10 @@ export default function ContactModal({ onClose }: Props) {
   function handleChange(
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value } as ContactForm));
+    setFormData((prev) => ({ ...prev, [name]: value }) as ContactForm);
 
     // clear an error for the field as user types
     setErrors((prev) => ({ ...prev, [name]: "" }));

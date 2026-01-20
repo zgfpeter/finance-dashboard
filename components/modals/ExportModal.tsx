@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import { MdDownload } from "react-icons/md";
 import LoadingSpinner from "../ui/LoadingSpinner";
 

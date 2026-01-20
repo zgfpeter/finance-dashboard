@@ -2,7 +2,7 @@
 
 // imports
 import { useState, useMemo } from "react";
-import { useDashboard } from "@/app/hooks/useDashboard";
+import { useDashboard } from "@/hooks/useDashboard";
 import {
   useMutation,
   UseMutationResult,
@@ -26,7 +26,7 @@ import {
   MdChevronRight,
   MdArrowBack,
 } from "react-icons/md";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import { prettifyDate } from "@/lib/utils";
 import EmptyState from "../ui/EmptyState";
 import ErrorState from "../ui/ErrorState";
@@ -326,7 +326,7 @@ export default function UpcomingChargesModal({ onClose }: Props) {
                       const clickedDate = new Date(
                         currentDate.getFullYear(),
                         currentDate.getMonth(),
-                        dayNum
+                        dayNum,
                       );
                       setSelectedDate(clickedDate);
                     }}

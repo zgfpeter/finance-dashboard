@@ -11,14 +11,14 @@ interface Props {
 import { motion } from "framer-motion";
 import { calcProgressPercent as calcAnimationWidth } from "@/lib/utils";
 import { MdEdit, MdDelete, MdOutlineWatchLater } from "react-icons/md";
-import { useDashboard } from "@/app/hooks/useDashboard";
+import { useDashboard } from "@/hooks/useDashboard";
 import { useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DashboardData } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
 import { calculateDeadline, prettifyDate } from "@/lib/utils";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import LoadingState from "../ui/LoadingState";
 import EmptyState from "../ui/EmptyState";
 import ErrorState from "../ui/ErrorState";
@@ -175,8 +175,8 @@ export default function DebtsModal({ onClose }: Props) {
                     deadline.status === "upcoming"
                       ? "text-green-500"
                       : deadline.status === "soon"
-                      ? "text-yellow-500"
-                      : "text-red-500"
+                        ? "text-yellow-500"
+                        : "text-red-500"
                   }
                 >
                   {deadline.text}
@@ -215,7 +215,7 @@ export default function DebtsModal({ onClose }: Props) {
                     animate={{
                       width: `${calcAnimationWidth(
                         Number(debt.currentPaid),
-                        Number(debt.totalAmount)
+                        Number(debt.totalAmount),
                       )}%`,
                     }}
                     transition={{
@@ -231,7 +231,7 @@ export default function DebtsModal({ onClose }: Props) {
                       openModal({
                         type: "editDebt",
                         data: debt,
-                      })
+                      }),
                     )
                   }
                   className="p-2 rounded-full hover:bg-stone-900"

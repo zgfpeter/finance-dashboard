@@ -23,6 +23,7 @@ import EditDebtModal from "./modals/EditDebtModal";
 import EditGoalModal from "./modals/EditGoalModal";
 import ContactModal from "./modals/ContactModal";
 import ImportExportModal from "./modals/ImportExportModal";
+import Pricing from "./modals/Pricing";
 
 export default function ModalContainer() {
   const dispatch = useDispatch();
@@ -212,6 +213,16 @@ export default function ModalContainer() {
           ariaLabel="ImportExport"
         >
           <ImportExportModal onClose={handleClose} />
+        </ModalWrapper>
+      );
+    case "pricing":
+      return (
+        <ModalWrapper
+          onClose={handleClose}
+          widthClass="w-[900px] max-w-full"
+          ariaLabel="pricing"
+        >
+          <Pricing onClose={handleClose} />
         </ModalWrapper>
       );
 

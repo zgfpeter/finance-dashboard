@@ -4,41 +4,40 @@
 import React, { useState } from "react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DashboardData, Debt } from "@/lib/types/dashboard";
+import { DashboardData, Goal } from "@/lib/types/dashboard";
 import { MdClose, MdCheck } from "react-icons/md";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import ErrorState from "../ui/ErrorState";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 // -- end imports --
 // the props the component takes
 interface Props {
-  data: Debt | null;
+  data: Goal | null;
   onClose: () => void;
 }
 
-//   company: string;
-//   currentPaid: number | string;
-//   totalAmount: number | string;
-//   dueDate: string;
-
-export default function EditDebtModal({ data, onClose }: Props) {
+export default function EditGoalModal({ data, onClose }: Props) {
   // get the axiosAuth instance
   const axiosAuth = useAxiosAuth();
   const queryClient = useQueryClient();
-  const [company, setCompany] = useState(data?.company ?? "");
-  const [currentPaid, setCurrentPaid] = useState(data?.currentPaid ?? "");
-  const [totalAmount, setTotalAmount] = useState(data?.totalAmount ?? "");
-
-  const [dueDate, setDueDate] = useState(() => {
-    if (!data?.dueDate) return "";
-    return new Date(data?.dueDate).toISOString().slice(0, 10);
+  const [title, setTitle] = useState(data?.title ?? "");
+  const [currentAmount, setCurrentAmount] = useState(data?.currentAmount ?? "");
+  const [targetAmount, setTargetAmount] = useState(data?.targetAmount ?? "");
+  const [targetDate, setTargetDate] = useState(() => {
+    if (!data?.targetDate) return "";
+    return new Date(data?.targetDate).toISOString().slice(0, 10);
+  });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({
+    // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
+    id: "",
+    targetDate: "",
+    title: "",
+    currentAmount: "",
+    targetAmount: "",
+    generalError: "",
   });
 
-  // sanitize decimal input:
-  // - replace commas with dots
-  // - allow only digits and ONE dot
-  // - normalize leading dot (.5 -> 0.5)
   function sanitizeDecimalInput(value: string) {
     let sanitized = value.replace(",", "."); // mobile / EU keyboards
     sanitized = sanitized.replace(/[^0-9.]/g, ""); // keep digits + dot
@@ -59,27 +58,17 @@ export default function EditDebtModal({ data, onClose }: Props) {
     return value.replace(/\s+/g, " ").trim();
   }
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({
-    // this will hold the error messages, like if amount is empty, it will show "Enter amount" or something like that
-    id: "",
-    dueDate: "",
-    company: "",
-    currentPaid: "",
-    totalAmount: "",
-    generalError: "",
-  });
-
   // tanstack mutation: PUT
   // this runs when i call mutate()
   const updateMutation = useMutation({
     // sends the update to the backend, doesn't wait to finish to update UI
-    mutationFn: (debt: Debt) =>
-      axiosAuth.put(`/dashboard/debts/${debt._id}`, debt),
+    mutationFn: (goal: Goal) =>
+      axiosAuth.put(`/dashboard/goals/${goal._id}`, goal),
     // runs immediately when i click 'Save"
     // this runs before the PUT request is send, i can do optimistic updates here
     // cancel queries: because maybe another refetch is happening at the same time
     // cancel it to avoid UI flickering or outdated data ( race conditions )
-    onMutate: async (debt: Debt) => {
+    onMutate: async (goal: Goal) => {
       await queryClient.cancelQueries({ queryKey: ["dashboardData"] });
 
       // store the previous value in case i need to rollback
@@ -92,8 +81,8 @@ export default function EditDebtModal({ data, onClose }: Props) {
         if (!old) return old;
         return {
           ...old,
-          debts: old.debts.map((c) =>
-            c._id === debt._id ? { ...c, ...debt } : c
+          goals: old.goals.map((c) =>
+            c._id === goal._id ? { ...c, ...goal } : c,
           ),
         };
       });
@@ -119,7 +108,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
   if (!data) return <ErrorState message="No data" />;
 
   // get the states from the updateMutation
-  const { isPending, isError, error } = updateMutation;
+  const { isPending, isError } = updateMutation;
 
   // handle the user SAVE
   const handleSubmit = (e: React.FormEvent) => {
@@ -127,10 +116,10 @@ export default function EditDebtModal({ data, onClose }: Props) {
 
     // if nothing changed and the user clicks SAVE
     if (
-      company === data.company &&
-      currentPaid === data.currentPaid &&
-      totalAmount === data.totalAmount &&
-      dueDate === data.dueDate
+      title === data.title &&
+      currentAmount === data.currentAmount &&
+      targetAmount === data.targetAmount &&
+      targetDate === data.targetDate
     ) {
       onClose();
       return;
@@ -141,13 +130,12 @@ export default function EditDebtModal({ data, onClose }: Props) {
     }
 
     // if there are no errors in the form
-    // sanitize again before mutation
     updateMutation.mutate({
       ...data,
-      company: sanitizeText(company),
-      currentPaid: Number(sanitizeDecimalInput(String(currentPaid))),
-      totalAmount: Number(sanitizeDecimalInput(String(totalAmount))),
-      dueDate,
+      title: sanitizeText(title),
+      currentAmount,
+      targetAmount,
+      targetDate,
     });
   };
 
@@ -156,25 +144,26 @@ export default function EditDebtModal({ data, onClose }: Props) {
   function validateForm() {
     const newErrors: { [key: string]: string } = {};
     // set the errors state so that i can use it to show error messages
-    if (!company.trim()) {
-      newErrors.company = "Company is required.";
+    if (!title.trim()) {
+      newErrors.title = "Title is required.";
     }
-    if (Number(currentPaid) < 0) {
+    if (Number(currentAmount) < 0) {
       newErrors.amount = "Amount must be >= 0";
     }
-    if (Number(totalAmount) < 0) {
+    if (Number(targetAmount) < 0) {
       newErrors.amount = "Amount must be >= 0";
     }
-    if (!dueDate) {
+    if (!targetDate) {
       newErrors.date = "Date is required";
-    } else {
-      // to check if the entered date is not a future date:
-      const debtDate = new Date(dueDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (debtDate < today) {
-        newErrors.date = "Date cannot be in the past.";
-      }
+      // it's fine if date it's in the past, give users that option
+      // } else {
+      //   // to check if the entered date is not a future date:
+      //   const goalDate = new Date(targetDate);
+      //   const today = new Date();
+      //   today.setHours(0, 0, 0, 0);
+      //   if (goalDate < today) {
+      //     newErrors.date = "Date cannot be in the past.";
+      //   }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -199,7 +188,7 @@ export default function EditDebtModal({ data, onClose }: Props) {
         ✕
       </button>
       <h2 className="py-2 text-xl font-semibold">
-        Editing debt: {data?.company}
+        Editing goal: {data?.title}
       </h2>
 
       <form
@@ -208,79 +197,79 @@ export default function EditDebtModal({ data, onClose }: Props) {
       >
         <div className="flex flex-col justify-between w-full ">
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="company">
-              Company <span className="text-red-500">*</span>
+            <label htmlFor="title">
+              Title <span className="text-red-500">*</span>
             </label>
             {/* error if the form validation fails */}
-            {errors.company && (
+            {errors.title && (
               <span className="absolute text-red-500 right-5">
-                {errors.company}
+                {errors.title}
               </span>
             )}
             <input
               type="text"
-              value={company}
+              value={title}
               required
               maxLength={40}
-              onChange={(e) => setCompany(sanitizeText(e.target.value))}
-              name="company"
-              id="company"
+              onChange={(e) => setTitle(sanitizeText(e.target.value))}
+              name="title"
+              id="title"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="currentPaid">Paid</label>
-            {errors.currentPaid && (
+            <label htmlFor="currentAmount">Current amount</label>
+            {errors.currentAmount && (
               <span className="absolute text-red-500 right-5">
-                {errors.currentPaid}
+                {errors.currentAmount}
               </span>
             )}
             <input
               type="text"
-              value={currentPaid}
+              value={currentAmount}
               inputMode="decimal"
               placeholder="0.00"
               onChange={(e) =>
-                setCurrentPaid(sanitizeDecimalInput(e.target.value))
+                setCurrentAmount(sanitizeDecimalInput(e.target.value))
               }
-              name="currentPaid"
-              id="currentPaid"
+              name="currentAmount"
+              id="currentAmount"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="relative flex flex-col gap-3 p-3">
-            <label htmlFor="totalAmount">Total owed</label>
-            {errors.totalAmount && (
+            <label htmlFor="targetAmount">Target amount</label>
+            {errors.targetAmount && (
               <span className="absolute text-red-500 right-5">
-                {errors.totalAmount}
+                {errors.targetAmount}
               </span>
             )}
             <input
               type="text"
-              value={totalAmount}
-              onChange={(e) =>
-                setCurrentPaid(sanitizeDecimalInput(e.target.value))
-              }
+              value={targetAmount}
               inputMode="decimal"
               placeholder="0.00"
-              name="totalAmount"
-              id="totalAmount"
+              onChange={(e) =>
+                setTargetAmount(sanitizeDecimalInput(e.target.value))
+              }
+              name="targetAmount"
+              id="targetAmount"
               className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
             />
           </div>
           <div className="relative flex justify-between">
             <div className="relative flex flex-col gap-3 p-3">
-              <label htmlFor="dueDate">
-                Due date <span className="text-red-500">*</span>
+              <label htmlFor="targetDate">
+                Target date <span className="text-red-500">*</span>
               </label>
 
               <input
                 type="date"
-                value={dueDate}
+                value={targetDate}
                 required
-                onChange={(e) => setDueDate(e.target.value)}
-                name="dueDate"
-                id="dueDate"
+                onChange={(e) => setTargetDate(e.target.value)}
+                name="targetDate"
+                id="targetDate"
                 className="border border-(--secondary-blue) rounded-md p-2  focus:outline-none focus:border-cyan-500 h-11"
               />
             </div>
@@ -294,8 +283,8 @@ export default function EditDebtModal({ data, onClose }: Props) {
               className="flex items-center justify-center w-10 h-10 border-l border-r border-red-500 rounded-full hover:text-red-600"
               aria-label="Cancel changes"
               disabled={isPending}
-              type="button"
               onClick={onClose}
+              type="button"
             >
               <MdClose size={20} />
             </button>

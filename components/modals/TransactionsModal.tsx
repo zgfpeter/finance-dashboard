@@ -18,7 +18,7 @@ import {
   MdFilterList,
   MdArrowBack,
 } from "react-icons/md";
-import { useDashboard } from "@/app/hooks/useDashboard";
+import { useDashboard } from "@/hooks/useDashboard";
 import { useState, useMemo } from "react";
 import {
   useMutation,
@@ -33,7 +33,7 @@ import {
 } from "@/lib/types/dashboard";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/app/store/modalSlice";
-import useAxiosAuth from "@/app/hooks/useAxiosAuth";
+import useAxiosAuth from "@/hooks/useAxiosAuth";
 import { prettifyDate } from "@/lib/utils";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import LoadingState from "../ui/LoadingState";
@@ -353,7 +353,7 @@ export default function TransactionsModal({ onClose }: Props) {
                 const MAX_ITEMS = 2;
                 const visibleTransactions = daysTransactions.slice(
                   0,
-                  MAX_ITEMS
+                  MAX_ITEMS,
                 );
                 const overflowCount = daysTransactions.length - MAX_ITEMS;
 
@@ -365,7 +365,7 @@ export default function TransactionsModal({ onClose }: Props) {
                       const clickedDate = new Date(
                         currentDate.getFullYear(),
                         currentDate.getMonth(),
-                        dayNum
+                        dayNum,
                       );
                       setSelectedDate(clickedDate);
                     }}
@@ -523,7 +523,7 @@ function TransactionListItem({
               openModal({
                 type: "editTransaction",
                 data: transaction,
-              })
+              }),
             )
           }
           className="p-2 rounded-full hover:bg-stone-900"

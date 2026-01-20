@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Rowdies } from "next/font/google";
 import "./globals.css";
 // import Navbar from "./components/Navbar";
-import Footer from "./components/layout/Footer";
+import Footer from "./layout/Footer";
 import Providers from "./providers/Providers";
-import Background from "./components/ui/Background";
+import Background from "@/components/ui/Background";
 // import { store } from "./store/store";
 const rowdies = Rowdies({
   variable: "--font-rowdies",
