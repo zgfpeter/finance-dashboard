@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
+import { RootState } from "@/app/store/store";
 import { closeModal } from "@/app/store/modalSlice";
 
 import ModalWrapper from "./ModalWrapper";
@@ -32,7 +32,7 @@ export default function ModalContainer() {
   // payload can be the data the modal has to display
   // data needed for edits
   const { type: modalType, data: modalData } = useSelector(
-    (state: RootState) => state.modal
+    (state: RootState) => state.modal,
   );
   // no modal open
   if (modalType === "none") return null;
