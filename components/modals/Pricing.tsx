@@ -39,7 +39,7 @@ export default function Pricing({ onClose }: Props) {
         ✕
       </button>
 
-      <h2 className="pt-3 pb-6 text-xl font-semibold">Pricing</h2>
+      <h2 className="pt-3 pb-6 text-xl font-semibold">Upgrade & go ad free</h2>
       <section className="grid justify-between grid-cols-2 gap-5 p-3 my-20 text-lg">
         <div className="flex flex-col items-center gap-5  border-2 border-teal-900 shadow-[5px_5px] shadow-teal-700 p-10">
           <h2 className="px-3 py-1 bg-teal-500/20">Monthly</h2>

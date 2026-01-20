@@ -116,11 +116,11 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           </section>
-          <button
+          {/* <button
             onClick={() => dispatch(openModal({ type: "pricing", data: null }))}
           >
             Upgrade
-          </button>
+          </button> */}
           {/* display username */}
           <p className="self-center px-5 py-1 text-xl text-center text-transparent border-l border-r border-orange-500 rounded-md bg-linear-to-r from-teal-500 via-cyan-600 to-teal-900 bg-clip-text w-fit ">
             {username}

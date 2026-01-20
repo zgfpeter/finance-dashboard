@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import customAxios from "@/lib/axios";
 import { isAxiosError } from "axios";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 export default function SignUp() {
   const router = useRouter();
 
